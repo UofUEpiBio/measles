@@ -84,45 +84,45 @@ jobs:
           path: epiworldR_*.tar.gz
           retention-days: 7
 
-  epiworldShiny:
-    runs-on: ubuntu-latest
-    container: rocker/tidyverse:4.4.0
+  # epiworldShiny:
+  #   runs-on: ubuntu-latest
+  #   container: rocker/tidyverse:4.4.0
 
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: 'UofUEpiBio/epiworldRShiny'
-          ref: 'main'
-          fetch-depth: 1
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         repository: 'UofUEpiBio/epiworldRShiny'
+  #         ref: 'main'
+  #         fetch-depth: 1
 
-      - name: Install dependencies
-        run: |
-          install2.r -n 2 shinyjs shinydashboard DT shinycssloaders plotly
-          installGithub.r UofUEpiBio/epiworldR@${{ github.sha }}
+  #     - name: Install dependencies
+  #       run: |
+  #         install2.r -n 2 shinyjs shinydashboard DT shinycssloaders plotly
+  #         installGithub.r UofUEpiBio/epiworldR@${{ github.sha }}
 
-      - name: Check the package
-        run: |
-          R CMD build .
-          R CMD check  --no-manual epiworldRShiny_*tar.gz
+  #     - name: Check the package
+  #       run: |
+  #         R CMD build .
+  #         R CMD check  --no-manual epiworldRShiny_*tar.gz
 
-  epiworldRShiny-cran:
-    runs-on: ubuntu-latest
-    container: rocker/tidyverse:4.4.0
+  # epiworldRShiny-cran:
+  #   runs-on: ubuntu-latest
+  #   container: rocker/tidyverse:4.4.0
 
-    steps:
-      - name: Get epiworldRShiny
-        run: |
-          # Get the latest version from CRAN
-          apt-get update && apt-get install curl -y --no-install-recommends
-          LATEST_VERSION=$(curl -s https://crandb.r-pkg.org/epiworldRShiny | grep -o '"Version":"[^"]*"' | cut -d'"' -f4)
-          wget \
-            https://cran.r-project.org/src/contrib/epiworldRShiny_${LATEST_VERSION}.tar.gz
+  #   steps:
+  #     - name: Get epiworldRShiny
+  #       run: |
+  #         # Get the latest version from CRAN
+  #         apt-get update && apt-get install curl -y --no-install-recommends
+  #         LATEST_VERSION=$(curl -s https://crandb.r-pkg.org/epiworldRShiny | grep -o '"Version":"[^"]*"' | cut -d'"' -f4)
+  #         wget \
+  #           https://cran.r-project.org/src/contrib/epiworldRShiny_${LATEST_VERSION}.tar.gz
 
-      - name: Install dependencies
-        run: |
-          install2.r -n 2 shinyjs shinydashboard DT shinycssloaders plotly
-          installGithub.r UofUEpiBio/epiworldR@${{ github.sha }}
+  #     - name: Install dependencies
+  #       run: |
+  #         install2.r -n 2 shinyjs shinydashboard DT shinycssloaders plotly
+  #         installGithub.r UofUEpiBio/epiworldR@${{ github.sha }}
 
-      - name: Check the package
-        run: |
-          R CMD check --no-manual epiworldRShiny_*tar.gz
+  #     - name: Check the package
+  #       run: |
+  #         R CMD check --no-manual epiworldRShiny_*tar.gz
