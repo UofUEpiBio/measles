@@ -1,7 +1,7 @@
 Package: measles
 Type: Package
 Title: Measles Epidemiological Models
-Version: 0.1.0.0
+Version: 0.10.0.0
 Depends:
     R (>= 4.1.0),
     epiworldR (>= 0.10.0.0)

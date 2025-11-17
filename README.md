@@ -1,49 +1,81 @@
-# measles
+
+
+<!-- README.md is generated from README.qmd. Please edit that file -->
+
+# measles <img src="man/figures/logo.png" width="200px" alt="epiworld logo" align="right">
 
 <!-- badges: start -->
+
+[![ForeSITE Group](https://github.com/EpiForeSITE/software/raw/e82ed88f75e0fe5c0a1a3b38c2b94509f122019c/docs/assets/foresite-software-badge.svg)](https://github.com/EpiForeSITE)
+[![CRAN status](https://www.r-pkg.org/badges/version/measles)](https://CRAN.R-project.org/package=measles)
+[![R-CMD-check](https://github.com/UofUEpiBio/measles/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/measles/actions/workflows/r.yml)
+[![CRANlogs downloads](https://cranlogs.r-pkg.org/badges/grand-total/measles)](https://cran.r-project.org/package=measles)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/UofUEpiBio/measles/blob/master/LICENSE.md)
+[![codecov](https://codecov.io/gh/UofUEpiBio/measles/graph/badge.svg?token=ZB8FVLI7GN)](https://app.codecov.io/gh/UofUEpiBio/measles)
+[![status](https://tinyverse.netlify.app/badge/measles)](https://CRAN.R-project.org/package=measles)
+
 <!-- badges: end -->
 
 ## Overview
 
-The **measles** package is a specialized spinoff from [epiworldR](https://github.com/UofUEpiBio/epiworldR), focusing exclusively on measles epidemiological models. This package provides fast, agent-based models (ABMs) for studying measles transmission dynamics, vaccination strategies, and intervention policies.
+The **measles** package is a specialized spinoff from
+[epiworldR](https://github.com/UofUEpiBio/epiworldR), focusing
+exclusively on measles epidemiological models. This package provides
+fast, agent-based models (ABMs) for studying measles transmission
+dynamics, vaccination strategies, and intervention policies.
 
-Built on the powerful [epiworld](https://github.com/UofUEpiBio/epiworld) C++ library, these models leverage the speed and flexibility of epiworldR while providing specialized functionality for measles outbreak modeling.
+Built on the powerful [epiworld](https://github.com/UofUEpiBio/epiworld)
+C++ library, these models leverage the speed and flexibility of
+epiworldR while providing specialized functionality for measles outbreak
+modeling.
 
 ## Features
 
-- **Fast simulation**: Leverages the high-performance C++ backend from epiworld
-- **Specialized measles models**: Three distinct models tailored for different scenarios
-- **Flexible interventions**: Support for vaccination, quarantine, isolation, and contact tracing
-- **Population mixing**: Models can account for different population groups with varying contact patterns
-- **Risk-based strategies**: Advanced models support risk-stratified quarantine policies
+- **Fast simulation**: Leverages the high-performance C++ backend from
+  epiworld
+- **Specialized measles models**: Three distinct models tailored for
+  different scenarios
+- **Flexible interventions**: Support for vaccination, quarantine,
+  isolation, and contact tracing
+- **Population mixing**: Models can account for different population
+  groups with varying contact patterns
+- **Risk-based strategies**: Advanced models support risk-stratified
+  quarantine policies
 
 ## Models Included
 
 The package includes three measles-specific models:
 
-1. **ModelMeaslesSchool**: A SEIHR (Susceptible-Exposed-Infectious-Hospitalized-Recovered) model designed for school settings with isolation and quarantine policies.
+1.  **ModelMeaslesSchool**: A SEIHR
+    (Susceptible-Exposed-Infectious-Hospitalized-Recovered) model
+    designed for school settings with isolation and quarantine policies.
 
-2. **ModelMeaslesMixing**: A measles model with population mixing between different groups, including vaccination, quarantine, isolation, and contact tracing mechanisms.
+2.  **ModelMeaslesMixing**: A measles model with population mixing
+    between different groups, including vaccination, quarantine,
+    isolation, and contact tracing mechanisms.
 
-3. **ModelMeaslesMixingRiskQuarantine**: An advanced mixing model with risk-based quarantine strategies that assign different quarantine durations based on exposure risk levels (high, medium, low).
+3.  **ModelMeaslesMixingRiskQuarantine**: An advanced mixing model with
+    risk-based quarantine strategies that assign different quarantine
+    durations based on exposure risk levels (high, medium, low).
 
 ## Installation
 
 You can install the measles package from GitHub:
 
-```r
+``` r
 # install.packages("devtools")
 devtools::install_github("UofUEpiBio/measles")
 ```
 
-Note: This package requires [epiworldR](https://cran.r-project.org/package=epiworldR) as a dependency.
+Note: This package requires
+[epiworldR](https://cran.r-project.org/package=epiworldR) as a
+dependency.
 
 ## Quick Example
 
-Here's a simple example using the ModelMeaslesSchool:
+Here’s a simple example using the ModelMeaslesSchool:
 
-```r
+``` r
 library(measles)
 
 # Create a measles model for a school with 500 students
@@ -65,9 +97,10 @@ plot(model_school)
 
 ## Example with Population Mixing
 
-The mixing models allow you to simulate measles spread across different population groups:
+The mixing models allow you to simulate measles spread across different
+population groups:
 
-```r
+``` r
 library(measles)
 
 # Define three populations
@@ -85,7 +118,7 @@ contact_matrix <- matrix(c(
 # Create the model
 measles_model <- ModelMeaslesMixing(
   n = 9000,
-  prevalence = 1/9000,
+  prevalence = 1 / 9000,
   contact_rate = 15,
   transmission_rate = 0.9,
   vax_efficacy = 0.97,
@@ -107,24 +140,39 @@ summary(measles_model)
 
 ## Relationship to epiworldR
 
-This package is a spinoff from epiworldR, which provides a comprehensive framework for agent-based epidemiological models. While epiworldR includes many different disease models (SIR, SEIR, SIS, etc.), the measles package focuses specifically on measles-related models with specialized features for:
+This package is a spinoff from epiworldR, which provides a comprehensive
+framework for agent-based epidemiological models. While epiworldR
+includes many different disease models (SIR, SEIR, SIS, etc.), the
+measles package focuses specifically on measles-related models with
+specialized features for:
 
-- Measles-specific disease progression (incubation, prodromal, and rash periods)
+- Measles-specific disease progression (incubation, prodromal, and rash
+  periods)
 - School-based outbreak scenarios
 - Vaccination coverage and efficacy
 - Quarantine and isolation policies
 - Contact tracing strategies
 - Risk-stratified interventions
 
-For general-purpose epidemiological modeling or other disease types, please see the [epiworldR package](https://github.com/UofUEpiBio/epiworldR).
+For general-purpose epidemiological modeling or other disease types,
+please see the [epiworldR
+package](https://github.com/UofUEpiBio/epiworldR).
 
 ## Citation
 
-If you use the measles package in your research, please cite both this package and epiworldR.
+If you use the measles package in your research, please cite both this
+package and epiworldR:
+
+``` r
+citation("measles")
+citation("epiworldR")
+```
 
 ## Authors
 
-This package was developed as part of a collaboration between the University of Utah (ForeSITE center grant) and the Utah Department of Health and Human Services in response to the 2025 US Measles outbreak.
+This package was developed as part of a collaboration between the
+University of Utah (ForeSITE center grant) and the Utah Department of
+Health and Human Services in response to the 2025 US Measles outbreak.
 
 ## License
 
@@ -132,4 +180,6 @@ MIT License - see LICENSE file for details.
 
 ## Contributing
 
-Contributions are welcome! Please see the [epiworldR development guidelines](https://github.com/UofUEpiBio/epiworldR/blob/main/DEVELOPMENT.md) for information on how to contribute.
+Contributions are welcome! Please see the [epiworldR development
+guidelines](https://github.com/UofUEpiBio/epiworldR/blob/main/DEVELOPMENT.md)
+for information on how to contribute.

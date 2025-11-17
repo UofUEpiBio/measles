@@ -5,9 +5,9 @@ FROM rocker/tidyverse:4.5.1
 #   Rscript --vanilla -e 'getOption("repos")'
 
 # Installing pdflatex via tinytex
-RUN Rscript --vanilla -e "install.packages('tinytex'); tinytex::install_tinytex()" && \
-  cat "export PATH=/root/bin:$PATH" >> /root/.bashrc && \
-  apt-get update && apt-get install --no-install-recommends -y tidy
+# RUN install2.r --error tinytex && Rscript --vanilla -e "tinytex::install_tinytex()" && \
+#   cat "export PATH=/root/bin:$PATH" >> /root/.bashrc && \
+#   apt-get update && apt-get install --no-install-recommends -y tidy
 
 
 # Adding R packages
