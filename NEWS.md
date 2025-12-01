@@ -1,3 +1,14 @@
+# measles 0.1.0
+
+## New Features
+
+* Added `get_contact_matrix()` and `set_contact_matrix()` functions to retrieve and modify the contact matrix for mixing models. These functions are available for:
+  - `ModelMeaslesMixing`
+  - `ModelMeaslesMixingRiskQuarantine`
+
+  Other mixing models in epiworld will have these methods available in the near future.
+
+
 # epiworldR 0.10.0.0
 
 ## New Features
