@@ -114,9 +114,9 @@ get_contact_matrix.default <- function(model) {
 #' @export
 get_contact_matrix.epiworld_measlesmixing <- function(model) {
   # Get the vector from C++ and convert to matrix
+  # C++ stores the matrix in column-major order (same as R)
   vec <- get_contact_matrix_mixing_cpp(model)
   n <- sqrt(length(vec))
-  # Contact matrix is stored in column-major order
   matrix(vec, nrow = n, ncol = n)
 }
 
@@ -124,9 +124,9 @@ get_contact_matrix.epiworld_measlesmixing <- function(model) {
 #' @export
 get_contact_matrix.epiworld_measlesmixingriskquarantine <- function(model) {
   # Get the vector from C++ and convert to matrix
+  # C++ stores the matrix in column-major order (same as R)
   vec <- get_contact_matrix_mixing_risk_quarantine_cpp(model)
   n <- sqrt(length(vec))
-  # Contact matrix is stored in column-major order
   matrix(vec, nrow = n, ncol = n)
 }
 
@@ -150,7 +150,7 @@ set_contact_matrix.default <- function(model, value) {
 #' @rdname contact_matrix
 #' @export
 set_contact_matrix.epiworld_measlesmixing <- function(model, value) {
-  # Convert matrix to vector in column-major order
+  # as.vector() converts matrix to column-major order (same as C++ expects)
   set_contact_matrix_mixing_cpp(model, as.vector(value))
   invisible(model)
 }
@@ -158,7 +158,7 @@ set_contact_matrix.epiworld_measlesmixing <- function(model, value) {
 #' @rdname contact_matrix
 #' @export
 set_contact_matrix.epiworld_measlesmixingriskquarantine <- function(model, value) {
-  # Convert matrix to vector in column-major order
+  # as.vector() converts matrix to column-major order (same as C++ expects)
   set_contact_matrix_mixing_risk_quarantine_cpp(model, as.vector(value))
   invisible(model)
 }
