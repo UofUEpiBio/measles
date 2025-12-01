@@ -59,13 +59,13 @@ extern "C" SEXP _measles_set_contact_matrix_mixing_risk_quarantine_cpp(SEXP mode
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_measles_ModelMeaslesMixingRiskQuarantine_cpp",        (DL_FUNC) &_measles_ModelMeaslesMixingRiskQuarantine_cpp,        22},
-    {"_measles_ModelMeaslesMixing_cpp",                      (DL_FUNC) &_measles_ModelMeaslesMixing_cpp,                      20},
-    {"_measles_ModelMeaslesSchool_cpp",                      (DL_FUNC) &_measles_ModelMeaslesSchool_cpp,                      16},
-    {"_measles_get_contact_matrix_mixing_cpp",               (DL_FUNC) &_measles_get_contact_matrix_mixing_cpp,                1},
-    {"_measles_set_contact_matrix_mixing_cpp",               (DL_FUNC) &_measles_set_contact_matrix_mixing_cpp,                2},
-    {"_measles_get_contact_matrix_mixing_risk_quarantine_cpp", (DL_FUNC) &_measles_get_contact_matrix_mixing_risk_quarantine_cpp, 1},
-    {"_measles_set_contact_matrix_mixing_risk_quarantine_cpp", (DL_FUNC) &_measles_set_contact_matrix_mixing_risk_quarantine_cpp, 2},
+    {"_measles_ModelMeaslesMixingRiskQuarantine_cpp",          (DL_FUNC) &_measles_ModelMeaslesMixingRiskQuarantine_cpp,          22},
+    {"_measles_ModelMeaslesMixing_cpp",                        (DL_FUNC) &_measles_ModelMeaslesMixing_cpp,                        20},
+    {"_measles_ModelMeaslesSchool_cpp",                        (DL_FUNC) &_measles_ModelMeaslesSchool_cpp,                        16},
+    {"_measles_get_contact_matrix_mixing_cpp",                 (DL_FUNC) &_measles_get_contact_matrix_mixing_cpp,                  1},
+    {"_measles_get_contact_matrix_mixing_risk_quarantine_cpp", (DL_FUNC) &_measles_get_contact_matrix_mixing_risk_quarantine_cpp,  1},
+    {"_measles_set_contact_matrix_mixing_cpp",                 (DL_FUNC) &_measles_set_contact_matrix_mixing_cpp,                  2},
+    {"_measles_set_contact_matrix_mixing_risk_quarantine_cpp", (DL_FUNC) &_measles_set_contact_matrix_mixing_risk_quarantine_cpp,  2},
     {NULL, NULL, 0}
 };
 }
