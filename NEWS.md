@@ -9,5 +9,3 @@ This is the first release of the measles R package, a spin-off of the epiworldR 
   - `ModelMeaslesMixingRiskQuarantine`
 
   Other mixing models in epiworld will have these methods available in the near future.
-
-
