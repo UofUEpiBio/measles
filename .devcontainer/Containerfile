@@ -9,17 +9,19 @@ FROM rocker/tidyverse:4.5.1
 #   cat "export PATH=/root/bin:$PATH" >> /root/.bashrc && \
 #   apt-get update && apt-get install --no-install-recommends -y tidy
 
+RUN apt-get update && apt-get install --no-install-recommends -y valgrind gdb \
+  libglpk-dev
+
+RUN apt-get update && apt-get install --no-install-recommends -y pre-commit nano
+
+RUN install2.r --error languageserver && \
+installGithub.r nx10/httpgd
 
 # Adding R packages
 RUN install2.r --error cpp11 roxygen2 tinytest data.table netplot \
   devtools decor DiagrammeR
 
-RUN install2.r --error languageserver && \
-  installGithub.r nx10/httpgd
+RUN installGithub.r UofUEpiBio/epiworldR@copilot/remove-measles-models
 
-RUN apt-get update && apt-get install --no-install-recommends -y valgrind gdb \
-  libglpk-dev
-
-RUN apt-get update && apt-get install --no-install-recommends -y pre-commit nano
 
 CMD ["bash"]
