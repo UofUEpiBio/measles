@@ -34,8 +34,7 @@ install-dev: clean
 	EPI_DEV=yes R CMD INSTALL .& $(MAKE) clean
 
 install:
-	cd .. && \
-		R CMD INSTALL epiworldR_$(VERSION).tar.gz
+	Rscript --vanilla -e 'devtools::install()'
 
 
 README.md: README.qmd
@@ -51,7 +50,7 @@ local-update-diagrams:
 	rsync -avz --delete ../epiworld/docs_src/assets/img/* man/figures/
 
 check: build
-	cd .. && R CMD check epiworldR_*.tar.gz
+	Rscript --vanilla -e 'devtools::check()'
 
 clean:
 	rm -f src/*.dll src/*.so src/*.o
