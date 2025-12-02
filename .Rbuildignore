@@ -5,6 +5,7 @@
 ^DEVELOPMENT\.md$
 ^README\.qmd$
 \.github
+AGENTS\.md
 Makefile
 paper/
 

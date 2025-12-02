@@ -49,7 +49,7 @@ local-update:
 local-update-diagrams:
 	rsync -avz --delete ../epiworld/docs_src/assets/img/* man/figures/
 
-check: build
+check:
 	Rscript --vanilla -e 'devtools::check()'
 
 clean:
@@ -63,7 +63,7 @@ clean:
 docs:
 	Rscript -e 'devtools::document()'
 
-checkv: build
+checkv:
 	R CMD check --as-cran --use-valgrind epiworldR*.tar.gz
 
 # Builds and installs without vignettes
