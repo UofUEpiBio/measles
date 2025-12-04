@@ -22,4 +22,7 @@ Roxygen: list(markdown = TRUE)
 LinkingTo: cpp11, epiworldR
 Suggests:
     tinytest,
-    data.table
+    data.table,
+    quarto
+VignetteBuilder:
+    quarto

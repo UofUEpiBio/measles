@@ -1,0 +1,120 @@
+---
+title: "Mixing model in Southwest Utah"
+author: "George G. Vega Yon, Ph.D."
+date: today
+vignette: >
+  %\VignetteIndexEntry{Network Perception Analysis}
+  %\VignetteEngine{quarto::format}
+  %\VignetteEncoding{UTF-8}
+---
+
+During the 2025 US Measles outbreak, the number of cases in the state of Utah started to climb quickly in the southwest region of the state. This vignette shows how we can use the mixing model of the `measles` R package to do scenario modeling of the situation using both age and school data.
+
+## Set up
+
+We start by loading the `measles` R package. Since the package depends on [`epiworldR`](https://cran.r-project.org/package=epiworldR){target="_blank"}, `epiworldR` is loaded automatically too:
+
+```{r}
+#| label: load
+library(measles)
+```
+
+For the moment, we will use the following data as the mixing matrix
+
+```{r}
+#| label: mixing-matrix
+entities_from_dataframe <- function(
+  model,
+  entities,
+  col_name,
+  col_number,
+  ...
+) {
+  # Basic checker
+  stopifnot_model(model)
+
+  if (!inherits(entities, "data.frame"))
+    stop(
+      "The argument `entities` must be a data.frame. It is of class: ",
+      paste(class(entities), collapse = ", ")
+    )
+
+  # Checking the columns
+  if (!inherits(entities[[col_name]], "character"))
+    stop(
+      "The column `col_name` (", col_name, ") should be of class",
+      "`character`, but it is of class ",
+      paste(class(entities[[col_name]]), collapse = ", ")
+    )
+
+  if (!inherits(entities[[col_number]], "character"))
+    stop(
+      "The column `col_number` (", col_number, ") should be of class",
+      "`numeric`, but it is of class ",
+      paste(class(entities[[col_number]]), collapse = ", ")
+    )
+
+  # Iterating through the rows
+  for (i in seq_len(nrow(entities))) {
+
+    e <- epiworldR::entity(
+      name = entities[[col_name]][i]
+    )
+
+  }
+
+}
+```
+
+## Creating the model
+
+To create the model, we do the following:
+
+```{r}
+#| label: create-model
+# Row-stochastic matrix (rowsums 1)
+cmatrix <- c(
+  c(0.9, 0.05, 0.05),
+  c(0.1, 0.8, 0.1),
+  c(0.1, 0.2, 0.7)
+) |> matrix(byrow = TRUE, nrow = 3)
+
+N <- 9e3
+
+measles_model <- ModelMeaslesMixing(
+  n                        = N,
+  prevalence               = 1 / N,
+  contact_rate             = 15,
+  transmission_rate        = 0.9,
+  vax_efficacy             = 0.97,
+  vax_reduction_recovery_rate = 0.8,
+  incubation_period        = 10,
+  prodromal_period         = 3,
+  rash_period              = 7,
+  contact_matrix           = cmatrix,
+  hospitalization_rate     = 0.1,
+  hospitalization_period   = 10,
+  days_undetected          = 2,
+  quarantine_period        = 14,
+  quarantine_willingness   = 0.9,
+  isolation_willingness    = 0.8,
+  isolation_period         = 10,
+  prop_vaccinated          = 0.95,
+  contact_tracing_success_rate = 0.8,
+  contact_tracing_days_prior = 4
+)
+
+# Adding the entities to the model
+ans <- lapply(seq_along(1:3), \(i) {
+  measles_model |>
+    add_entity(
+      entity(paste("Population", i), 3e3, as_proportion = FALSE)
+    )
+})
+
+set.seed(331)
+run(measles_model, ndays = 100)
+summary(measles_model)
+
+draw_mermaid(measles_model)
+```

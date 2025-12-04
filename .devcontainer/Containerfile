@@ -19,7 +19,7 @@ installGithub.r nx10/httpgd
 
 # Adding R packages
 RUN install2.r --error cpp11 roxygen2 tinytest data.table netplot \
-  devtools decor DiagrammeR
+  devtools decor DiagrammeR quarto
 
 RUN installGithub.r UofUEpiBio/epiworldR@copilot/remove-measles-models
 
