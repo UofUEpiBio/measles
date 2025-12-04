@@ -67,9 +67,19 @@ You can install the measles package from GitHub:
 devtools::install_github("UofUEpiBio/measles")
 ```
 
-Note: This package requires
-[epiworldR](https://cran.r-project.org/package=epiworldR) as a
-dependency.
+Or from <a href="https://uofuepibio.r-universe.dev/"
+target="_blank">R-universe</a> (recommended for the latest development
+version):
+
+``` r
+install.packages(
+  'measles',
+  repos = c(
+    'https://uofuepibio.r-universe.dev',
+    'https://cloud.r-project.org'
+  )
+)
+```
 
 ## Quick Example
 
@@ -168,18 +178,16 @@ citation("measles")
 citation("epiworldR")
 ```
 
-## Authors
-
-This package was developed as part of a collaboration between the
-University of Utah (ForeSITE center grant) and the Utah Department of
-Health and Human Services in response to the 2025 US Measles outbreak.
-
-## License
-
-MIT License - see LICENSE file for details.
-
 ## Contributing
 
-Contributions are welcome! Please see the [epiworldR development
-guidelines](https://github.com/UofUEpiBio/epiworldR/blob/main/DEVELOPMENT.md)
+Contributions are welcome! Please see the [`measles` development
+guidelines](https://github.com/UofUEpiBio/measles/blob/main/DEVELOPMENT.md)
 for information on how to contribute.
+
+## Acknowledgments
+
+This project was made possible by cooperative agreement
+CDC-RFA-FT-23-0069 from the CDC’s Center for Forecasting and Outbreak
+Analytics. Its contents are solely the responsibility of the authors and
+do not necessarily represent the official views of the Centers for
+Disease Control and Prevention.

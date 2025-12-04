@@ -1,12 +1,12 @@
 
-##  epiworldR configure.ac (based off RcppArmadillo configure.ac)
+##  measles configure.ac (based off RcppArmadillo configure.ac)
 ##
 
 ## require at least autoconf 2.69
 AC_PREREQ([2.69])
 
 ## Process this file with autoconf to produce a configure script.
-AC_INIT([epiworldR],[0.2-0],[g.vegayon@gmail.com])
+AC_INIT([measles],[0.1.0],[g.vegayon@gmail.com])
 
 ## Set R_HOME, respecting an environment variable if one is set
 : ${R_HOME=$(R RHOME)}
