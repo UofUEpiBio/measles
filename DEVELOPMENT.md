@@ -13,4 +13,4 @@ Clicking the "Artifact download URL" will download a zip archive titled `measles
 Simply unzip the `measles-built-package-ubuntu-latest-devel.zip` and upload the tarbell.
 
 **NOTE:** On macOS, simply double-clicking the `measles-built-package-ubuntu-latest-devel.zip` file will automatically unzip both the `.zip` and the `.tar.gz` file.
-We found it best to us the `unzip` command in the command line to unzip just the `.zip` file and leave the `.tar.gz` file ready for upload.
+We found it best to use the `unzip` command in the command line to unzip just the `.zip` file and leave the `.tar.gz` file ready for upload.
