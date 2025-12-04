@@ -74,8 +74,19 @@ entities_from_dataframe <- function(
       paste(class(entities[[col_number]]), collapse = ", ")
     )
 
+  # Checking that all the numbers are in the expected range
+  if (any(entities[[col_number]] <= 0L))
+    stop("Entities should have all positive numbers.")
+
+  # Creating sequences of agent ids from 0 to n-1
+  # So we can distribute them to entities
+  roll_sum <- 0L
+
   # Iterating through the rows
   for (i in seq_len(nrow(entities))) {
+    # Setting the distribution set
+    from <- roll_sum
+    to   <- roll_sum + entities[[col_number]][i] - 1L
 
     e <- epiworldR::entity(
       name = entities[[col_name]][i],
@@ -83,7 +94,15 @@ entities_from_dataframe <- function(
       ...
     )
 
+    # Setting the distribution to the set
+    epiworldR::set_distribution_entity(
+      entity = e,
+      distfun = distribute_entity_to_set(from:to)
+    )
+
     epiworldR::add_entity(model, e)
+
+    roll_sum <- to + 1L
 
   }
 

@@ -34,6 +34,13 @@ entities_obj <- get_entities(measles_model)
 esizes <- sapply(entities_obj, \(e) nrow(entity_get_agents(e)))
 expect_true(all(esizes == 3000))
 
+# Should be unique distributions
+lapply(entities_obj, \(e) entity_get_agents(e)[,1]) |>
+  unlist(recursive = FALSE) |>
+  unique() |>
+  length() |>
+  expect_equal(9000)
+
 # Checking names
 enames <- entities_obj |> sapply(get_entity_name)
 expect_equal(enames, entities$name)

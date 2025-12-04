@@ -3,7 +3,7 @@ title: "Mixing model in Southwest Utah"
 author: "George G. Vega Yon, Ph.D."
 date: today
 vignette: >
-  %\VignetteIndexEntry{Network Perception Analysis}
+  %\VignetteIndexEntry{Mixing model in Southwest Utah}
   %\VignetteEngine{quarto::format}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,58 +19,26 @@ We start by loading the `measles` R package. Since the package depends on [`epiw
 library(measles)
 ```
 
-We now load the data from the `multigroup.vaccine` R package:
+For the data, we need two datasets: information about the population distribution by age and vaccination status, and the contact matrix. The `measles` R package comes with a pre-processed dataset that was created using the [`multigroup.vaccine` R package](https://github.com/EpiForeSITE/multigroup-vaccine). We can load the needed data using the `data()` function:
 
 ```{r}
 #| label: data
+data(southwest_utah, package = "measles")
+data(southwest_utah_matrix, package = "measles")
 ```
 
-For the moment, we will use the following data as the mixing matrix
+Let's take a look at the datasets:
 
 ```{r}
-#| label: mixing-matrix
-entities_from_dataframe <- function(
-  model,
-  entities,
-  col_name,
-  col_number,
-  ...
-) {
-  # Basic checker
-  stopifnot_model(model)
+#| label: data-peek
+southwest_utah
 
-  if (!inherits(entities, "data.frame"))
-    stop(
-      "The argument `entities` must be a data.frame. It is of class: ",
-      paste(class(entities), collapse = ", ")
-    )
-
-  # Checking the columns
-  if (!inherits(entities[[col_name]], "character"))
-    stop(
-      "The column `col_name` (", col_name, ") should be of class",
-      "`character`, but it is of class ",
-      paste(class(entities[[col_name]]), collapse = ", ")
-    )
-
-  if (!inherits(entities[[col_number]], "character"))
-    stop(
-      "The column `col_number` (", col_number, ") should be of class",
-      "`numeric`, but it is of class ",
-      paste(class(entities[[col_number]]), collapse = ", ")
-    )
-
-  # Iterating through the rows
-  for (i in seq_len(nrow(entities))) {
-
-    e <- epiworldR::entity(
-      name = entities[[col_name]][i]
-    )
-
-  }
-
-}
+# Looking at the first 5 columns
+southwest_utah_matrix[, 1:5] |>
+  round(2)
 ```
+
+One important thing to note is that the data in `southwest_utah` must conincide with that in the contact matrix, particularly, there should be one entry in the `data.frame` for each row/column of the contact matrix.
 
 ## Creating the model
 
@@ -78,14 +46,7 @@ To create the model, we do the following:
 
 ```{r}
 #| label: create-model
-# Row-stochastic matrix (rowsums 1)
-cmatrix <- c(
-  c(0.9, 0.05, 0.05),
-  c(0.1, 0.8, 0.1),
-  c(0.1, 0.2, 0.7)
-) |> matrix(byrow = TRUE, nrow = 3)
-
-N <- 9e3
+N <- sum(southwest_utah$agepops)
 
 measles_model <- ModelMeaslesMixing(
   n                        = N,
@@ -97,7 +58,7 @@ measles_model <- ModelMeaslesMixing(
   incubation_period        = 10,
   prodromal_period         = 3,
   rash_period              = 7,
-  contact_matrix           = cmatrix,
+  contact_matrix           = southwest_utah_matrix,
   hospitalization_rate     = 0.1,
   hospitalization_period   = 10,
   days_undetected          = 2,
@@ -111,16 +72,15 @@ measles_model <- ModelMeaslesMixing(
 )
 
 # Adding the entities to the model
-ans <- lapply(seq_along(1:3), \(i) {
-  measles_model |>
-    add_entity(
-      entity(paste("Population", i), 3e3, as_proportion = FALSE)
-    )
-})
+entities_from_dataframe(
+  model = measles_model,
+  entities = southwest_utah,
+  col_name = "age_labels",
+  col_number = "agepops",
+  as_proportion = FALSE
+)
 
 set.seed(331)
 run(measles_model, ndays = 100)
 summary(measles_model)
-
-draw_mermaid(measles_model)
 ```

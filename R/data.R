@@ -3,9 +3,12 @@
 #' A matrix containing spatial data for Hildale city, Utah and Colorado
 #' City town, Arizona. The matrix provides an estimate of the mixing
 #' rates between schools and the rest of the population in the area.
+#' **IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
+#' DEVELOPING IT.**
 #'
 #' @format
-#' A matrix with 18 rows and 18 columns with the
+#' A row-stochastic matrix (rows add up to one) with 18 rows and 18 columns
+#' with the
 #'
 #' @source
 #' The data was generated using the `multigroup.vaccine` R package:
@@ -19,13 +22,15 @@
 
 #' Southwest Utah Population Data by Age Group
 #'
-#' A dataset containing population information for southwest Utah organized by age groups.
+#' A dataset containing population information for southwest Utah organized by age groups. **IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
+#' DEVELOPING IT.**
 #'
-#' @format A data frame with 18 rows and 3 columns:
+#' @format A data frame with 18 rows and 4 columns:
 #' \describe{
-#'   \item{age_labels}{character. Labels describing the age groups}
-#'   \item{agepops}{numeric. Population counts for each age group}
-#'   \item{agelims}{numeric. Age limit boundaries for each group}
+#'   \item{age_labels}{character. Labels describing the age groups.}
+#'   \item{agepops}{numeric. Population counts for each age group.}
+#'   \item{agelims}{numeric. Age limit boundaries for each group.}
+#'   \item{vacc_rate}{numeric. Vaccination rate for each age group.}
 #' }
 #'
 #' @details

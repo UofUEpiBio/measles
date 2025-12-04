@@ -75,6 +75,10 @@ southwest_utah_matrix <- contactMatrixAgeSchool(
 
 southwest_utah_matrix |> round(2)
 
+# Ensuring it is row-stochastic
+# Future version of epiworld may support non-row-stochastic matrices.
+southwest_utah_matrix <- southwest_utah_matrix / rowSums(southwest_utah_matrix)
+
 usethis::use_data(
   southwest_utah_matrix,
   internal = FALSE,
@@ -121,6 +125,10 @@ southwest_utah <- southwest_utah[ids]
 stopifnot(
   all(southwest_utah$age_labels == colnames(southwest_utah_matrix))
 )
+
+# Adding a fake vaccination rate
+southwest_utah[, vacc_rate := 0.9]
+southwest_utah[grepl("s", age_labels), vacc_rate := 0.5]
 
 usethis::use_data(
   southwest_utah,

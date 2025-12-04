@@ -5,7 +5,8 @@
 \alias{southwest_utah_matrix}
 \title{Southwest Utah Mixing Matrix}
 \format{
-A matrix with 18 rows and 18 columns with the
+A row-stochastic matrix (rows add up to one) with 18 rows and 18 columns
+with the
 }
 \source{
 The data was generated using the \code{multigroup.vaccine} R package:
@@ -21,5 +22,7 @@ southwest_utah_matrix
 A matrix containing spatial data for Hildale city, Utah and Colorado
 City town, Arizona. The matrix provides an estimate of the mixing
 rates between schools and the rest of the population in the area.
+\strong{IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
+DEVELOPING IT.}
 }
 \keyword{datasets}

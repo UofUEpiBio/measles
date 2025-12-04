@@ -5,11 +5,12 @@
 \alias{southwest_utah}
 \title{Southwest Utah Population Data by Age Group}
 \format{
-A data frame with 18 rows and 3 columns:
+A data frame with 18 rows and 4 columns:
 \describe{
-\item{age_labels}{character. Labels describing the age groups}
-\item{agepops}{numeric. Population counts for each age group}
-\item{agelims}{numeric. Age limit boundaries for each group}
+\item{age_labels}{character. Labels describing the age groups.}
+\item{agepops}{numeric. Population counts for each age group.}
+\item{agelims}{numeric. Age limit boundaries for each group.}
+\item{vacc_rate}{numeric. Vaccination rate for each age group.}
 }
 }
 \source{
@@ -23,7 +24,8 @@ is available at \url{https://github.com/UofUEpiBio/measles}
 southwest_utah
 }
 \description{
-A dataset containing population information for southwest Utah organized by age groups.
+A dataset containing population information for southwest Utah organized by age groups. \strong{IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
+DEVELOPING IT.}
 }
 \details{
 This dataset provides demographic information for southwest Utah,
