@@ -21,7 +21,8 @@ installGithub.r nx10/httpgd
 RUN install2.r --error cpp11 roxygen2 tinytest data.table netplot \
   devtools decor DiagrammeR quarto
 
-RUN installGithub.r UofUEpiBio/epiworldR@copilot/remove-measles-models
+RUN installGithub.r UofUEpiBio/epiworldR@copilot/remove-measles-models \
+  EpiForeSITE/multigroup-vaccine@shortcreek-model
 
 
 CMD ["bash"]

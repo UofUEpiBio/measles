@@ -19,6 +19,12 @@ We start by loading the `measles` R package. Since the package depends on [`epiw
 library(measles)
 ```
 
+We now load the data from the `multigroup.vaccine` R package:
+
+```{r}
+#| label: data
+```
+
 For the moment, we will use the following data as the mixing matrix
 
 ```{r}
