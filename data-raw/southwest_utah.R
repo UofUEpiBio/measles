@@ -19,15 +19,6 @@ colorado_city_path <- system.file(
 # Age groups based on ACS 5-year intervals, adjusted to avoid zero populations
 agelims <- c(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70)
 
-# Vaccine effectiveness by age group (adjusted for these age groups)
-# Using approximate values for these broader age categories
-ageveff <- rep(0.97, length(agelims))  # Most age groups have high effectiveness
-ageveff[1] <- 0.93  # Under 5 may have slightly lower effectiveness
-
-# Initial infection in the 25-29 age group (working age adults)
-# This corresponds to age group 25-29 (index 6)
-initgrp <- 6
-
 cities <- c("Hildale city, Utah", "Colorado City town, Arizona")
 
 city_data_list <- list()
@@ -47,21 +38,16 @@ for (city in cities) {
 
   city_data_list[[city]] <- data
 
-  cat("\n", city, ":\n", sep = "")
-  cat("  Total population:", format(data$total_pop, big.mark = ","), "\n")
-  cat("  Age distribution:\n")
-  for (i in seq_along(data$age_labels)) {
-    pct <- 100 * data$age_pops[i] / data$total_pop
-    cat(sprintf("    %s: %s (%.1f%%)\n",
-      data$age_labels[i],
-      format(data$age_pops[i], big.mark = ","),
-      pct))
-  }
 }
 
 # We extract only the age and pops
-hildale_data <- city_data_list[["Hildale city, Utah"]][c("age_labels", "age_pops")]
-colorado_city_data <- city_data_list[["Colorado City town, Arizona"]][c("age_labels", "age_pops")]
+hildale_data <- city_data_list[["Hildale city, Utah"]][
+  c("age_labels", "age_pops")
+]
+
+colorado_city_data <- city_data_list[["Colorado City town, Arizona"]][
+  c("age_labels", "age_pops")
+]
 
 # Preparing both in a single data.frame
 southwest_utah <- rbind(
@@ -74,15 +60,70 @@ southwest_utah <- southwest_utah[,
 ]
 
 # Preparing the data for Damon's package
-southwest_utah[, agelims := as.integer(gsub(".+to", "", age_labels))]
-southwest_utah[is.na(agelims), agelims := 100L]
+southwest_utah[, agelims := as.integer(gsub("to.+", "", age_labels))]
+southwest_utah[is.na(agelims), agelims := 70L]
 
-schoolagegroups <- c(3, 3, 4, 4, 5, 5)
-schoolpops <- c(350, 350, 100, 100, 200, 200)
+schoolagegroups <- c(2, 2, 3, 3, 4, 4)
+schoolpops <- c(100, 100, 200, 200, 200, 200)
 
-contactMatrixAgeSchool(
+southwest_utah_matrix <- contactMatrixAgeSchool(
   southwest_utah$agelims,
   southwest_utah$agepops,
   schoolagegroups,
   schoolpops, schportion = 0.7
+)
+
+southwest_utah_matrix |> round(2)
+
+usethis::use_data(
+  southwest_utah_matrix,
+  internal = FALSE,
+  overwrite = TRUE
+)
+
+# We now append the school populations to the southwest_utah data
+# substracting the school populations from the age groups
+schools <- southwest_utah[schoolagegroups]
+
+schools[, agepops := schoolpops]
+
+schools_pop <- schools[, .(school_p = sum(agepops)), by = .(age_labels)]
+southwest_utah <- merge(
+  southwest_utah,
+  schools_pop,
+  all = TRUE,
+  by = "age_labels"
+)
+
+southwest_utah[!is.na(school_p), agepops := agepops - school_p]
+southwest_utah[, school_p := NULL]
+
+# Relabeling data
+schools[, age_labels := paste0(age_labels, "s", .I)]
+
+# Putting all together
+southwest_utah <- rbind(
+  southwest_utah,
+  schools
+)
+southwest_utah[age_labels == "70plus", age_labels := "70+"]
+southwest_utah[age_labels == "0to4", age_labels := "under5"]
+
+# Sorting according to the mixing matrix
+ids <- match(
+  colnames(southwest_utah_matrix), southwest_utah$age_labels
+)
+
+ids <- ids[!is.na(ids)]
+southwest_utah <- southwest_utah[ids]
+
+# Ensuring ti works
+stopifnot(
+  all(southwest_utah$age_labels == colnames(southwest_utah_matrix))
+)
+
+usethis::use_data(
+  southwest_utah,
+  internal = FALSE,
+  overwrite = TRUE
 )

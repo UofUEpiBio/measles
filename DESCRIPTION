@@ -28,3 +28,4 @@ Suggests:
     multigroup.vaccine
 VignetteBuilder:
     quarto
+LazyData: true

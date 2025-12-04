@@ -6,6 +6,10 @@
 #' @param model An [epiworld_model] object.
 #' @param entities A `data.frame` with the entities to add. It must contain two
 #' columns: entity names (character) and size (proportion or integer).
+#' @param col_name The name of the column in `entities` that contains the
+#' entity names.
+#' @param col_number The name of the column in `entities` that contains the
+#' entity sizes (either as proportions or integers).
 #' @param ... Further arguments passed to [epiworldR::add_entity()]
 #' @returns
 #' Inivisible the model with the added entities.
@@ -35,6 +39,7 @@
 #'     entities = entities,
 #'     col_name = "name",
 #'     col_number = "size",
+#'     # This is passed to `epiworldR::add_entity()`
 #'     as_proportion = FALSE
 #'   )
 #' @export

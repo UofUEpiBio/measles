@@ -12,6 +12,12 @@ entities_from_dataframe(model, entities, col_name, col_number, ...)
 \item{entities}{A \code{data.frame} with the entities to add. It must contain two
 columns: entity names (character) and size (proportion or integer).}
 
+\item{col_name}{The name of the column in \code{entities} that contains the
+entity names.}
+
+\item{col_number}{The name of the column in \code{entities} that contains the
+entity sizes (either as proportions or integers).}
+
 \item{...}{Further arguments passed to \code{\link[epiworldR:entities]{epiworldR::add_entity()}}}
 }
 \value{
@@ -47,6 +53,7 @@ measles_model <- ModelMeaslesMixing(
     entities = entities,
     col_name = "name",
     col_number = "size",
+    # This is passed to `epiworldR::add_entity()`
     as_proportion = FALSE
   )
 }
