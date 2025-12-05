@@ -23,6 +23,7 @@ jobs:
           extra-packages: |
             any::covr
             github::UofUEpiBio/epiworldR@copilot/remove-measles-models
+            github::EpiForeSITE/multigroup-vaccine@shortcreek-model
           needs: check
 
       - name: Running coverage
