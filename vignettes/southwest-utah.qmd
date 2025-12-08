@@ -122,5 +122,12 @@ ans <- measles_model |>
   )
 
 ans <- ans$virus_hist |> as.data.table()
-ans
+
+outbreak_size <- ans[date == max(date), .(size = sum(n)), by = .(sim_num)]
+```
+
+We can visualize the output:
+
+```{r}
+hist(outbreak_size$size, xlab = "Case count", main = "Outbreak sizes")
 ```
