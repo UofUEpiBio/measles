@@ -8,6 +8,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+::: {.callout-warning title="Warning"}
+The data currently used in this vignette is partly fictional and for demonstration purposes only. Please take that into consideration when interpreting the results. The current vaccination rates in the southwest Utah region will most certainly differ.
+:::
+
 During the 2025 US Measles outbreak, the number of cases in the state of Utah started to climb quickly in the southwest region of the state. This vignette shows how we can use the mixing model of the `measles` R package to do scenario modeling of the situation using both age and school data.
 
 ## Set up
@@ -41,6 +45,10 @@ southwest_utah_matrix[, 1:5] |>
 One important thing to note is that the data in `southwest_utah` must conincide with that in the contact matrix, particularly, there should be one entry in the `data.frame` for each row/column of the contact matrix.
 
 ## Creating the model
+
+::: {.callout-warning title="Warning"}
+The current parameters, particularly those reltatd to transmission, have not been calibrated in this version of the vignette. Please take that into consideration when interpreting the results, which has a basic reproductive number of around 15.
+:::
 
 To create the model, we do the following:
 
@@ -107,27 +115,48 @@ measles_model |>
     nsims = 100,
     seed  = 8812,
     saver = make_saver("virus_hist"),
-    nthreads = 5L
+    nthreads = 2L
   )
 ```
 
-Extracting the data and doing some data processing to assess the outbreak size
+After calling the function `run_multiple()`, the C++ function will write the information to disk. Before we read in the data, we can take a look at the summary of the model, which will give us an overview of the last run, including how much time it spend per simulation, and what is the transsition matrix for the current run.
 
 ```{r}
-library(data.table)
+#| label: summarize
+summary(measles_model)
+```
 
+To retrieve the results, we use the `run_multiple_get_results()` function:
+
+```{r}
+#| label: run_multiple_get_results
+# Extracting the results
 ans <- measles_model |>
   run_multiple_get_results(
     freader = data.table::fread
   )
 
-ans <- ans$virus_hist |> as.data.table()
-
-outbreak_size <- ans[date == max(date), .(size = sum(n)), by = .(sim_num)]
+# Taking a look at the structure
+str(ans)
 ```
 
-We can visualize the output:
+The function call will get us the results as a list of data.frames (data.table objects in this case). Since we are only saving the `"virus_hist"`, we can access that item from the data and, for convinience, process it using the `data.table` package:
 
 ```{r}
+#| label: data.table
+# Converting into data.table format for convenience
+library(data.table)
+ans <- ans$virus_hist |> as.data.table()
+
+# Printing
+ans
+```
+
+Finally, since we are only interested about the final outbreak size (in this case), can will collapse the data to get the total number of cases at the final simulation day. Subsequently, we can plot the results using the `hist` function:
+
+```{r}
+#| label: aggregating-and-plotting
+# Aggregating to get the final
+outbreak_size <- ans[date == max(date), .(size = sum(n)), by = .(sim_num)]
 hist(outbreak_size$size, xlab = "Case count", main = "Outbreak sizes")
 ```
