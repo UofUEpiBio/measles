@@ -1,4 +1,4 @@
-#' Southwest Utah Mixing Matrix
+#' Hildale and Colorado City Mixing Matrix
 #'
 #' A matrix containing spatial data for Hildale city, Utah and Colorado
 #' City town, Arizona. The matrix provides an estimate of the mixing
@@ -18,12 +18,13 @@
 #' is available at <https://github.com/UofUEpiBio/measles>
 #'
 #'
-"southwest_utah_matrix"
+"hildale_and_colorado_city_matrix"
 
-#' Southwest Utah Population Data by Age Group
+#' Hildale and Colorado City Population Data by Age Group
 #'
-#' A dataset containing population information for southwest Utah organized by age groups. **IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
-#' DEVELOPING IT.**
+#' A dataset containing population information for Hildale city, Utah and
+#' Colorado City town, Arizona organized by age groups. **IMPORTANT: THE
+#' SCHOOL-RELATED DATA IS FAKE. WE ARE STILL DEVELOPING IT.**
 #'
 #' @format A data frame with 18 rows and 4 columns:
 #' \describe{
@@ -34,9 +35,9 @@
 #' }
 #'
 #' @details
-#' This dataset provides demographic information for southwest Utah,
-#' with population data disaggregated by 18 age categories. This
-#' dataset matches the [southwest_utah_matrix] matrix.
+#' This dataset provides demographic information for Hildale city, Utah and
+#' Colorado City town, Arizona, with population data disaggregated by 18 age
+#' categories. This dataset matches the [hildale_and_colorado_city_matrix] matrix.
 #'
 #' @source
 #' The data was generated using the `multigroup.vaccine` R package:
@@ -47,7 +48,7 @@
 #'
 #'
 #' @examples
-#' data(southwest_utah)
-#' head(southwest_utah)
+#' data(hildale_and_colorado_city)
+#' head(hildale_and_colorado_city)
 #'
-"southwest_utah"
+"hildale_and_colorado_city"
