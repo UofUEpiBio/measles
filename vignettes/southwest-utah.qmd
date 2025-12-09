@@ -1,0 +1,162 @@
+---
+title: "Mixing model in Southwest Utah"
+author: "George G. Vega Yon, Ph.D."
+date: today
+vignette: >
+  %\VignetteIndexEntry{Mixing model in Southwest Utah}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+::: {.callout-warning title="Warning"}
+The data currently used in this vignette is partly fictional and for demonstration purposes only. Please take that into consideration when interpreting the results. The current vaccination rates in the southwest Utah region will most certainly differ.
+:::
+
+During the 2025 US Measles outbreak, the number of cases in the state of Utah started to climb quickly in the southwest region of the state. This vignette shows how we can use the mixing model of the `measles` R package to do scenario modeling of the situation using both age and school data.
+
+## Set up
+
+We start by loading the `measles` R package. Since the package depends on [`epiworldR`](https://cran.r-project.org/package=epiworldR){target="_blank"}, `epiworldR` is loaded automatically too:
+
+```{r}
+#| label: load
+library(measles)
+```
+
+For the data, we need two datasets: information about the population distribution by age and vaccination status, and the contact matrix. The `measles` R package comes with a pre-processed dataset that was created using the [`multigroup.vaccine` R package](https://github.com/EpiForeSITE/multigroup-vaccine). We can load the needed data using the `data()` function:
+
+```{r}
+#| label: data
+data(southwest_utah, package = "measles")
+data(southwest_utah_matrix, package = "measles")
+```
+
+Let's take a look at the datasets:
+
+```{r}
+#| label: data-peek
+southwest_utah
+
+# Looking at the first 5 columns
+southwest_utah_matrix[, 1:5] |>
+  round(2)
+```
+
+One important thing to note is that the data in `southwest_utah` must coincide with that in the contact matrix, particularly, there should be one entry in the `data.frame` for each row/column of the contact matrix.
+
+## Creating the model
+
+::: {.callout-warning title="Warning"}
+The current parameters, particularly those related to transmission, have not been calibrated in this version of the vignette. Please take that into consideration when interpreting the results, which has a basic reproductive number of around 15.
+:::
+
+To create the model, we do the following:
+
+```{r}
+#| label: create-model
+N <- sum(southwest_utah$agepops)
+
+measles_model <- ModelMeaslesMixing(
+  n                            = N,
+  prevalence                   = 1 / N,
+  contact_rate                 = 15,
+  transmission_rate            = 0.9,
+  vax_efficacy                 = 0.97,
+  contact_matrix               = southwest_utah_matrix,
+  hospitalization_rate         = 0.1,
+  hospitalization_period       = 10,
+  days_undetected              = 2,
+  quarantine_period            = 14,
+  quarantine_willingness       = 0.9,
+  isolation_willingness        = 0.8,
+  isolation_period             = 10,
+  prop_vaccinated              = 0.95,
+  contact_tracing_success_rate = 0.8,
+  contact_tracing_days_prior   = 4
+)
+```
+
+Now, since this is a mixing model, we are required to specify the entities. To do so, we can either use the functions `entity()` and `add_entity()`, or use the wrapper `add_entities_from_dataframe()` as follows:
+
+
+```{r}
+#| label: distribute-virus
+# Adding the entities to the model
+add_entities_from_dataframe(
+  model = measles_model,
+  entities = southwest_utah,
+  col_name = "age_labels",
+  col_number = "agepops",
+  as_proportion = FALSE
+)
+```
+
+We can also specify the vaccination rates. There are multiple ways in which we can do that. The default behavior of the model is, at each run, randomly sample `prop_vaccinated` percent of the population and assign the vaccine. Thus, the number of vaccinated individuals will be constant across simulations. Nonetheless, since the schools and age groups have different vaccination rates, it is better to use the `distribute_tool_to_entities()` function. Like the `add_entities_from_dataframe()` function, the `distribute_tool_to_entities()` function simplifies the process:
+
+```{r}
+#| label: distribute-tool
+# Setting the distribution function
+set_distribution_tool(
+  tool = get_tool(measles_model, 0),
+  distfun = distribute_tool_to_entities(
+    prevalence = southwest_utah$vacc_rate,
+    as_proportion = TRUE
+  )
+)
+```
+
+Now, we can specify what to record from the simulation.
+
+```{r}
+#| label: running-model
+measles_model |>
+  run_multiple(
+    ndays = 100,
+    nsims = 100,
+    seed  = 8812,
+    saver = make_saver("virus_hist"),
+    nthreads = 2L
+  )
+```
+
+After calling the function `run_multiple()`, the C++ function will write the information to disk. Before we read in the data, we can take a look at the summary of the model, which will give us an overview of the last run, including how much time it spend per simulation, and what is the transsition matrix for the current run.
+
+```{r}
+#| label: summarize
+summary(measles_model)
+```
+
+To retrieve the results, we use the `run_multiple_get_results()` function:
+
+```{r}
+#| label: run_multiple_get_results
+# Extracting the results
+ans <- measles_model |>
+  run_multiple_get_results(
+    freader = data.table::fread
+  )
+
+# Taking a look at the structure
+str(ans)
+```
+
+The function call will get us the results as a list of data.frames (data.table objects in this case). Since we are only saving the `"virus_hist"`, we can access that item from the data and, for convenience, process it using the `data.table` package:
+
+```{r}
+#| label: data.table
+# Converting into data.table format for convenience
+library(data.table)
+ans <- ans$virus_hist |> as.data.table()
+
+# Printing
+ans
+```
+
+Finally, since we are only interested about the final outbreak size (in this case), can will collapse the data to get the total number of cases at the final simulation day. Subsequently, we can plot the results using the `hist` function:
+
+```{r}
+#| label: aggregating-and-plotting
+# Aggregating to get the final
+outbreak_size <- ans[date == max(date), .(size = sum(n)), by = .(sim_num)]
+hist(outbreak_size$size, xlab = "Case count", main = "Outbreak sizes")
+```

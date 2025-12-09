@@ -44,6 +44,7 @@ jobs:
           extra-packages: |
             any::pkgdown
             github::UofUEpiBio/epiworldR@copilot/remove-measles-models
+            github::EpiForeSITE/multigroup-vaccine@shortcreek-model
             local::.
           needs: website
 

@@ -49,3 +49,5 @@ revdep/
 # R packages
 .*\.tar\.gz$
 .*\.Rcheck/$
+
+data-raw
