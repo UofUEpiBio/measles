@@ -7,6 +7,8 @@ library(multigroup.vaccine)
 library(socialmixr)
 library(data.table)
 
+
+
 # Load city data files
 hildale_path <- system.file(
   "extdata", "hildale_ut_2023.csv", package = "multigroup.vaccine"
