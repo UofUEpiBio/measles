@@ -24,8 +24,7 @@ LinkingTo: cpp11, epiworldR
 Suggests:
     tinytest,
     data.table,
-    quarto,
-    multigroup.vaccine
+    quarto
 VignetteBuilder:
     quarto
 LazyData: true
