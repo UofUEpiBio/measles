@@ -86,8 +86,8 @@ jobs:
       - name: Check package (Windows)
         if: ${{ matrix.config.os == 'windows-latest' }}
         run: |
-          R CMD build .
-          R CMD check --no-manual (Get-Item measles_*.tar.gz).Name
+          R.exe CMD build .
+          R.exe CMD check --no-manual (Get-Item measles_*.tar.gz).Name
         shell: pwsh
 
       - name: Build the package
