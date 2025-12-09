@@ -4,7 +4,7 @@ author: "George G. Vega Yon, Ph.D."
 date: today
 vignette: >
   %\VignetteIndexEntry{Mixing model in Southwest Utah}
-  %\VignetteEngine{quarto::format}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
 
