@@ -42,12 +42,12 @@ southwest_utah_matrix[, 1:5] |>
   round(2)
 ```
 
-One important thing to note is that the data in `southwest_utah` must conincide with that in the contact matrix, particularly, there should be one entry in the `data.frame` for each row/column of the contact matrix.
+One important thing to note is that the data in `southwest_utah` must coincide with that in the contact matrix, particularly, there should be one entry in the `data.frame` for each row/column of the contact matrix.
 
 ## Creating the model
 
 ::: {.callout-warning title="Warning"}
-The current parameters, particularly those reltatd to transmission, have not been calibrated in this version of the vignette. Please take that into consideration when interpreting the results, which has a basic reproductive number of around 15.
+The current parameters, particularly those related to transmission, have not been calibrated in this version of the vignette. Please take that into consideration when interpreting the results, which has a basic reproductive number of around 15.
 :::
 
 To create the model, we do the following:
@@ -140,7 +140,7 @@ ans <- measles_model |>
 str(ans)
 ```
 
-The function call will get us the results as a list of data.frames (data.table objects in this case). Since we are only saving the `"virus_hist"`, we can access that item from the data and, for convinience, process it using the `data.table` package:
+The function call will get us the results as a list of data.frames (data.table objects in this case). Since we are only saving the `"virus_hist"`, we can access that item from the data and, for convenience, process it using the `data.table` package:
 
 ```{r}
 #| label: data.table
