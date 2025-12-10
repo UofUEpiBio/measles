@@ -51,6 +51,12 @@ model_mixing |>
   add_entity(e2) |>
   add_entity(e3)
 
+# Expecting error
+expect_error(
+  set_contact_matrix(model_mixing, matrix(c(-0.1, 0.5, 0.6, 0.5), 2, 2)),
+  "must be greater than or equal to 0"
+)
+
 # Run the model first so contact matrix is initialized
 set.seed(123)
 run(model_mixing, ndays = 10)
@@ -111,6 +117,12 @@ model_risk_quar |>
   add_entity(e1_rq) |>
   add_entity(e2_rq) |>
   add_entity(e3_rq)
+
+# Expecting error
+expect_error(
+  set_contact_matrix(model_risk_quar, matrix(c(-0.1, 0.5, 0.6, 0.5), 2, 2)),
+  "must be greater than or equal to 0"
+)
 
 # Run the model first so contact matrix is initialized
 set.seed(789)
