@@ -66,3 +66,14 @@ stopifnot_double <- function(x, lb = NULL, ub = NULL) {
     )
   }
 }
+
+# Checks if model object is of class "epiworld_model"
+stopifnot_model <- function(model) {
+  if (!inherits(model, "epiworld_model")) {
+    stop(
+      "The -model- object must be of class 'epiworld_model'. ",
+      "The object passed to the function is of class(es): ",
+      paste(class(model), collapse = ", ")
+    )
+  }
+}

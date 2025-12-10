@@ -2,7 +2,12 @@
 
 ## Internal Changes
 
-* Removed unused functions from `arg-checks.R` to reduce code bloat and improve maintainability. The following functions were removed as they were not used anywhere in the package: `stopifnot_string`, `stopifnot_bool`, `stopifnot_numvector`, `stopifnot_stringvector`, `stopifnot_model`, `stopifnot_agent`, `stopifnot_entity`, `stopifnot_entity_distfun`, `stopifnot_lfmcmc`, `stopifnot_tool`, `stopifnot_tfun`, `stopifnot_tool_distfun`, `stopifnot_virus`, `stopifnot_vfun`, and `stopifnot_virus_distfun`.
+* Removed unused functions from `arg-checks.R` to reduce code bloat and improve maintainability. The following functions were removed as they were not used anywhere in the package: `stopifnot_string`, `stopifnot_bool`, `stopifnot_numvector`, `stopifnot_stringvector`, `stopifnot_agent`, `stopifnot_entity`, `stopifnot_entity_distfun`, `stopifnot_lfmcmc`, `stopifnot_tool`, `stopifnot_tfun`, `stopifnot_tool_distfun`, `stopifnot_virus`, `stopifnot_vfun`, and `stopifnot_virus_distfun`.
+
+* Added argument validation to `get_contact_matrix()` and `set_contact_matrix()` functions:
+  - `stopifnot_model()` now validates model objects in all getter and setter methods
+  - `set_contact_matrix()` now validates that matrices are numeric and contain values between 0 and 1 (probabilities)
+  - Restored `stopifnot_model()` function to `arg-checks.R` for model validation
 
 # measles 0.1.0
 

@@ -113,6 +113,8 @@ get_contact_matrix.default <- function(model) {
 #' @rdname contact_matrix
 #' @export
 get_contact_matrix.epiworld_measlesmixing <- function(model) {
+  stopifnot_model(model)
+  
   # Get the vector from C++ and convert to matrix
   # C++ stores the matrix in column-major order (same as R)
   vec <- get_contact_matrix_mixing_cpp(model)
@@ -123,6 +125,8 @@ get_contact_matrix.epiworld_measlesmixing <- function(model) {
 #' @rdname contact_matrix
 #' @export
 get_contact_matrix.epiworld_measlesmixingriskquarantine <- function(model) {
+  stopifnot_model(model)
+  
   # Get the vector from C++ and convert to matrix
   # C++ stores the matrix in column-major order (same as R)
   vec <- get_contact_matrix_mixing_risk_quarantine_cpp(model)
@@ -150,6 +154,16 @@ set_contact_matrix.default <- function(model, value) {
 #' @rdname contact_matrix
 #' @export
 set_contact_matrix.epiworld_measlesmixing <- function(model, value) {
+  stopifnot_model(model)
+  
+  # Validate the matrix: must be numeric and contain probabilities [0, 1]
+  if (!is.matrix(value) || !is.numeric(value)) {
+    stop("value must be a numeric matrix")
+  }
+  
+  # Check that all values are probabilities (between 0 and 1)
+  stopifnot_double(as.vector(value), lb = 0, ub = 1)
+  
   # as.vector() converts matrix to column-major order (same as C++ expects)
   set_contact_matrix_mixing_cpp(model, as.vector(value))
   invisible(model)
@@ -158,6 +172,16 @@ set_contact_matrix.epiworld_measlesmixing <- function(model, value) {
 #' @rdname contact_matrix
 #' @export
 set_contact_matrix.epiworld_measlesmixingriskquarantine <- function(model, value) {
+  stopifnot_model(model)
+  
+  # Validate the matrix: must be numeric and contain probabilities [0, 1]
+  if (!is.matrix(value) || !is.numeric(value)) {
+    stop("value must be a numeric matrix")
+  }
+  
+  # Check that all values are probabilities (between 0 and 1)
+  stopifnot_double(as.vector(value), lb = 0, ub = 1)
+  
   # as.vector() converts matrix to column-major order (same as C++ expects)
   set_contact_matrix_mixing_risk_quarantine_cpp(model, as.vector(value))
   invisible(model)
