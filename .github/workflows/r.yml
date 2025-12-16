@@ -62,7 +62,7 @@ jobs:
           extra-packages:
             any::rcmdcheck
             any::tinytest
-            github::UofUEpiBio/epiworldR@copilot/remove-measles-models
+            github::UofUEpiBio/epiworldR@main
             github::EpiForeSITE/multigroup-vaccine@shortcreek-model
           needs: check
 
