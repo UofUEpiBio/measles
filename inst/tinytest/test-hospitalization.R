@@ -3,7 +3,18 @@ set.seed(312)
 p_hosp <- 0.1
 p_rec <- 1/3
 
-# Adjusting hospitalization rate for testing purposes
+# Adjusting hospitalization rate for testing purposes.
+# p_hosp is the *target* probability that an infected individual is ever
+# hospitalized over the course of their rash, whereas ModelMeaslesSchool
+# expects a per-time-step hospitalization_rate that acts together with the
+# per-time-step recovery probability p_rec.
+#
+# Because of this interaction, using p_hosp directly as hospitalization_rate
+# would not yield an overall hospitalization proportion of p_hosp in the
+# simulation. The expression below applies the algebraic adjustment implied
+# by the model's transition structure so that, in expectation, the simulated
+# proportion of hospitalized cases (ans$hosp / ans$outbreak_size) is close
+# to p_hosp, as checked by the test at the end of this file.
 hosp_rate <- p_hosp * (1-p_rec) / (1 - p_hosp)
 
 m_model <- ModelMeaslesSchool(
@@ -66,6 +77,11 @@ if (interactive()) {
   )
 }
 
+# The empirical hospitalization rate comes from a stochastic simulation
+# (finite population, 200 days, 1000 simulations), so it will not match
+# the target p_hosp exactly. A 10 percentage point tolerance keeps the
+# test robust to Monte Carlo variability while still detecting substantial
+# deviations from the intended hospitalization rate.
 expect_true(
   abs(mean(ans$hosp/ans$outbreak_size) - p_hosp) < .1
 )
