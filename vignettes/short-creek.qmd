@@ -1,18 +1,18 @@
 ---
-title: "Mixing model in Hildale and Colorado City"
+title: "Mixing model in Short Creek"
 author: "George G. Vega Yon, Ph.D."
 date: today
 vignette: >
-  %\VignetteIndexEntry{Mixing model in Hildale and Colorado City}
+  %\VignetteIndexEntry{Mixing model in Short Creek}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
 
 ::: {.callout-warning title="Warning"}
-The data currently used in this vignette is partly fictional and for demonstration purposes only. Please take that into consideration when interpreting the results. The current vaccination rates in the Hildale and Colorado City region will most certainly differ.
+The data currently used in this vignette is partly fictional and for demonstration purposes only. Please take that into consideration when interpreting the results. The current vaccination rates in the Short Creek region will most certainly differ.
 :::
 
-During the 2025 US Measles outbreak, the number of cases in the state of Utah started to climb quickly in the Hildale and Colorado City region (on the Utah-Arizona border). This vignette shows how we can use the mixing model of the `measles` R package to do scenario modeling of the situation using both age and school data.
+During the 2025 US Measles outbreak, the number of cases in the state of Utah started to climb quickly in the Short Creek region (on the Utah-Arizona border). This vignette shows how we can use the mixing model of the `measles` R package to do scenario modeling of the situation using both age and school data.
 
 ## Set up
 
@@ -27,22 +27,22 @@ For the data, we need two datasets: information about the population distributio
 
 ```{r}
 #| label: data
-data(hildale_and_colorado_city, package = "measles")
-data(hildale_and_colorado_city_matrix, package = "measles")
+data(short_creek, package = "measles")
+data(short_creek_matrix, package = "measles")
 ```
 
 Let's take a look at the datasets:
 
 ```{r}
 #| label: data-peek
-hildale_and_colorado_city
+short_creek
 
 # Looking at the first 5 columns
-hildale_and_colorado_city_matrix[, 1:5] |>
+short_creek_matrix[, 1:5] |
   round(2)
 ```
 
-One important thing to note is that the data in `hildale_and_colorado_city` must coincide with that in the contact matrix, particularly, there should be one entry in the `data.frame` for each row/column of the contact matrix.
+One important thing to note is that the data in `short_creek` must coincide with that in the contact matrix, particularly, there should be one entry in the `data.frame` for each row/column of the contact matrix.
 
 ## Creating the model
 
@@ -54,7 +54,7 @@ To create the model, we do the following:
 
 ```{r}
 #| label: create-model
-N <- sum(hildale_and_colorado_city$agepops)
+N <- sum(short_creek$agepops)
 
 measles_model <- ModelMeaslesMixing(
   n                            = N,
@@ -62,7 +62,7 @@ measles_model <- ModelMeaslesMixing(
   contact_rate                 = 15,
   transmission_rate            = 0.9,
   vax_efficacy                 = 0.97,
-  contact_matrix               = hildale_and_colorado_city_matrix,
+  contact_matrix               = short_creek_matrix,
   hospitalization_rate         = 0.1,
   hospitalization_period       = 10,
   days_undetected              = 2,
@@ -84,7 +84,7 @@ Now, since this is a mixing model, we are required to specify the entities. To d
 # Adding the entities to the model
 add_entities_from_dataframe(
   model = measles_model,
-  entities = hildale_and_colorado_city,
+  entities = short_creek,
   col_name = "age_labels",
   col_number = "agepops",
   as_proportion = FALSE
@@ -99,7 +99,7 @@ We can also specify the vaccination rates. There are multiple ways in which we c
 set_distribution_tool(
   tool = get_tool(measles_model, 0),
   distfun = distribute_tool_to_entities(
-    prevalence = hildale_and_colorado_city$vacc_rate,
+    prevalence = short_creek$vacc_rate,
     as_proportion = TRUE
   )
 )

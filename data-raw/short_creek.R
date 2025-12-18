@@ -1,4 +1,4 @@
-# This file generates the data for the Hildale and Colorado City measles vignette
+# This file generates the data for the Short Creek measles vignette
 # The original code was adapted from the multigroup.vaccine package,
 # in a vignette by @JakeWags:
 # https://github.com/EpiForeSITE/multigroup-vaccine/blob/54acee568fbb0666231ab59f19d33841337d7402/vignettes/hildale_and_colorado_city.Rmd
@@ -16,10 +16,17 @@ colorado_city_path <- system.file(
   "extdata", "colorado_city_az_2023.csv", package = "multigroup.vaccine"
 )
 
+centenial_park_path <- system.file(
+  "extdata", "centenial_park_az_2023.csv", package = "multigroup.vaccine"
+)
+
 # Age groups based on ACS 5-year intervals, adjusted to avoid zero populations
 agelims <- c(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70)
 
-cities <- c("Hildale city, Utah", "Colorado City town, Arizona")
+cities <- c(
+  "Hildale city, Utah", "Colorado City town, Arizona",
+  "Centennial Park CDP, Arizona"
+)
 
 city_data_list <- list()
 
@@ -49,89 +56,103 @@ colorado_city_data <- city_data_list[["Colorado City town, Arizona"]][
   c("age_labels", "age_pops")
 ]
 
+centenial_park_data <- city_data_list[["Centennial Park CDP, Arizona"]][
+  c("age_labels", "age_pops")
+]
+
 # Preparing both in a single data.frame
-hildale_and_colorado_city <- rbind(
-  with(hildale_data, data.frame(city = "Hildale, UT", age_labels, age_pops)),
-  with(colorado_city_data, data.frame(city = "Colorado City, AZ", age_labels, age_pops))
+short_creek <- rbind(
+  with(
+    hildale_data,
+    data.frame(city = "Hildale, UT", age_labels, age_pops)
+  ),
+  with(
+    colorado_city_data,
+    data.frame(city = "Colorado City, AZ", age_labels, age_pops)
+  ),
+  with(
+    centenial_park_data,
+    data.frame(city = "Centennial Park, AZ", age_labels, age_pops)
+  )
 ) |> data.table()
 
-hildale_and_colorado_city <- hildale_and_colorado_city[,
+short_creek <- short_creek[,
   .(agepops = sum(age_pops)), by = "age_labels"
 ]
 
 # Preparing the data for Damon's package
-hildale_and_colorado_city[, agelims := as.integer(gsub("to.+", "", age_labels))]
-hildale_and_colorado_city[is.na(agelims), agelims := 70L]
+short_creek[, agelims := as.integer(gsub("to.+", "", age_labels))]
+short_creek[is.na(agelims), agelims := 70L]
 
 schoolagegroups <- c(2, 2, 3, 3, 4, 4)
 schoolpops <- c(100, 100, 200, 200, 200, 200)
 
-hildale_and_colorado_city_matrix <- contactMatrixAgeSchool(
-  hildale_and_colorado_city$agelims,
-  hildale_and_colorado_city$agepops,
+short_creek_matrix <- contactMatrixAgeSchool(
+  short_creek$agelims,
+  short_creek$agepops,
   schoolagegroups,
   schoolpops, schportion = 0.7
 )
 
-hildale_and_colorado_city_matrix |> round(2)
+short_creek_matrix |> round(2)
 
 # Ensuring it is row-stochastic
 # Future version of epiworld may support non-row-stochastic matrices.
-hildale_and_colorado_city_matrix <- hildale_and_colorado_city_matrix / rowSums(hildale_and_colorado_city_matrix)
+short_creek_matrix <- short_creek_matrix / rowSums(short_creek_matrix)
 
 usethis::use_data(
-  hildale_and_colorado_city_matrix,
+  short_creek_matrix,
   internal = FALSE,
   overwrite = TRUE
 )
 
-# We now append the school populations to the hildale_and_colorado_city data
+# We now append the school populations to the short_creek data
 # substracting the school populations from the age groups
-schools <- hildale_and_colorado_city[schoolagegroups]
+schools <- short_creek[schoolagegroups]
 
 schools[, agepops := schoolpops]
 
 schools_pop <- schools[, .(school_p = sum(agepops)), by = .(age_labels)]
-hildale_and_colorado_city <- merge(
-  hildale_and_colorado_city,
+short_creek <- merge(
+  short_creek,
   schools_pop,
   all = TRUE,
   by = "age_labels"
 )
 
-hildale_and_colorado_city[!is.na(school_p), agepops := agepops - school_p]
-hildale_and_colorado_city[, school_p := NULL]
+short_creek[!is.na(school_p), agepops := agepops - school_p]
+short_creek[, school_p := NULL]
 
 # Relabeling data
 schools[, age_labels := paste0(age_labels, "s", .I)]
 
 # Putting all together
-hildale_and_colorado_city <- rbind(
-  hildale_and_colorado_city,
+short_creek <- rbind(
+  short_creek,
   schools
 )
-hildale_and_colorado_city[age_labels == "70plus", age_labels := "70+"]
-hildale_and_colorado_city[age_labels == "0to4", age_labels := "under5"]
+short_creek[age_labels == "70plus", age_labels := "70+"]
+short_creek[age_labels == "0to4", age_labels := "under5"]
 
 # Sorting according to the mixing matrix
 ids <- match(
-  colnames(hildale_and_colorado_city_matrix), hildale_and_colorado_city$age_labels
+  colnames(short_creek_matrix), short_creek$age_labels
 )
 
 ids <- ids[!is.na(ids)]
-hildale_and_colorado_city <- hildale_and_colorado_city[ids]
+short_creek <- short_creek[ids]
 
 # Ensuring ti works
 stopifnot(
-  all(hildale_and_colorado_city$age_labels == colnames(hildale_and_colorado_city_matrix))
+  all(short_creek$age_labels == colnames(short_creek_matrix))
 )
 
 # Adding a fake vaccination rate
-hildale_and_colorado_city[, vacc_rate := 0.9]
-hildale_and_colorado_city[grepl("s", age_labels), vacc_rate := 0.5]
+short_creek[, vacc_rate := 0.9]
+short_creek[grepl("s", age_labels), vacc_rate := 0.5]
 
 usethis::use_data(
-  hildale_and_colorado_city,
+  short_creek,
   internal = FALSE,
   overwrite = TRUE
 )
