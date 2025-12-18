@@ -1,8 +1,9 @@
-#' Hildale and Colorado City Mixing Matrix
+#' Short Creek Mixing Matrix
 #'
-#' A matrix containing spatial data for Hildale city, Utah and Colorado
-#' City town, Arizona. The matrix provides an estimate of the mixing
-#' rates between schools and the rest of the population in the area.
+#' A matrix containing spatial data for the Short Creek area (Hildale city,
+#' Utah, Colorado City town, Arizona, and Centenial Park, Arizona).
+#' The matrix provides an estimate of
+#' the mixing rates between schools and the rest of the population in the area.
 #' **IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
 #' DEVELOPING IT.**
 #'
@@ -18,13 +19,15 @@
 #' is available at <https://github.com/UofUEpiBio/measles>
 #'
 #'
-"hildale_and_colorado_city_matrix"
+"short_creek_matrix"
 
-#' Hildale and Colorado City Population Data by Age Group
+#' Short Creek Population Data by Age Group
 #'
-#' A dataset containing population information for Hildale city, Utah and
-#' Colorado City town, Arizona organized by age groups. **IMPORTANT: THE
-#' SCHOOL-RELATED DATA IS FAKE. WE ARE STILL DEVELOPING IT.**
+#' A dataset containing population information for the Short Creek area
+#' (Hildale city, Utah, Colorado City town, Arizona, and Centeial Park,
+#' Arizona) organized by age
+#' groups. **IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
+#' DEVELOPING IT.**
 #'
 #' @format A data frame with 18 rows and 4 columns:
 #' \describe{
@@ -35,9 +38,11 @@
 #' }
 #'
 #' @details
-#' This dataset provides demographic information for Hildale city, Utah and
-#' Colorado City town, Arizona, with population data disaggregated by 18 age
-#' categories. This dataset matches the [hildale_and_colorado_city_matrix] matrix.
+#' This dataset provides demographic information for the Short Creek area
+#' (Hildale city, Utah, Colorado City town, Arizona, and Centenial Park,
+#' Arizona), with population data
+#' disaggregated by 18 age categories. This dataset matches the
+#' [short_creek_matrix] matrix.
 #'
 #' @source
 #' The data was generated using the `multigroup.vaccine` R package:
@@ -48,7 +53,7 @@
 #'
 #'
 #' @examples
-#' data(hildale_and_colorado_city)
-#' head(hildale_and_colorado_city)
+#' data(short_creek)
+#' head(short_creek)
 #'
-"hildale_and_colorado_city"
+"short_creek"

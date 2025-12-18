@@ -14,6 +14,7 @@ help:
 	@echo "  local-update-diagrams  Update diagrams from local epiworld docs_src folder"
 	@echo "  website             Build the pkgdown website"
 	@echo "  clean               Clean compiled files and reset DESCRIPTION and NAMESPACE"
+	@echo "  data-raw            Run the Rscripts in data-raw to regenerate datasets"
 
 build:
 	cd .. && R CMD build epiworldR
@@ -74,4 +75,10 @@ dev: clean
 website:
 	Rscript -e 'pkgdown::build_site()'
 
-.PHONY: build update check clean docs docker-debug dev website
+data-raw: data-raw/*.R
+	for f in data-raw/*.R; do \
+		R CMD BATCH $$f && rm -f $$f.Rout; \
+	done
+
+
+.PHONY: build update check clean docs docker-debug dev website install install-dev help local-update local-update-diagrams checkv debug
