@@ -40,7 +40,7 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
-            github::UofUEpiBio/epiworldR@gvegayon/hosptracker
+            github::UofUEpiBio/epiworldR@main
             github::EpiForeSITE/multigroup-vaccine@shortcreek-model
           needs: check
 

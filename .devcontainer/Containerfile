@@ -21,7 +21,7 @@ installGithub.r nx10/httpgd
 RUN install2.r --error cpp11 roxygen2 tinytest data.table netplot \
   devtools decor DiagrammeR quarto
 
-RUN installGithub.r UofUEpiBio/epiworldR@gvegayon/hosptracker \
+RUN installGithub.r UofUEpiBio/epiworldR@main \
   EpiForeSITE/multigroup-vaccine@shortcreek-model
 
 
