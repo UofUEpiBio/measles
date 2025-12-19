@@ -30,7 +30,9 @@ run_multiple(
   m_model,
   ndays = 200,
   nsims = 1000,
-  saver = make_saver("transition", "outbreak_size", "transmission"),
+  saver = make_saver(
+    "transition", "outbreak_size", "transmission", "hospitalizations"
+    ),
   nthreads = 2,
   seed = 1123
 )
@@ -42,6 +44,7 @@ library(data.table)
 ans_transition <- ans$transition
 ans_outbreak_size <- ans$outbreak_size
 ans_transmission <- ans$transmission
+ans_hospitalizations <- ans$hospitalizations
 
 mean_o_s_transmission <- ans_transmission[, .N, by = "sim_num"]
 
@@ -85,3 +88,13 @@ if (interactive()) {
 expect_true(
   abs(mean(ans$hosp/ans$outbreak_size) - p_hosp) < .1
 )
+
+# Comparing the hospitalizations we retrieved from the 
+# "hospitalizations" saver vs that from the transition matrix
+# (should be the same)
+
+# Computing from the data
+mean_hosp <- ans_hospitalizations[, .(real_hosp=sum(count)), by = .(sim_num)]
+
+ans <- merge(ans, mean_hosp, by = "sim_num")
+expect_true(ans[, all(hosp == real_hosp)])
