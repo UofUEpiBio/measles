@@ -25,10 +25,10 @@ short_creek
 }
 \description{
 A dataset containing population information for the Short Creek area
-(Hildale city, Utah, Colorado City town, Arizona, and Centeial Park,
+(Hildale city, Utah, Colorado City town, Arizona, and Centennial Park,
 Arizona) organized by age
-groups. \strong{IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
-DEVELOPING IT.}
+groups. \strong{IMPORTANT: This dataset is still under review. Please take
+any results with caution.}
 }
 \details{
 This dataset provides demographic information for the Short Creek area

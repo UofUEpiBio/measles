@@ -16,8 +16,8 @@ colorado_city_path <- system.file(
   "extdata", "colorado_city_az_2023.csv", package = "multigroup.vaccine"
 )
 
-centenial_park_path <- system.file(
-  "extdata", "centenial_park_az_2023.csv", package = "multigroup.vaccine"
+centennial_park_path <- system.file(
+  "extdata", "centennial_park_az_2023.csv", package = "multigroup.vaccine"
 )
 
 # Age groups based on ACS 5-year intervals, adjusted to avoid zero populations
@@ -33,8 +33,12 @@ city_data_list <- list()
 for (city in cities) {
   if (grepl("Hildale", city)) {
     csv_path <- hildale_path
-  } else {
+  } else if (grepl("Colorado City", city)) {
     csv_path <- colorado_city_path
+  } else if (grepl("Centennial Park", city)) {
+    csv_path <- centennial_park_path
+  } else {
+    stop("Unknown city: ", city)
   }
 
   data <- getCityData(
@@ -84,8 +88,9 @@ short_creek <- short_creek[,
 short_creek[, agelims := as.integer(gsub("to.+", "", age_labels))]
 short_creek[is.na(agelims), agelims := 70L]
 
-schoolagegroups <- c(2, 2, 3, 3, 4, 4)
-schoolpops <- c(100, 100, 200, 200, 200, 200)
+schoolpops <- c(250, 350, 190, 86, 150, 84, 114, 108, 205)
+schoolagegroups <- c(3, 3, 3, 4, 4, 4, 5, 5, 5)
+schoolvax <- c(16, 129, 80, 20, 55, 50, 27, 40, 93)
 
 short_creek_matrix <- contactMatrixAgeSchool(
   short_creek$agelims,
@@ -148,8 +153,11 @@ stopifnot(
 )
 
 # Adding a fake vaccination rate
-short_creek[, vacc_rate := 0.9]
-short_creek[grepl("s", age_labels), vacc_rate := 0.5]
+short_creek[, vacc_rate := 0.93]
+short_creek[
+  grepl("s", age_labels),
+  vacc_rate := schoolvax / schoolpops
+]
 
 usethis::use_data(
   short_creek,
