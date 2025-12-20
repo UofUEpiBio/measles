@@ -4,8 +4,8 @@
 #' Utah, Colorado City town, Arizona, and Centenial Park, Arizona).
 #' The matrix provides an estimate of
 #' the mixing rates between schools and the rest of the population in the area.
-#' **IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
-#' DEVELOPING IT.**
+#' **IMPORTANT: This dataset is still under review. Please take
+#' any results with caution.**
 #'
 #' @format
 #' A row-stochastic matrix (rows add up to one) with 18 rows and 18 columns
@@ -24,10 +24,10 @@
 #' Short Creek Population Data by Age Group
 #'
 #' A dataset containing population information for the Short Creek area
-#' (Hildale city, Utah, Colorado City town, Arizona, and Centeial Park,
+#' (Hildale city, Utah, Colorado City town, Arizona, and Centennial Park,
 #' Arizona) organized by age
-#' groups. **IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
-#' DEVELOPING IT.**
+#' groups. **IMPORTANT: This dataset is still under review. Please take
+#' any results with caution.**
 #'
 #' @format A data frame with 18 rows and 4 columns:
 #' \describe{

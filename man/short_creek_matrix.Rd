@@ -23,7 +23,7 @@ A matrix containing spatial data for the Short Creek area (Hildale city,
 Utah, Colorado City town, Arizona, and Centenial Park, Arizona).
 The matrix provides an estimate of
 the mixing rates between schools and the rest of the population in the area.
-\strong{IMPORTANT: THE SCHOOL-RELATED DATA IS FAKE. WE ARE STILL
-DEVELOPING IT.}
+\strong{IMPORTANT: This dataset is still under review. Please take
+any results with caution.}
 }
 \keyword{datasets}
