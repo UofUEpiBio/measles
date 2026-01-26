@@ -44,7 +44,6 @@ jobs:
           extra-packages: |
             any::pkgdown
             github::UofUEpiBio/epiworldR@main
-            github::EpiForeSITE/multigroup-vaccine@shortcreek-model
             local::.
           needs: website
 

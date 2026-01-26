@@ -41,7 +41,6 @@ jobs:
           extra-packages: |
             any::rcmdcheck
             github::UofUEpiBio/epiworldR@main
-            github::EpiForeSITE/multigroup-vaccine@shortcreek-model
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2

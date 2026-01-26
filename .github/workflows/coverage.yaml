@@ -23,7 +23,6 @@ jobs:
           extra-packages: |
             any::covr
             github::UofUEpiBio/epiworldR@main
-            github::EpiForeSITE/multigroup-vaccine@shortcreek-model
           needs: check
 
       - name: Running coverage
