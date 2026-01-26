@@ -22,7 +22,6 @@ jobs:
         with:
           extra-packages: |
             any::covr
-            github::UofUEpiBio/epiworldR@main
           needs: check
 
       - name: Running coverage

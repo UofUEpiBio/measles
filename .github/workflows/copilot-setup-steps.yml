@@ -39,5 +39,4 @@ jobs:
           extra-packages: |
             any::rcmdcheck
             any::tinytest
-            github::UofUEpiBio/epiworldR@main
           needs: check

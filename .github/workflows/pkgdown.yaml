@@ -43,7 +43,6 @@ jobs:
         with:
           extra-packages: |
             any::pkgdown
-            github::UofUEpiBio/epiworldR@main
             local::.
           needs: website
 
