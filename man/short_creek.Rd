@@ -5,7 +5,7 @@
 \alias{short_creek}
 \title{Short Creek Population Data by Age Group}
 \format{
-A data frame with 18 rows and 4 columns:
+A data frame with 15 rows and 4 columns:
 \describe{
 \item{age_labels}{character. Labels describing the age groups.}
 \item{agepops}{numeric. Population counts for each age group.}
@@ -16,7 +16,7 @@ A data frame with 18 rows and 4 columns:
 \source{
 The data was generated using the \code{multigroup.vaccine} R package:
 Toth D (2025). \emph{multigroup.vaccine: Multigroup Vaccine Model}. R
-package version 0.1.0, commit 54acee568fbb0666231ab59f19d33841337d7402,
+package version 0.1.0, commit 3047ebf568c9b2028336dc14af587a282de9e225,
 \url{https://github.com/EpiForeSITE/multigroup-vaccine}. The source code
 is available at \url{https://github.com/UofUEpiBio/measles}
 }
@@ -27,15 +27,20 @@ short_creek
 A dataset containing population information for the Short Creek area
 (Hildale city, Utah, Colorado City town, Arizona, and Centennial Park,
 Arizona) organized by age
-groups. \strong{IMPORTANT: This dataset is still under review. Please take
-any results with caution.}
+groups.
 }
 \details{
 This dataset provides demographic information for the Short Creek area
 (Hildale city, Utah, Colorado City town, Arizona, and Centenial Park,
 Arizona), with population data
-disaggregated by 18 age categories. This dataset matches the
+disaggregated by 15 age categories. This dataset matches the
 \link{short_creek_matrix} matrix.
+
+This data uses real vaccination rates from publicly available school
+records, and population age structure and composition from the latest US
+census. Vaccination rates for the non-school-aged population were imputed
+based on assumptions and do not reflect the actual vaccination information
+for those age groups.
 }
 \examples{
 data(short_creek)

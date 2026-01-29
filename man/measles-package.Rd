@@ -20,13 +20,4 @@ Useful links:
 }
 
 }
-\author{
-\strong{Maintainer}: George Vega Yon \email{g.vegayon@gmail.com} (\href{https://orcid.org/0000-0002-3171-0844}{ORCID})
-
-Other contributors:
-\itemize{
-  \item Centers for Disease Control and Prevention (Award number 1U01CK000585; 75D30121F00003) [funder]
-}
-
-}
 \keyword{internal}
