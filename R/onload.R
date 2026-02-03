@@ -7,10 +7,12 @@ check_epiworldr_version <- function() {
 
   if (ev < required) {
     packageStartupMessage(
-      "The installed version of the epiworldR R package (", ev,
-      ") is not the latest available. Since epiworldR is actively ",
-      "used in public health responses, the package is ",
-      "continually updated. Please install version ", required, "."
+      "===================== {measles} note =====================\n",
+      "The installed version of the {epiworldR} R package\n",
+      "(", ev, ") is not the latest available. Since {epiworldR}\n",
+      "is actively used in public health responses, the package\n",
+      "is continually updated. Please install version ", required, ".\n",
+      "=========================================================="
     )
   }
 
