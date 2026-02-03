@@ -37,5 +37,3 @@ Suggests:
 VignetteBuilder:
     quarto
 LazyData: true
-Remotes:
-    UofUEpiBio/epiworldR@gvegayon/binomial_in_measles
