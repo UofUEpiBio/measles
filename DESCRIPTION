@@ -4,7 +4,7 @@ Title: Measles Epidemiological Models
 Version: 0.1.0
 Depends:
     R (>= 4.1.0),
-    epiworldR (>= 0.11.2.0)
+    epiworldR (>= 0.11.0.1)
 Authors@R: c(
   person(given="George", family="Vega Yon", role=c("aut", "cre"),
   email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")),
@@ -30,6 +30,7 @@ RoxygenNote: 7.3.3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 LinkingTo: cpp11, epiworldR
+Imports: utils
 Suggests:
     tinytest,
     data.table,
@@ -37,5 +38,3 @@ Suggests:
 VignetteBuilder:
     quarto
 LazyData: true
-Remotes:
-    UofUEpiBio/epiworldR@gvegayon/binomial_in_measles
