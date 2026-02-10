@@ -39,9 +39,9 @@ The software `measles` implements agent-based models for simulating measles outb
 
 ## Statement of need
 
-The 2025 US measles outbreak, which began in Texas, has resulted in thousands of cases across the United States. In parallel with the rise of anti-vaccination campaigns, diseases such as measles—previously considered eliminated in many settings—have re-emerged as significant public health concerns. Measles is a highly transmissible yet preventable disease, but declining immunization coverage over the past decade has reduced population immunity below the levels required to prevent outbreaks, 93%.
+The 2025 US measles outbreak, which began in Texas, has resulted in thousands of cases across the United States. In parallel with the rise of anti-vaccination campaigns, diseases such as measles—previously considered eliminated in many settings—have re-emerged as significant public health concerns. Measles is a highly transmissible yet preventable disease, but declining immunization coverage over the past decade has reduced population immunity below the levels required to prevent outbreaks, which is often indicated to be about 93%, based on an basic reproductive number estimated to be about 15 [@guerraBasicReproductionNumber2017].
 
-Although agent-based models of measles exist, many are not readily accessible to non-expert users or designed for routine use by public health practitioners. During the 2025 outbreak, public health partners explicitly identified the need for a user-friendly, well-documented measles modeling tool that could be used to support decision-making in real time (InsightNet Annual Conference, 2025, Measles session).
+Although agent-based models of measles exist, many are not readily accessible to non-expert users or designed for routine use by public health practitioners. During the 2025 outbreak, public health partners explicitly identified the need for a user-friendly, well-documented measles modeling tool that could be used to support decision-making in real time [@InsightNetAnnual].
 
 The models implemented in the `measles` R package were developed and refined through extensive use by public health officials during outbreak response efforts. As a result, the package provides battle-tested, performant, and well-documented agent-based models that bring advanced modeling capabilities closer to practitioners. By lowering technical barriers, the `measles` package enables epidemiologists and public health officials to explore outbreak dynamics and evaluate intervention strategies using a tool grounded in real-world public health practice.
 
@@ -66,6 +66,8 @@ Each model implements the full disease progression of measles, including suscept
 An extended example is included that simulates an outbreak in the southwest region of Utah (Short Creek), integrating school-level vaccination data from the Utah Department of Health and Human Services, population age structure from the U.S. Census, and age-specific mixing patterns from the POLYMOD survey.
 
 ![Mixing Model in the `measles` package. The model features multiple "entities" to which agents belong. These can represent age-groups, schools, or any sort of set of individuals within a population. How agents within these entities interact is given by a mixing matrix. Entities can have different vaccination rates.](mixing-seir-epiworld.png)
+
+Finally, the package, including documentation, is readily available in the Comprehensive R Archive Network (CRAN), as well as GitHub, <https://github.com/UofUEpiBio/measles>, where the development takes place.
 
 ## Research impact statement
 
