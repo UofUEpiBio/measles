@@ -65,7 +65,7 @@ Each model implements the full disease progression of measles, including suscept
 
 An extended example is included that simulates an outbreak in the southwest region of Utah (Short Creek), integrating school-level vaccination data from the Utah Department of Health and Human Services, population age structure from the U.S. Census, and age-specific mixing patterns from the POLYMOD survey.
 
-![Mixing Model in the `measles` package. The model features multiple "entities" to which agents belong. These can represent age-groups, schools, or any sort of set of individuals within a population. How agents within these entities interact is given by a mixing matrix. Entities can have different vaccination rates.](mixing-seir-epiworld.pdf)
+![Mixing Model in the `measles` package. The model features multiple "entities" to which agents belong. These can represent age-groups, schools, or any sort of set of individuals within a population. How agents within these entities interact is given by a mixing matrix. Entities can have different vaccination rates.](mixing-seir-epiworld.png)
 
 ## Research impact statement
 
