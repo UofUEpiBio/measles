@@ -22,9 +22,10 @@ authors:
     affiliation: "1"
     orcid: 0009-0000-5053-2281
     equal-contrib: false
-  - given-name: Olivia
+  - given-names: Olivia
     surname: Banks
     affiliation: "1"
+    equal-contrib: false
     orcid: 0009-0008-7611-6030
 affiliations:
  - name: The University of Utah, United States
@@ -63,6 +64,8 @@ All models in `measles` are discrete-time agent-based models that differ in how 
 Each model implements the full disease progression of measles, including susceptible, exposed, prodromal, rash, and recovered states, as well as hospitalization and quarantine processes. The application programming interface allows users to modify key components such as contact rates, individual susceptibility, index cases, initial conditions, and quarantine policies.
 
 An extended example is included that simulates an outbreak in the southwest region of Utah (Short Creek), integrating school-level vaccination data from the Utah Department of Health and Human Services, population age structure from the U.S. Census, and age-specific mixing patterns from the POLYMOD survey.
+
+![Mixing Model in the `measles` package. The model features multiple "entities" to which agents belong. These can represent age-groups, schools, or any sort of set of individuals within a population. How agents within these entities interact is given by a mixing matrix. Entities can have different vaccination rates.](mixing-seir-epiworld.pdf)
 
 ## Research impact statement
 
