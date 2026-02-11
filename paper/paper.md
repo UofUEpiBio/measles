@@ -80,3 +80,9 @@ The `measles` package continues to be used through active collaborations with pu
 ## AI usage disclosure
 
 Generative AI tools were used in the development of this work. GitHub Copilot was used to assist with portions of the software implementation. ChatGPT was used to assist with drafting and editing parts of this manuscript. All AI-assisted content was reviewed and validated by the authors. In the case of the ChatGPT assisted component, you can review the entire conversation in [this link](https://chatgpt.com/share/698ac27e-9dac-800d-b6de-c5aef213065f).
+
+# Acknowledgements
+
+This work was supported by the Centers for Disease Control and Prevention, Modeling Infectious Diseases in Healthcare Network award U01CK000585 and Insight Net award number CDC-RFA-FT-23-0069.
+
+# References
