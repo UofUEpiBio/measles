@@ -1,3 +1,12 @@
+# measles 0.1-1
+
+## Internal changes
+
+* Simplified `configure.ac` to address CRAN policy compliance:
+  removed unnecessary C++11 compiler testing, removed custom OpenMP
+  detection in favor of R's `$(SHLIB_OPENMP_CXXFLAGS)`, and added
+  missing output for the dev version configure check.
+
 # measles 0.1.0
 
 This is the first release of the measles R package, a spin-off of the epiworldR package, focused on modeling measles transmission dynamics.
