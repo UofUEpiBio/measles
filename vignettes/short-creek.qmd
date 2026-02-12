@@ -9,7 +9,7 @@ vignette: >
 ---
 
 ::: {.callout-warning title="Warning"}
-The dataset used in this vignette is still under review. Please take these results with caution.
+The data and model used in this vignette are for demonstration purposes only and do not reflect real-world conditions accurately. As in most agent-based models, the simulations performed here are simplified representations of the reality and provide rich information for scenario modeling, but not necessarily for forecasting or parameter estimation.
 :::
 
 During the 2025 US Measles outbreak, the number of cases in the state of Utah started to climb quickly in the Short Creek region (on the Utah-Arizona border). This vignette shows how we can use the mixing model of the `measles` R package to do scenario modeling of the situation using both age and school data.
@@ -23,7 +23,7 @@ We start by loading the `measles` R package. Since the package depends on [`epiw
 library(measles)
 ```
 
-For the data, we need two datasets: information about the population distribution by age and vaccination status, and the contact matrix. The `measles` R package comes with a pre-processed dataset that was created using the [`multigroup.vaccine` R package](https://github.com/EpiForeSITE/multigroup-vaccine). We can load the needed data using the `data()` function:
+For the data, we need two datasets: information about the population distribution by age and vaccination status, and the contact matrix. The `measles` R package comes with a pre-processed dataset that was created using the [`multigroup.vaccine` R package](https://github.com/EpiForeSITE/multigroup-vaccine). This data uses real vaccination rates from publicly available school records, and population age structure and composition from the latest US census. Vaccination rates for the non-school-aged population were imputed based on assumptions and do not reflect the actual vaccination information for those age groups. We can load the needed data using the `data()` function:
 
 ```{r}
 #| label: data
@@ -36,10 +36,18 @@ Let's take a look at the datasets:
 ```{r}
 #| label: data-peek
 short_creek
+```
 
+As we can see, the vaccination rates in this area are significantly low. The vaccination rate needed to avert an outbreak is close to the 0.93 percent of the population. Let's now look at the first few entries of the contact matrix
+
+```{r}
+#| label: data-peak-matrix
 # Looking at the first 5 columns
 short_creek_matrix[, 1:5] |>
   round(2)
+
+# Looking at it as a heatmap
+image(short_creek_matrix)
 ```
 
 One important thing to note is that the data in `short_creek` must coincide with that in the contact matrix, particularly, there should be one entry in the `data.frame` for each row/column of the contact matrix.
@@ -233,4 +241,4 @@ hosp_tot[, .(vax, unvax)] |>
 
 ## Final comments
 
-Ultimately, based on the current results, we would be expecting all unvaccinated individuals to become infected, with a small number of vaccinated individuals also getting infected. This is consistent with the high R0 of measles and the low vaccination rates in the area.
+Ultimately, based on the current results, we would be expecting all unvaccinated individuals to become infected, with a small number of vaccinated individuals also getting infected. This is consistent with the high R0 of measles and the low vaccination rates in the area. Nonetheless, these results should be taken with caution, as this simulation is a simplification of reality that does not consider, for example, individuals' changing their behavior as a function of what is observed; it would be natural to expect some level of precaution, *e.g.*, reducing contact rates, would be observed in such a situation.

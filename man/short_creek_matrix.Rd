@@ -5,13 +5,13 @@
 \alias{short_creek_matrix}
 \title{Short Creek Mixing Matrix}
 \format{
-A row-stochastic matrix (rows add up to one) with 18 rows and 18 columns
+A row-stochastic matrix (rows add up to one) with 15 rows and 15 columns
 with the
 }
 \source{
 The data was generated using the \code{multigroup.vaccine} R package:
 Toth D (2025). \emph{multigroup.vaccine: Multigroup Vaccine Model}. R
-package version 0.1.0, commit 54acee568fbb0666231ab59f19d33841337d7402,
+package version 0.1.0, commit 3047ebf568c9b2028336dc14af587a282de9e225,
 \url{https://github.com/EpiForeSITE/multigroup-vaccine}. The source code
 is available at \url{https://github.com/UofUEpiBio/measles}
 }
@@ -23,7 +23,5 @@ A matrix containing spatial data for the Short Creek area (Hildale city,
 Utah, Colorado City town, Arizona, and Centenial Park, Arizona).
 The matrix provides an estimate of
 the mixing rates between schools and the rest of the population in the area.
-\strong{IMPORTANT: This dataset is still under review. Please take
-any results with caution.}
 }
 \keyword{datasets}

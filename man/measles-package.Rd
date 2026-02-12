@@ -25,6 +25,9 @@ Useful links:
 
 Other contributors:
 \itemize{
+  \item Damon Toth \email{damon.toth@hsc.utah.edu} (\href{https://orcid.org/0000-0001-7393-4814}{ORCID}) [contributor]
+  \item Jake Wagoner \email{jakew@sci.utah.edu} (\href{https://orcid.org/0009-0000-5053-2281}{ORCID}) [contributor]
+  \item Olivia Banks \email{olivia.banks@utah.edu} (\href{https://orcid.org/0009-0008-7611-6030}{ORCID}) [contributor]
   \item Centers for Disease Control and Prevention (Award number 1U01CK000585; 75D30121F00003) [funder]
 }
 

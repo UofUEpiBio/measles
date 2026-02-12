@@ -51,3 +51,4 @@ revdep/
 .*\.Rcheck/$
 
 data-raw
+paper
