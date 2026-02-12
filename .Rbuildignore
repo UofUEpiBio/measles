@@ -42,6 +42,8 @@ docker
 ^Rplots\.pdf$
 ^.*-conftest\.gcno$
 ^_codeql_detected_source_root$
+^autom4te\.cache$
+^configure~$
 
 # Ignore revdev folder
 revdep/
