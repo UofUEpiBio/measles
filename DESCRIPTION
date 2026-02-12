@@ -30,6 +30,7 @@ RoxygenNote: 7.3.3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 LinkingTo: cpp11, epiworldR
+SystemRequirements: C++17
 Imports: utils
 Suggests:
     tinytest,

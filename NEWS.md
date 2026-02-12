@@ -2,10 +2,15 @@
 
 ## Internal changes
 
-* Simplified `configure.ac` to address CRAN policy compliance:
-  removed unnecessary C++11 compiler testing, removed custom OpenMP
-  detection in favor of R's `$(SHLIB_OPENMP_CXXFLAGS)`, and added
-  missing output for the dev version configure check.
+* Removed the `configure` script infrastructure (`configure.ac`, `configure`,
+  `cleanup`, `src/Makevars.in`) in favor of a static `src/Makevars` that uses
+  R's own `$(SHLIB_OPENMP_CXXFLAGS)` for OpenMP support. This addresses
+  CRAN policy compliance by removing unnecessary C++11 compiler testing and
+  custom OpenMP detection.
+
+* Added `CXX_STD = CXX17` to `src/Makevars` and `src/Makevars.win`, and
+  `SystemRequirements: C++17` to `DESCRIPTION`, as required by the epiworld
+  C++ headers (`std::string_view`, `if constexpr`).
 
 # measles 0.1.0
 

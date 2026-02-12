@@ -9,7 +9,6 @@
 *.docx
 .DS_Store
 world-epi
-src/Makevars
 *_files/
 
 *.pdf
@@ -20,11 +19,6 @@ src/Makevars
 images
 inst/doc
 docs
-
-config.log
-config.status
-autom4te.cache/
-configure~
 
 .vscode
 build/
