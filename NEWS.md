@@ -1,4 +1,4 @@
-# measles 0.1-1
+# measles 0.1.1
 
 ## Internal changes
 
