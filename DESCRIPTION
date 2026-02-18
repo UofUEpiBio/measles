@@ -1,7 +1,7 @@
 Package: measles
 Type: Package
 Title: Measles Epidemiological Models
-Version: 0.1.0
+Version: 0.1.1
 Depends:
     R (>= 4.1.0),
     epiworldR (>= 0.11.0.1)
@@ -30,6 +30,7 @@ RoxygenNote: 7.3.3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 LinkingTo: cpp11, epiworldR
+SystemRequirements: C++17
 Imports: utils
 Suggests:
     tinytest,
