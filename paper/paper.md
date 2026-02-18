@@ -63,7 +63,7 @@ All models in `measles` are discrete-time agent-based models that differ in how 
 
 Each model implements the full disease progression of measles, including susceptible, exposed, prodromal, rash, and recovered states, as well as hospitalization and quarantine processes. The API allows users to modify key components such as contact rates, individual susceptibility, index cases, initial conditions, and quarantine policies.
 
-An extended example simulates an outbreak in the southwest region of Utah (Short Creek, a region with low vaccination coverage), integrating school-level vaccination data from the Utah Department of Health and Human Services, population age structure from the U.S. Census, and age-specific mixing patterns from the POLYMOD survey.
+An extended example simulates an outbreak in the Utah-Arizona border region (encompassing Hildale, Utah and Colorado City, Arizona—collectively known as Short Creek—an area with low vaccination coverage). The simulation integrates school-level vaccination data from both the Utah Department of Health and Human Services and publicly available Arizona school data, population age structure from the U.S. Census for both states, and age-specific mixing patterns from the POLYMOD survey.
 
 ![Mixing model architecture in the `measles` package showing entities (e.g., age groups, schools) and their interactions via a mixing matrix. Each entity can have different vaccination rates.](mixing-seir-epiworld.png)
 
@@ -83,6 +83,6 @@ Generative AI tools were used in the development of this work. GitHub Copilot wa
 
 # Acknowledgements
 
-This work was supported by the Centers for Disease Control and Prevention, Modeling Infectious Diseases in Healthcare Network award U01CK000585 and Insight Net award number CDC-RFA-FT-23-0069.
+This work was supported by the Centers for Disease Control and Prevention InsightNet award number CDC-RFA-FT-23-0069.
 
 # References
