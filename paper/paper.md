@@ -10,22 +10,18 @@ authors:
   - given-names: George G
     surname: Vega Yon
     orcid: 0000-0002-3171-0844
-    equal-contrib: true
     affiliation: "1" # (Multiple affiliations must be quoted)
   - given-names: Damon
     surname: Toth
     orcid: 0000-0001-7393-4814
     affiliation: "1"
-    equal-contrib: false
   - given-names: Jake
     surname: Wagoner
     affiliation: "1"
     orcid: 0009-0000-5053-2281
-    equal-contrib: false
   - given-names: Olivia
     surname: Banks
     affiliation: "1"
-    equal-contrib: false
     orcid: 0009-0008-7611-6030
 affiliations:
  - name: The University of Utah, United States
