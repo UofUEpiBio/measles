@@ -29,6 +29,10 @@ C++ library, these models leverage the speed and flexibility of
 epiworldR while providing specialized functionality for measles outbreak
 modeling.
 
+You can learn more about the ongoing efforts to model measles outbreaks
+in ForeSITE’s measles repository:
+<https://github.com/EpiForeSITE/measles>.
+
 ## Features
 
 - **Fast simulation**: Leverages the high-performance C++ backend from
