@@ -2,25 +2,26 @@
 # An in a school with low vaccination
 R0s <- c(0.8, 1.25, 3.5)
 for (R0 in R0s) {
-  p_t <- .05
+  p_t <- .5
   p_r <- 1/7
 
   crate <- R0 / p_t * p_r
 
   model_measles <- measles::ModelMeaslesSchool(
     n = 1000,
-    prevalence = 1,
+    prevalence = 2,
     contact_rate = crate,
     transmission_rate = p_t,
     prodromal_period = 1/p_r,
     prop_vaccinated = 0,
     quarantine_period = -1
-  ) 
+  ) |>
+    verbose_off()
 
   # Running and printing
   saver <- make_saver("reproductive")
   run_multiple(
-    model_measles, ndays = 60,
+    model_measles, ndays = 100,
     seed = 1912,
     saver = saver,
     nsims = 200,
@@ -34,6 +35,6 @@ for (R0 in R0s) {
   r0s <- subset(r0s, source_exposure_date == 0 & source != -1)
   r0_obs <- r0s$rt |> mean()
 
-  print(expect_equal(r0_obs, R0, tolerance = 0.1))
+  print(expect_equal(R0, r0_obs, tolerance = 0.1))
 
 }
