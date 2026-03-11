@@ -48,6 +48,9 @@
 #' there is no quarantine process. The same happens with `isolation_period`.
 #' Since the quarantine process is triggered by an isolation, then
 #' `isolation_period = -1` automatically sets `quarantine_period = -1`.
+#' 
+#' The model uses hospitalization rates instead of probabilities. To learn
+#' more about this, see the documentation in [ModelMeaslesMixing()].
 #' @section Model diagram:
 #' ![](measlesschool.png "Measles School Diagram")
 #'

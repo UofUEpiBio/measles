@@ -1,5 +1,11 @@
 # measles 0.1.1
 
+## User vissible changes
+
+* The vaccination efficacy has been modified to reflect a probability (the original intent) instead of a rate. Previous versions were resulting in a higher than expected vaccinated individuals becoming infected.
+
+* Improved documentation regarding vaccination rates and probabilities accross models.
+
 ## Internal changes
 
 * Removed the `configure` script infrastructure (`configure.ac`, `configure`,

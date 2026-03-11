@@ -98,6 +98,9 @@ When \code{quarantine_period} is set to -1, the model assumes
 there is no quarantine process. The same happens with \code{isolation_period}.
 Since the quarantine process is triggered by an isolation, then
 \code{isolation_period = -1} automatically sets \code{quarantine_period = -1}.
+
+The model uses hospitalization rates instead of probabilities. To learn
+more about this, see the documentation in \code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}.
 }
 \note{
 As of version 0.10.0, the parameter \code{vax_improved_recovery} has been removed

@@ -41,4 +41,3 @@ VignetteBuilder:
 LazyData: true
 Remotes:
   UofUEpiBio/epiworldR@gvegayon/epiworld-0.13.0
-  
