@@ -26,7 +26,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -35,6 +35,9 @@ jobs:
           r-version: devel
           http-user-agent: release
           use-public-rspm: true
+
+      - name: Install dependencies on MacOS
+        uses: ./.github/actions/install-macos-gettext
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:

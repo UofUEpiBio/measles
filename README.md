@@ -91,23 +91,164 @@ Here’s a simple example using the ModelMeaslesSchool:
 
 ``` r
 library(measles)
+#> Loading required package: epiworldR
+#> Thank you for using epiworldR! Please consider citing it in your work.
+#> You can find the citation information by running
+#>   citation("epiworldR")
 
 # Create a measles model for a school with 500 students
 model_school <- ModelMeaslesSchool(
   n = 500,
+  contact_rate = 10/.9/4, # R0 of 10
   prevalence = 1,
   prop_vaccinated = 0.70,
-  contact_rate = 15,
-  transmission_rate = 0.9
+  quarantine_period = -1,
+  vax_efficacy = 0.97
 )
 
 # Run the simulation
-run(model_school, ndays = 100, seed = 1912)
+run_multiple(
+  model_school,
+  ndays = 200,
+  seed = 1912,
+  nsims = 400,
+  saver = make_saver("outbreak_size"),
+  nthreads = 4L
+  )
+#> Starting multiple runs (400) using 4 thread(s)
+#> _________________________________________________________________________
+#> _________________________________________________________________________
+#> ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| done.
+```
 
+We can take a quick look at the last run using the `summary()` function:
+
+``` r
 # View results
 summary(model_school)
-plot(model_school)
+#> ________________________________________________________________________________
+#> ________________________________________________________________________________
+#> SIMULATION STUDY
+#>
+#> Name of the model   : (none)
+#> Population size     : 500
+#> Agents' data        : (none)
+#> Number of entities  : 0
+#> Days (duration)     : 200 (of 200)
+#> Number of viruses   : 1
+#> Last run elapsed t  : 5.00ms
+#> Total elapsed t     : 380.00ms (400 runs)
+#> Last run speed      : 17.12 million agents x day / second
+#> Average run speed   : 105.15 million agents x day / second
+#> Rewiring            : off
+#>
+#> Global events:
+#>  - Update model (runs daily)
+#>
+#> Virus(es):
+#>  - Measles
+#>
+#> Tool(s):
+#>  - MMR 0.970000
+#>
+#> Model parameters:
+#>  - (IGNORED) Vax improved recovery : 0.0e+00
+#>  - Contact rate                    : 2.7778
+#>  - Days undetected                 : 2.0000
+#>  - Hospitalization period          : 7.0000
+#>  - Hospitalization rate            : 0.2000
+#>  - Incubation period               : 12.0000
+#>  - Isolation period                : 4.0000
+#>  - Prodromal period                : 4.0000
+#>  - Quarantine period               : -1.0000
+#>  - Quarantine willingness          : 1.0000
+#>  - Rash period                     : 3.0000
+#>  - Transmission rate               : 0.9000
+#>  - Vaccination rate                : 0.7000
+#>  - Vax efficacy                    : 0.9700
+#>
+#> Distribution of the population at time 200:
+#>   - ( 0) Susceptible             : 499 -> 346
+#>   - ( 1) Exposed                 :   1 -> 0
+#>   - ( 2) Prodromal               :   0 -> 0
+#>   - ( 3) Rash                    :   0 -> 0
+#>   - ( 4) Isolated                :   0 -> 0
+#>   - ( 5) Isolated Recovered      :   0 -> 0
+#>   - ( 6) Detected Hospitalized   :   0 -> 0
+#>   - ( 7) Quarantined Exposed     :   0 -> 0
+#>   - ( 8) Quarantined Susceptible :   0 -> 0
+#>   - ( 9) Quarantined Prodromal   :   0 -> 0
+#>   - (10) Quarantined Recovered   :   0 -> 0
+#>   - (11) Hospitalized            :   0 -> 0
+#>   - (12) Recovered               :   0 -> 154
+#>
+#> Transition Probabilities:
+#>  - Susceptible              1.00  0.00     -     -     -     -     -     -     -     -     -     -     -
+#>  - Exposed                     -  0.92  0.08     -     -     -     -     -     -     -     -     -     -
+#>  - Prodromal                   -     -  0.77  0.23     -     -     -     -     -     -     -     -     -
+#>  - Rash                        -     -     -  0.29  0.18  0.15  0.08     -     -     -     -  0.13  0.16
+#>  - Isolated                    -     -     -  0.12  0.35  0.20  0.22     -     -     -     -  0.03  0.08
+#>  - Isolated Recovered          -     -     -     -     -  0.56     -     -     -     -     -     -  0.44
+#>  - Detected Hospitalized       -     -     -     -     -     -  0.87     -     -     -     -     -  0.13
+#>  - Quarantined Exposed         -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined Susceptible     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined Prodromal       -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined Recovered       -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized                -     -     -     -     -     -     -     -     -     -     -  0.78  0.22
+#>  - Recovered                   -     -     -     -     -     -     -     -     -     -     -     -  1.00
 ```
+
+And we can extract the results (outbreak size in this case), using the
+function `run_multiple_get_results()`:
+
+``` r
+ans <- run_multiple_get_results(model_school)[[1]]
+ans <- subset(ans, date == max(date))$outbreak_size
+table(ans) |>
+  prop.table() |>
+  knitr::kable(
+    col.names = c("Outbreak Size", "Proportion of Simulations"),
+    digits = 3,
+    caption = "Distribution of outbreak sizes across 400 simulations"
+  )
+```
+
+| Outbreak Size | Proportion of Simulations |
+|:--------------|--------------------------:|
+| 1             |                     0.175 |
+| 2             |                     0.038 |
+| 3             |                     0.013 |
+| 4             |                     0.002 |
+| 6             |                     0.002 |
+| 136           |                     0.002 |
+| 140           |                     0.013 |
+| 141           |                     0.002 |
+| 142           |                     0.005 |
+| 143           |                     0.002 |
+| 144           |                     0.010 |
+| 145           |                     0.013 |
+| 146           |                     0.022 |
+| 147           |                     0.020 |
+| 148           |                     0.022 |
+| 149           |                     0.028 |
+| 150           |                     0.048 |
+| 151           |                     0.058 |
+| 152           |                     0.052 |
+| 153           |                     0.068 |
+| 154           |                     0.072 |
+| 155           |                     0.052 |
+| 156           |                     0.072 |
+| 157           |                     0.048 |
+| 158           |                     0.048 |
+| 159           |                     0.028 |
+| 160           |                     0.032 |
+| 161           |                     0.015 |
+| 162           |                     0.010 |
+| 163           |                     0.020 |
+| 164           |                     0.005 |
+| 165           |                     0.002 |
+
+Distribution of outbreak sizes across 400 simulations
 
 ## Example with Population Mixing
 
@@ -115,8 +256,6 @@ The mixing models allow you to simulate measles spread across different
 population groups:
 
 ``` r
-library(measles)
-
 # Define three populations
 e1 <- entity("Population 1", 3000, as_proportion = FALSE)
 e2 <- entity("Population 2", 3000, as_proportion = FALSE)
@@ -148,9 +287,106 @@ measles_model |>
   add_entity(e2) |>
   add_entity(e3)
 
-run(measles_model, ndays = 100, seed = 331)
+run_multiple(
+  measles_model, ndays = 100, seed = 331,
+  nsims = 400,
+  saver = make_saver("outbreak_size"),
+  nthreads = 4L
+  )
+#> Starting multiple runs (400) using 4 thread(s)
+#> _________________________________________________________________________
+#> _________________________________________________________________________
+#> ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| done.
+
 summary(measles_model)
+#> ________________________________________________________________________________
+#> ________________________________________________________________________________
+#> SIMULATION STUDY
+#>
+#> Name of the model   : Measles with Mixing and Quarantine
+#> Population size     : 9000
+#> Agents' data        : (none)
+#> Number of entities  : 3
+#> Days (duration)     : 100 (of 100)
+#> Number of viruses   : 1
+#> Last run elapsed t  : 0.00s
+#> Total elapsed t     : 13.00s (400 runs)
+#> Last run speed      : 6.28 million agents x day / second
+#> Average run speed   : 26.21 million agents x day / second
+#> Rewiring            : off
+#>
+#> Global events:
+#>  - Update infected individuals (runs daily)
+#>
+#> Virus(es):
+#>  - Measles
+#>
+#> Tool(s):
+#>  - MMR 0.970000
+#>
+#> Model parameters:
+#>  - (IGNORED) Vax improved recovery : 0.5000
+#>  - Contact rate                    : 15.0000
+#>  - Contact tracing days prior      : 4.0000
+#>  - Contact tracing success rate    : 1.0000
+#>  - Days undetected                 : 2.0000
+#>  - Hospitalization period          : 7.0000
+#>  - Hospitalization rate            : 0.2000
+#>  - Incubation period               : 12.0000
+#>  - Isolation period                : 10.0000
+#>  - Isolation willingness           : 1.0000
+#>  - Prodromal period                : 4.0000
+#>  - Quarantine period               : 14.0000
+#>  - Quarantine willingness          : 1.0000
+#>  - Rash period                     : 3.0000
+#>  - Transmission rate               : 0.9000
+#>  - Vaccination rate                : 0.9500
+#>  - Vax efficacy                    : 0.9700
+#>
+#> Distribution of the population at time 100:
+#>   - ( 0) Susceptible             : 8999 -> 8326
+#>   - ( 1) Exposed                 :    1 -> 50
+#>   - ( 2) Prodromal               :    0 -> 20
+#>   - ( 3) Rash                    :    0 -> 6
+#>   - ( 4) Isolated                :    0 -> 2
+#>   - ( 5) Isolated Recovered      :    0 -> 25
+#>   - ( 6) Detected Hospitalized   :    0 -> 16
+#>   - ( 7) Quarantined Exposed     :    0 -> 6
+#>   - ( 8) Quarantined Susceptible :    0 -> 2
+#>   - ( 9) Quarantined Prodromal   :    0 -> 3
+#>   - (10) Quarantined Recovered   :    0 -> 0
+#>   - (11) Hospitalized            :    0 -> 12
+#>   - (12) Recovered               :    0 -> 532
+#>
+#> Transition Probabilities:
+#>  - Susceptible              1.00  0.00     -     -     -     -     -     -  0.00     -     -     -     -
+#>  - Exposed                     -  0.89  0.08     -     -     -     -  0.02     -  0.00     -     -     -
+#>  - Prodromal                   -     -  0.74  0.25  0.00     -     -     -     -  0.01     -     -     -
+#>  - Rash                        -     -     -  0.22  0.22  0.15  0.08     -     -     -     -  0.12  0.19
+#>  - Isolated                    -     -     -     -  0.47  0.36  0.18     -     -     -     -     -     -
+#>  - Isolated Recovered          -     -     -     -     -  0.88     -     -     -     -     -     -  0.12
+#>  - Detected Hospitalized       -     -     -     -     -     -  0.86     -     -     -     -     -  0.14
+#>  - Quarantined Exposed         -  0.04  0.00     -     -     -     -  0.89     -  0.07     -     -     -
+#>  - Quarantined Susceptible  0.07     -     -     -     -     -     -     -  0.93     -     -     -     -
+#>  - Quarantined Prodromal       -     -  0.01     -  0.27     -     -     -     -  0.72     -     -     -
+#>  - Quarantined Recovered       -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized                -     -     -     -     -     -     -     -     -     -     -  0.86  0.14
+#>  - Recovered                   -     -     -     -     -     -     -     -     -     -     -     -  1.00
 ```
+
+``` r
+ans <- run_multiple_get_results(measles_model)[[1]]
+ans <- subset(ans, date == max(date))$outbreak_size |>
+  hist(
+    main = "Distribution of outbreak sizes across 400 simulations",
+    xlab = "Outbreak Size",
+    ylab = "Frequency",
+    breaks = 20
+  )
+```
+
+<img src="man/figures/README-outbreak-size-plot-1.png"
+style="width:100.0%" />
 
 ## Relationship to epiworldR
 

@@ -66,6 +66,9 @@
 #' basic reproduction number (R0), but it is not 100% accurate. A more accurate
 #' way to set the contact rate is available, and will be distributed in the
 #' future.
+#'
+#' The model uses hospitalization rates instead of probabilities. To learn
+#' more about this, see the documentation in [ModelMeaslesMixing()].
 #' @section Model diagram:
 #' ![](measlesmixingriskquarantine.png "Measles Mixing Risk Quarantine Diagram")
 #' @returns

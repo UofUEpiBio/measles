@@ -54,6 +54,28 @@
 #' basic reproduction number (R0), but it is not 100% accurate. A more accurate
 #' way to se the contact rate is available, and will be distributed in the
 #' future.
+#'
+#' @section Hospitalization Probability:
+#' Instead of hospitalization probability, the model uses hospitalization rate.
+#' The following equation describes the hospitalization probability as a
+#' function of the hospitalization rate and recovery rate (from rash):
+#'
+#' \deqn{
+#' P(\text{hospitalization}) =
+#'  \frac{
+#'    \text{hospitalization}_\text{rate}}{
+#'    \text{hospitalization}_\text{rate} + \text{recovery}_\text{rate}
+#' }
+#' }
+#'
+#' Where the \eqn{\text{recovery}_\text{rate}} is given by the rash period
+#' (1/duration of it). In other words, to match a desired hospitalization
+#' probability, the user needs to use the following:
+#'
+#' ```r
+#' h_rate <- p_hosp * (1/rash_days) / (1 - p_hosp)
+#' ```
+#'
 #' @section Model diagram:
 #' ![](measlesmixing.png "Measles Mixing Diagram")
 #' @returns
