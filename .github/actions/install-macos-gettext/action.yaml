@@ -1,0 +1,15 @@
+# Got this idea from:
+# https://github.com/dmurdoch/parseLatex/blob/ebb86bcd2c3eae4e638081380224c7b4199dcfd2/.github/workflows/R-CMD-check.yaml
+# and
+# https://www.mail-archive.com/r-sig-mac@r-project.org/msg06933.html
+# I created it as a composite action to ease my work
+name: 'Local R Setup'
+description: 'Install gettext on macOS for R CMD check'
+runs:
+  using: "composite"
+  steps:
+    - name: Run local R script
+      shell: bash
+      run: |
+        # Use the action_path context to locate the file in the action's folder
+        sudo Rscript "source('${{ github.action_path }}/install.R');install.libs('gettext')"
