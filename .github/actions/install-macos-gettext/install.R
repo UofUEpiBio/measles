@@ -15,6 +15,9 @@ install.libs <- function(pkgs, url = "https://mac.R-project.org/bin",
   up <- function(...) paste(..., sep = "/")
   action <- match.arg(action)
 
+  old_options <- options(timeout = 120)
+  on.exit(options(old_options))
+
   if (os.arch == "auto") {
     rindex <- up(url, "REPOS")
     if (!quiet) cat("Downloading", rindex, "...\n")
@@ -84,12 +87,12 @@ install.libs <- function(pkgs, url = "https://mac.R-project.org/bin",
 
   if (action == "install") for (u in urls) {
     if (!quiet) cat("Downloading + installing ", u, "...\n")
-    if (system(paste("curl", "-sSL", shQuote(u), "|", "tar fxj - -C /")) < 0)
+    if (system(paste("curl", "--connect-timeout 20 --max-time 120", "-sSL", shQuote(u), "|", "tar fxj - -C /")) < 0)
       stop("Failed to install from ", u)
   } else if (action == "download") for (u in urls) {
     if (!file.exists(basename(u))) {
       if (!quiet) cat("Downloading ", u, "...\n", sep = "")
-      if (system(paste("curl", "-sSLO", shQuote(u))) < 0)
+      if (system(paste("curl", "--connect-timeout 20 --max-time 120", "-sSLO", shQuote(u))) < 0)
         stop("Failed to download ", u)
     }
   } else urls
