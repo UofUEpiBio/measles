@@ -99,7 +99,7 @@ library(measles)
 # Create a measles model for a school with 500 students
 model_school <- ModelMeaslesSchool(
   n = 500,
-  contact_rate = 10/.9/4, # R0 of 10
+  contact_rate = 10 / .9 / 4, # R0 of 10
   prevalence = 1,
   prop_vaccinated = 0.70,
   quarantine_period = -1,
@@ -114,7 +114,7 @@ run_multiple(
   nsims = 400,
   saver = make_saver("outbreak_size"),
   nthreads = 4L
-  )
+)
 #> Starting multiple runs (400) using 4 thread(s)
 #> _________________________________________________________________________
 #> _________________________________________________________________________
@@ -136,10 +136,10 @@ summary(model_school)
 #> Number of entities  : 0
 #> Days (duration)     : 200 (of 200)
 #> Number of viruses   : 1
-#> Last run elapsed t  : 5.00ms
-#> Total elapsed t     : 380.00ms (400 runs)
-#> Last run speed      : 17.12 million agents x day / second
-#> Average run speed   : 105.15 million agents x day / second
+#> Last run elapsed t  : 2.00ms
+#> Total elapsed t     : 204.00ms (400 runs)
+#> Last run speed      : 46.06 million agents x day / second
+#> Average run speed   : 195.63 million agents x day / second
 #> Rewiring            : off
 #>
 #> Global events:
@@ -292,7 +292,7 @@ run_multiple(
   nsims = 400,
   saver = make_saver("outbreak_size"),
   nthreads = 4L
-  )
+)
 #> Starting multiple runs (400) using 4 thread(s)
 #> _________________________________________________________________________
 #> _________________________________________________________________________
@@ -310,9 +310,9 @@ summary(measles_model)
 #> Days (duration)     : 100 (of 100)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 0.00s
-#> Total elapsed t     : 13.00s (400 runs)
-#> Last run speed      : 6.28 million agents x day / second
-#> Average run speed   : 26.21 million agents x day / second
+#> Total elapsed t     : 7.00s (400 runs)
+#> Last run speed      : 10.51 million agents x day / second
+#> Average run speed   : 48.36 million agents x day / second
 #> Rewiring            : off
 #>
 #> Global events:

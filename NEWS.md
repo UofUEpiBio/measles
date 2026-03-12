@@ -1,10 +1,13 @@
-# measles 0.1.1
+# measles 0.2.0
 
 ## User vissible changes
 
-* The vaccination efficacy has been modified to reflect a probability (the original intent) instead of a rate. Previous versions were resulting in a higher than expected vaccinated individuals becoming infected.
+* The vaccination efficacy has been modified to reflect a probability (the original intent) instead of a rate. Previous versions were resulting in a higher than expected vaccinated individuals becoming infected (update from epiworldR 0.13.0.0).
 
 * Improved documentation regarding vaccination rates and probabilities accross models.
+
+
+# measles 0.1.1
 
 ## Internal changes
 
