@@ -99,7 +99,7 @@ library(measles)
 # Create a measles model for a school with 500 students
 model_school <- ModelMeaslesSchool(
   n = 500,
-  contact_rate = 10 / .9 / 4, # R0 of 10
+  contact_rate = 10 / 0.9 / 4, # R0 of 10
   prevalence = 1,
   prop_vaccinated = 0.70,
   quarantine_period = -1,
