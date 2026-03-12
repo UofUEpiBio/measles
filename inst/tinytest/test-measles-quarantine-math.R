@@ -24,7 +24,7 @@ for (R0 in R0s) {
     model_measles, ndays = 100,
     seed = 1912,
     saver = saver,
-    nsims = 200,
+    nsims = 500,
     nthreads = 2L
     )
 
@@ -35,6 +35,7 @@ for (R0 in R0s) {
   r0s <- subset(r0s, source_exposure_date == 0 & source != -1)
   r0_obs <- r0s$rt |> mean()
 
-  print(expect_equal(R0, r0_obs, tolerance = 0.1))
+  msg <- paste0("R0: ", R0, " observed: ", r0_obs)
+  print(expect_true(abs(r0_obs - R0) < 0.2, info = msg))
 
 }
