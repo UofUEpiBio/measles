@@ -82,33 +82,59 @@ install.packages(
 
 Here's a simple example using the ModelMeaslesSchool:
 
-```{r example, eval=FALSE}
+```{r}
+#| label: example
 library(measles)
 
 # Create a measles model for a school with 500 students
 model_school <- ModelMeaslesSchool(
   n = 500,
+  contact_rate = 10 / .9 / 4, # R0 of 10
   prevalence = 1,
   prop_vaccinated = 0.70,
-  contact_rate = 15,
-  transmission_rate = 0.9
+  quarantine_period = -1,
+  vax_efficacy = 0.97
 )
 
 # Run the simulation
-run(model_school, ndays = 100, seed = 1912)
+run_multiple(
+  model_school,
+  ndays = 200,
+  seed = 1912,
+  nsims = 400,
+  saver = make_saver("outbreak_size"),
+  nthreads = 4L
+)
+```
 
+We can take a quick look at the last run using the `summary()` function:
+
+```{r}
 # View results
 summary(model_school)
-plot(model_school)
+```
+
+And we can extract the results (outbreak size in this case), using the function `run_multiple_get_results()`:
+
+```{r}
+#| label: plot-outcome
+ans <- run_multiple_get_results(model_school)[[1]]
+ans <- subset(ans, date == max(date))$outbreak_size
+table(ans) |>
+  prop.table() |>
+  knitr::kable(
+    col.names = c("Outbreak Size", "Proportion of Simulations"),
+    digits = 3,
+    caption = "Distribution of outbreak sizes across 400 simulations"
+  )
 ```
 
 ## Example with Population Mixing
 
 The mixing models allow you to simulate measles spread across different population groups:
 
-```{r mixing-example, eval=FALSE}
-library(measles)
-
+```{r}
+#| label: mixing-example
 # Define three populations
 e1 <- entity("Population 1", 3000, as_proportion = FALSE)
 e2 <- entity("Population 2", 3000, as_proportion = FALSE)
@@ -140,8 +166,26 @@ measles_model |>
   add_entity(e2) |>
   add_entity(e3)
 
-run(measles_model, ndays = 100, seed = 331)
+run_multiple(
+  measles_model, ndays = 100, seed = 331,
+  nsims = 400,
+  saver = make_saver("outbreak_size"),
+  nthreads = 4L
+)
+
 summary(measles_model)
+```
+
+```{r}
+#| label: outbreak-size-plot
+ans <- run_multiple_get_results(measles_model)[[1]]
+ans <- subset(ans, date == max(date))$outbreak_size |>
+  hist(
+    main = "Distribution of outbreak sizes across 400 simulations",
+    xlab = "Outbreak Size",
+    ylab = "Frequency",
+    breaks = 20
+  )
 ```
 
 ## Relationship to epiworldR
