@@ -12,4 +12,4 @@ runs:
       shell: bash
       run: |
         # Use the action_path context to locate the file in the action's folder
-        sudo Rscript "source('${{ github.action_path }}/install.R');install.libs('gettext')"
+        sudo Rscript -e "source('${{ github.action_path }}/install.R');install.libs('gettext')"
