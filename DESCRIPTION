@@ -39,3 +39,5 @@ Suggests:
 VignetteBuilder:
     quarto
 LazyData: true
+Remotes:
+  UofUEpiBio/epiworldR@gvegayon/epiworld-0.14.0-asan
