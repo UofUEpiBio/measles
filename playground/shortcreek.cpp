@@ -168,22 +168,33 @@ int main() {
     //   P(hosp) = h_rate / (h_rate + recovery_rate)
     //   recovery_rate = 1 / rash_period = 1/3
     //   => h_rate = P(hosp) * recovery_rate / (1 - P(hosp))
-    double rash_period  = 3.0;
-    double h_rate       = 0.1 * (1.0 / rash_period) / (1.0 - 0.1);
+    double rash_period       = 3.0;
+    double hosp_probability  = 0.1;
+    double recovery_rate     = 1.0 / rash_period;
+    double h_rate            = hosp_probability * recovery_rate /
+                               (1.0 - hosp_probability);
 
     // -----------------------------------------------------------------
     // 4. Create the model
     //    (mirrors the R call to ModelMeaslesMixing)
     // -----------------------------------------------------------------
+
+    // Vignette parameters
+    double transmission_rate = 0.9;
+    double prodromal_period  = 4.0;
+
+    // contact_rate = 15 / transmission_rate / prodromal_period
+    double contact_rate = 15.0 / transmission_rate / prodromal_period;
+
     epiworld::epimodels::ModelMeaslesMixing<> measles_model(
         static_cast<epiworld_fast_uint>(N),     // n
         1.0 / static_cast<double>(N),           // prevalence
-        15.0 / 0.9 / 4.0,                       // contact_rate
-        0.9,                                     // transmission_rate
+        contact_rate,                            // contact_rate
+        transmission_rate,                       // transmission_rate
         0.97,                                    // vax_efficacy
         0.5,                                     // vax_reduction_recovery_rate (default)
         12.0,                                    // incubation_period
-        4.0,                                     // prodromal_period
+        prodromal_period,                        // prodromal_period
         rash_period,                             // rash_period
         contact_matrix,                          // contact_matrix (column-major)
         h_rate,                                  // hospitalization_rate
