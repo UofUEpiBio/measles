@@ -253,7 +253,7 @@ int main() {
     // -----------------------------------------------------------------
     measles_model.run_multiple(
         200u,  // ndays
-        200u,  // nsims
+        50u,  // nsims
         8812,  // seed
         epiworld::make_save_run<>(
             "%05lu-episim",    // file name format
@@ -274,6 +274,8 @@ int main() {
         true,  // verbose
         2      // nthreads
     );
+
+    measles_model.print();
 
     return 0;
 }
