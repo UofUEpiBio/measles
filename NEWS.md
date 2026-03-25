@@ -1,5 +1,13 @@
 # measles 0.2.0
 
+## Internal changes
+
+* Added `playground/shortcreek.cpp`, a pure C++ port of the Short Creek mixing
+  model vignette (`vignettes/short-creek.qmd`). This standalone program
+  replicates the model setup and `run_multiple()` call using only the epiworld
+  C++ library and the standard library. A `playground/Makefile` is included for
+  building the program.
+
 ## User visible changes
 
 * The vaccination efficacy has been modified to reflect a probability (the original intent) instead of a rate. Previous versions were resulting in a higher than expected vaccinated individuals becoming infected (update from epiworldR 0.13.0.0).

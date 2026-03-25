@@ -25,3 +25,7 @@ build/
 _codeql_detected_source_root
 
 /.quarto/
+
+# Playground build artifacts
+playground/shortcreek
+playground/*.csv
