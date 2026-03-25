@@ -8,8 +8,13 @@ RUN wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.9.35/quar
     dpkg -i quarto-1.9.35-linux-${TARGETARCH}.deb && \
     rm quarto-1.9.35-linux-${TARGETARCH}.deb
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    valgrind pre-commit
+
 # Adding R packages
 RUN install2.r --error epiworldR tinytest data.table quarto cpp11
+
+
 
 
 CMD ["bash"]

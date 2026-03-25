@@ -136,7 +136,7 @@ measles_model |>
     nsims = 50,
     seed  = 8812,
     saver = make_saver("outbreak_size", "hospitalizations"),
-    nthreads = 2L
+    nthreads = 1L
   )
 ```
 

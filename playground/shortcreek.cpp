@@ -20,6 +20,7 @@
 #include <vector>
 
 // The epiworld header-only library (provided by the epiworldR package)
+#define epiworld_double double
 #include "epiworld/epiworld.hpp"
 
 /**
@@ -272,7 +273,7 @@ int main() {
         ),
         true,  // reset between runs
         true,  // verbose
-        2      // nthreads
+        1      // nthreads
     );
 
     measles_model.print();
