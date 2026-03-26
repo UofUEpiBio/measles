@@ -99,7 +99,7 @@ library(measles)
 # Create a measles model for a school with 500 students
 model_school <- ModelMeaslesSchool(
   n = 500,
-  contact_rate = 10 / 0.9 / 4, # R0 of 10
+  contact_rate = 10 / .9 / 4, # R0 of 10
   prevalence = 1,
   prop_vaccinated = 0.70,
   quarantine_period = -1,
@@ -136,11 +136,12 @@ summary(model_school)
 #> Number of entities  : 0
 #> Days (duration)     : 200 (of 200)
 #> Number of viruses   : 1
-#> Last run elapsed t  : 2.00ms
-#> Total elapsed t     : 204.00ms (400 runs)
-#> Last run speed      : 46.06 million agents x day / second
-#> Average run speed   : 195.63 million agents x day / second
+#> Last run elapsed t  : 1.00ms
+#> Total elapsed t     : 115.00ms (400 runs)
+#> Last run speed      : 77.94 million agents x day / second
+#> Average run speed   : 347.30 million agents x day / second
 #> Rewiring            : off
+#> Last seed used      : 1264933217
 #>
 #> Global events:
 #>  - Update model (runs daily)
@@ -310,10 +311,11 @@ summary(measles_model)
 #> Days (duration)     : 100 (of 100)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 0.00s
-#> Total elapsed t     : 7.00s (400 runs)
-#> Last run speed      : 10.51 million agents x day / second
-#> Average run speed   : 48.36 million agents x day / second
+#> Total elapsed t     : 3.00s (400 runs)
+#> Last run speed      : 19.84 million agents x day / second
+#> Average run speed   : 91.46 million agents x day / second
 #> Rewiring            : off
+#> Last seed used      : 1428497254
 #>
 #> Global events:
 #>  - Update infected individuals (runs daily)
