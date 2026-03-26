@@ -9,7 +9,7 @@ RUN wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.9.35/quar
     rm quarto-1.9.35-linux-${TARGETARCH}.deb
 
 # Adding R packages
-RUN install2.r --error epiworldR tinytest data.table quarto cpp11
+RUN install2.r --error epiworldR tinytest data.table quarto cpp11 rhub
 
 
 CMD ["bash"]

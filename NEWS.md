@@ -6,6 +6,10 @@
 
 * Improved documentation regarding vaccination rates and probabilities across models.
 
+## Internal changes
+
+* This version uses the latest version of `epiworld` (0.14.0), which introduced several important changes. You can read more about the changes [here](https://github.com/UofUEpiBio/epiworld/pull/189) (the corresponding `epiworldR` PR is [here](https://github.com/UofUEpiBio/epiworldR/pull/172).).
+
 
 # measles 0.1.1
 
