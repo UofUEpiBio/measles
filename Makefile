@@ -38,5 +38,7 @@ data-raw: data-raw/*.R
 		R CMD BATCH $$f && rm -f $$f.Rout; \
 	done
 
+clean:
+	Rscript -e 'devtools::clean_dll()'
 
 .PHONY: build update check clean docs docker-debug dev website install install-dev help local-update local-update-diagrams checkv debug

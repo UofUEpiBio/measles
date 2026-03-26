@@ -1,28 +1,15 @@
-FROM ghcr.io/rocker-org/devcontainer/tidyverse:4.5
+FROM ghcr.io/rocker-org/devcontainer/r-ver:4.5
 
-# RUN \
-#   echo 'options(repos=c(CRAN="https://packagemanager.posit.co/cran/__linux__/bookworm/latest"))' >> ~/.Rprofile && \
-#   Rscript --vanilla -e 'getOption("repos")'
+# Architecture-specific variable (built in Docker BuildKit)
+ARG TARGETARCH
 
-# Installing pdflatex via tinytex
-# RUN install2.r --error tinytex && Rscript --vanilla -e "tinytex::install_tinytex()" && \
-#   cat "export PATH=/root/bin:$PATH" >> /root/.bashrc && \
-#   apt-get update && apt-get install --no-install-recommends -y tidy
-
-RUN apt-get update && apt-get install --no-install-recommends -y valgrind gdb \
-  libglpk-dev
-
-RUN apt-get update && apt-get install --no-install-recommends -y pre-commit nano
-
-RUN install2.r --error languageserver && \
-installGithub.r nx10/httpgd
+# Install quarto-cli and the orange-book extension
+RUN wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.9.35/quarto-1.9.35-linux-${TARGETARCH}.deb && \
+    dpkg -i quarto-1.9.35-linux-${TARGETARCH}.deb && \
+    rm quarto-1.9.35-linux-${TARGETARCH}.deb
 
 # Adding R packages
-RUN install2.r --error cpp11 roxygen2 tinytest data.table netplot \
-  devtools decor DiagrammeR quarto
-
-RUN installGithub.r UofUEpiBio/epiworldR@main \
-  EpiForeSITE/multigroup-vaccine@3047ebf568c9b2028336dc14af587a282de9e225
+RUN install2.r --error epiworldR tinytest data.table quarto cpp11 rhub
 
 
 CMD ["bash"]
