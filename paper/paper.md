@@ -67,7 +67,7 @@ The package and its documentation (vignettes, API references, and help files) ar
 
 ## Research impact statement
 
-The `measles` R package is the result of intensive collaboration between the University of Utah and the Utah Department of Health and Human Services (DHHS). Using the functions implemented in this package, and with funding from the U.S. Centers for Disease Control and Prevention, the University of Utah developed a Shiny application that has been used extensively by DHHS and other public health departments in the United States.
+The `measles` R package is the result of intensive collaboration between the University of Utah and the Utah Department of Health and Human Services (DHHS). Using the functions implemented in this package, and with funding from the U.S. Centers for Disease Control and Prevention, the University of Utah developed a Shiny application that has been used extensively by DHHS and other public health departments in the United States [@vegayonPracticalGuidelinesReflections2026].
 
 By mid-2025, DHHS used the school-based models to generate individualized outbreak simulations for every school in the state of Utah. These results were communicated directly to school districts to support preparedness and response planning.
 
