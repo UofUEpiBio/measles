@@ -26,7 +26,10 @@ SEXP ModelMeaslesSchool_cpp(
   double prop_vaccinated,
   int quarantine_period,
   double quarantine_willingness,
-  int isolation_period
+  int isolation_period,
+  double pep_efficacy,
+  double pep_willingness
+
 ) {
 
   // Creating a pointer to a ModelMeaslesSchool model
@@ -47,7 +50,9 @@ SEXP ModelMeaslesSchool_cpp(
           prop_vaccinated,
           quarantine_period,
           quarantine_willingness,
-          isolation_period
+          isolation_period,
+          pep_efficacy,
+          pep_willingness
       )
   );
 
