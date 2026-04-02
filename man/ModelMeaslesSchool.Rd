@@ -22,8 +22,8 @@ ModelMeaslesSchool(
   quarantine_period = 21,
   quarantine_willingness = 1,
   isolation_period = 4,
-  pep_efficacy = 0.9,
-  pep_willingness = 0.9,
+  pep_efficacy = 0,
+  pep_willingness = 0,
   ...
 )
 

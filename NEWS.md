@@ -1,3 +1,10 @@
+# measles 0.2.0.9000
+
+## User visible changes
+
+* The school model now includes post-exposure prophylaxis MMR. The default behavior of the model is not distribuing it, but users can easily activate it.
+
+
 # measles 0.2.0
 
 ## User visible changes
