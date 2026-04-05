@@ -26,9 +26,7 @@ SEXP ModelMeaslesSchool_cpp(
   double prop_vaccinated,
   int quarantine_period,
   double quarantine_willingness,
-  int isolation_period,
-  double pep_efficacy,
-  double pep_willingness
+  int isolation_period
 
 ) {
 
@@ -50,9 +48,7 @@ SEXP ModelMeaslesSchool_cpp(
           prop_vaccinated,
           quarantine_period,
           quarantine_willingness,
-          isolation_period,
-          pep_efficacy,
-          pep_willingness
+          isolation_period
       )
   );
 
@@ -183,7 +179,10 @@ std::vector<double> get_contact_matrix_mixing_cpp(SEXP model) {
 
 // Set contact matrix for ModelMeaslesMixing
 [[cpp11::register]]
-void set_contact_matrix_mixing_cpp(SEXP model, std::vector<double> contact_matrix) {
+void set_contact_matrix_mixing_cpp(
+  SEXP model,
+  std::vector<double> contact_matrix
+) {
   cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixing<>> ptr(model);
   ptr->set_contact_matrix(contact_matrix);
 }
@@ -203,4 +202,36 @@ void set_contact_matrix_mixing_risk_quarantine_cpp(
 ) {
   cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixingRiskQuarantine<>> ptr(model);
   ptr->set_contact_matrix(contact_matrix);
+}
+
+
+[[cpp11::register]]
+SEXP InterventionMeaslesPEP_cpp(
+    std::string name,
+    double mmr_efficacy,
+    double ig_efficacy,
+    double ig_half_life_mean,
+    double ig_half_life_sd,
+    double pep_willingness,
+    double mmr_window,
+    std::vector< int > quarantine_states,
+    std::vector< int > quarantine_states_for_pep
+) {
+
+  cpp11::external_pointer<epiworld::epimodels::InterventionMeaslesPEP<>> ptr(
+      new epiworld::epimodels::InterventionMeaslesPEP<>(
+          name,
+          mmr_efficacy,
+          ig_efficacy,
+          ig_half_life_mean,
+          ig_half_life_sd,
+          pep_willingness,
+          mmr_window,
+          quarantine_states,
+          quarantine_states_for_pep
+      )
+  );
+
+  return ptr;
+
 }

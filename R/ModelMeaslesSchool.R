@@ -43,15 +43,6 @@
 #' sets the probability of accepting quarantine. If a quarantined agent develops
 #' rash, they are moved to isolation, which triggers a new quarantine process.
 #'
-#' In the case that `pep_willingness` is greater than 0, any agent that is
-#' exposed and willing to accept Post-Exposure Prophylaxis (PEP) will have
-#' their probability of infection reduced by `pep_efficacy`. PEP is
-#' "offered" to agents at the end of the day (if quarantine is triggered),
-#' and, if accepted, agents' may move out of the quarantine process if
-#' they are either still susceptible or they are exposed (latent period).
-#' When PEP is active, the model will show no agent in "Quarantine Exposed"
-#' or "Quarantine Susceptible" states.
-#'
 #' The basic reproductive number in Measles is estimated to be about 15.
 #' By default, the contact rate of the model is set so that the R0 matches
 #' 15.
@@ -126,8 +117,6 @@ ModelMeaslesSchool <- function(
   quarantine_period = 21,
   quarantine_willingness = 1,
   isolation_period = 4,
-  pep_efficacy = 0.0,
-  pep_willingness = 0.0,
   ...
 ) {
   # Check input parameters
@@ -147,8 +136,6 @@ ModelMeaslesSchool <- function(
   stopifnot_int(quarantine_period, lb = -1)
   stopifnot_double(quarantine_willingness, lb = 0, ub = 1)
   stopifnot_int(isolation_period, lb = -1)
-  stopifnot_double(pep_efficacy, lb = 0, ub = 1)
-  stopifnot_double(pep_willingness, lb = 0, ub = 1)
 
 
   if ("vax_improved_recovery" %in% names(list(...)))
@@ -176,9 +163,7 @@ ModelMeaslesSchool <- function(
       prop_vaccinated,
       quarantine_period,
       quarantine_willingness,
-      isolation_period,
-      pep_efficacy,
-      pep_willingness
+      isolation_period
     ),
     class = c("epiworld_measlesquarantine", "epiworld_model")
   )

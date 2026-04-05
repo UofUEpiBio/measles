@@ -22,8 +22,6 @@ ModelMeaslesSchool(
   quarantine_period = 21,
   quarantine_willingness = 1,
   isolation_period = 4,
-  pep_efficacy = 0,
-  pep_willingness = 0,
   ...
 )
 
@@ -63,12 +61,12 @@ see details).}
 
 \item{isolation_period}{Number of days an agent is in isolation.}
 
+\item{...}{Further arguments (not used).}
+
 \item{pep_efficacy}{Probability of post-exposure prophylaxis (PEP) efficacy.}
 
 \item{pep_willingness}{Probability of accepting post-exposure prophylaxis
 (PEP).}
-
-\item{...}{Further arguments (not used).}
 }
 \value{
 \itemize{
@@ -96,15 +94,6 @@ quarantined (if willing). Isolated agents then may be moved out of the
 isolation in \code{isolation_period} days. The quarantine willingness parameter
 sets the probability of accepting quarantine. If a quarantined agent develops
 rash, they are moved to isolation, which triggers a new quarantine process.
-
-In the case that \code{pep_willingness} is greater than 0, any agent that is
-exposed and willing to accept Post-Exposure Prophylaxis (PEP) will have
-their probability of infection reduced by \code{pep_efficacy}. PEP is
-"offered" to agents at the end of the day (if quarantine is triggered),
-and, if accepted, agents' may move out of the quarantine process if
-they are either still susceptible or they are exposed (latent period).
-When PEP is active, the model will show no agent in "Quarantine Exposed"
-or "Quarantine Susceptible" states.
 
 The basic reproductive number in Measles is estimated to be about 15.
 By default, the contact rate of the model is set so that the R0 matches
