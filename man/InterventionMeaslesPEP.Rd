@@ -63,4 +63,13 @@ they are automatically moved out of the quarantine process.
 out of the quarantine process if the PEP is effective (based on
 \code{mmr_efficacy} or \code{ig_efficacy}).
 }
+
+Since IG winds down over time, the IG "tool" may be removed from
+the agent as a function of the half-life of IG (based on
+\code{ig_half_life_mean} and \code{ig_half_life_sd}). Particularly, after
+applied, the IG "tool" will have a random duration based on a normal
+distribution with mean \code{ig_half_life_mean} and standard deviation
+\code{ig_half_life_sd}. Once the duration is over, the IG "tool" is removed
+from the agent, and they are again eligible for PEP if they
+get exposed again.
 }

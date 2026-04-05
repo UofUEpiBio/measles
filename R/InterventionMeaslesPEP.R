@@ -37,6 +37,15 @@
 #' out of the quarantine process if the PEP is effective (based on
 #' `mmr_efficacy` or `ig_efficacy`).
 #'
+#' Since IG winds down over time, the IG "tool" may be removed from
+#' the agent as a function of the half-life of IG (based on
+#' `ig_half_life_mean` and `ig_half_life_sd`). Particularly, after
+#' applied, the IG "tool" will have a random duration based on a normal
+#' distribution with mean `ig_half_life_mean` and standard deviation
+#' `ig_half_life_sd`. Once the duration is over, the IG "tool" is removed
+#' from the agent, and they are again eligible for PEP if they
+#' get exposed again.
+#'
 #' @returns
 #' An object of class `epiworld_globalevent` representing the measles PEP
 #' intervention.
