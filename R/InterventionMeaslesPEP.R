@@ -9,7 +9,8 @@
 #' @param ig_half_life_sd Standard deviation of the half-life of immunoglobulin (IG) in days.
 #' @param pep_willingness Probability that an individual will accept PEP.
 #' @param mmr_window Time window for MMR vaccine administration.
-#' @param quarantine_states,quarantine_states_for_pep Character vector of target and destination states (see details).
+#' @param quarantine_states,quarantine_states_for_pep Integer vector of
+#' target and destination states (see details).
 #'
 #' @details
 #' This functions creates a global event that represents a post-exposure
@@ -49,7 +50,8 @@
 #' @returns
 #' An object of class `epiworld_globalevent` representing the measles PEP
 #' intervention.
-#'
+#' @export
+#' @seealso [epiworldR::global-events]
 InterventionMeaslesPEP <- function(
   name,
   mmr_efficacy,
@@ -62,14 +64,15 @@ InterventionMeaslesPEP <- function(
   quarantine_states_for_pep
 ) {
 
+  stopifnot_character(name)
   stopifnot_double(mmr_efficacy, lb = 0, ub = 1)
   stopifnot_double(ig_efficacy, lb = 0, ub = 1)
   stopifnot_double(ig_half_life_mean, lb = 0)
   stopifnot_double(ig_half_life_sd, lb = 0)
   stopifnot_double(pep_willingness, lb = 0, ub = 1)
   stopifnot_double(mmr_window, lb = 0)
-  stopifnot_character(quarantine_states)
-  stopifnot_character(quarantine_states_for_pep)
+  stopifnot_int(quarantine_states, lb = 0)
+  stopifnot_int(quarantine_states_for_pep, lb = 0)
 
   InterventionMeaslesPEP_cpp(
     name,

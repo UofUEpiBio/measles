@@ -76,12 +76,12 @@
 #' @family Models
 #' @family measles models
 #' @concept measles-models
-#' @aliases epiworld_measlesquarantine
+#' @aliases epiworld_measlesschool
 #' @returns
-#' - The `ModelMeaslesQuarantine` function returns a model of classes [epiworld_model] and `epiworld_measlesquarantine`.
+#' - The `ModelMeaslesSchool` function returns a model of classes [epiworld_model] and `epiworld_measlesschool`.
 #' @examples
 #' # An in a school with low vaccination
-#' model_measles <- ModelMeaslesQuarantine(
+#' model_measles <- ModelMeaslesSchool(
 #'   n = 500,
 #'   prevalence = 1,
 #'   prop_vaccinated = 0.70
@@ -162,7 +162,7 @@ ModelMeaslesSchool <- function(
       quarantine_willingness,
       isolation_period
     ),
-    class = c("epiworld_measlesquarantine", "epiworld_model")
+    class = c("epiworld_measlesschool", "epiworld_model")
   )
 
 }

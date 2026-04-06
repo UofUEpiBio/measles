@@ -2,7 +2,7 @@
 % Please edit documentation in R/ModelMeaslesSchool.R
 \name{ModelMeaslesSchool}
 \alias{ModelMeaslesSchool}
-\alias{epiworld_measlesquarantine}
+\alias{epiworld_measlesschool}
 \alias{ModelMeaslesQuarantine}
 \title{Measles model with quarantine}
 \usage{
@@ -65,7 +65,7 @@ see details).}
 }
 \value{
 \itemize{
-\item The \code{ModelMeaslesQuarantine} function returns a model of classes \link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \code{epiworld_measlesquarantine}.
+\item The \code{ModelMeaslesSchool} function returns a model of classes \link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \code{epiworld_measlesschool}.
 }
 }
 \description{
@@ -114,7 +114,7 @@ accept it.
 
 \examples{
 # An in a school with low vaccination
-model_measles <- ModelMeaslesQuarantine(
+model_measles <- ModelMeaslesSchool(
   n = 500,
   prevalence = 1,
   prop_vaccinated = 0.70

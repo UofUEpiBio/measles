@@ -31,7 +31,8 @@ InterventionMeaslesPEP(
 
 \item{mmr_window}{Time window for MMR vaccine administration.}
 
-\item{quarantine_states, quarantine_states_for_pep}{Character vector of target and destination states (see details).}
+\item{quarantine_states, quarantine_states_for_pep}{Integer vector of
+target and destination states (see details).}
 }
 \value{
 An object of class \code{epiworld_globalevent} representing the measles PEP
@@ -72,4 +73,7 @@ distribution with mean \code{ig_half_life_mean} and standard deviation
 \code{ig_half_life_sd}. Once the duration is over, the IG "tool" is removed
 from the agent, and they are again eligible for PEP if they
 get exposed again.
+}
+\seealso{
+\link[epiworldR:global-events]{epiworldR::global-events}
 }
