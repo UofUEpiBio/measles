@@ -27,3 +27,7 @@ get_contact_matrix_mixing_risk_quarantine_cpp <- function(model) {
 set_contact_matrix_mixing_risk_quarantine_cpp <- function(model, contact_matrix) {
   invisible(.Call(`_measles_set_contact_matrix_mixing_risk_quarantine_cpp`, model, contact_matrix))
 }
+
+InterventionMeaslesPEP_cpp <- function(name, mmr_efficacy, ig_efficacy, ig_half_life_mean, ig_half_life_sd, pep_willingness, mmr_window, target_states, states_if_pep_effective, states_if_pep_ineffective) {
+  .Call(`_measles_InterventionMeaslesPEP_cpp`, name, mmr_efficacy, ig_efficacy, ig_half_life_mean, ig_half_life_sd, pep_willingness, mmr_window, target_states, states_if_pep_effective, states_if_pep_ineffective)
+}

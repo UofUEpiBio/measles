@@ -77,3 +77,15 @@ stopifnot_model <- function(model) {
     )
   }
 }
+
+
+stopifnot_character <- function(x) {
+  stopifany_na(x)
+
+  if (!is.character(x)) {
+    stop(
+      paste(match.call()$x, "must be a character vector, but is of class(es): "),
+      paste(class(x), collapse = ", ")
+    )
+  }
+}

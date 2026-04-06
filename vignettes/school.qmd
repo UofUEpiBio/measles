@@ -1,0 +1,187 @@
+---
+title: "School-based transmission model"
+author: "George G. Vega Yon, Ph.D."
+date: today
+embed-resources: false
+vignette: >
+  %\VignetteIndexEntry{School-based transmission model}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette illustrates the usage of `ModelMeaslesSchool` and `InterventionMeaslesPEP` to model measles transmission in a school setting and the impact of post-exposure prophylaxis (PEP) on outbreak dynamics. The model features a population of 1000 individuals with a vaccination coverage of 80% and an initial prevalence of 1 case. We will run multiple simulations to analyze the outbreak size distribution and the usage of PEP as an intervention tool.
+
+This example uses immunoglobulin (IG) to illustrate how to model a tool with a half-life, which is relevant for IG as its protective effect wanes over time. However, the use of IG for measles PEP is generally limited to specific populations (e.g., immunocompromised individuals, infants under 6 months) and is not commonly used in school settings. Therefore, while we include IG in this example for demonstration purposes, it may not be the most realistic choice for modeling PEP in a school-based transmission scenario. In practice, the MMR vaccine is more commonly used for PEP in school settings, and the parameters of the `InterventionMeaslesPEP` function can be adjusted accordingly to reflect this.
+
+
+## Building the model
+
+We start by loading the `measles` package. This will automatically load the `epiworldR` package as well, which is a dependency for building and running the model.
+
+```{r}
+#| label: setup
+library(measles)
+```
+
+Then, we build the model using the `ModelMeaslesSchool` function, specifying the population size (`n`), initial prevalence of cases, and the proportion of vaccinated individuals. For the moment, we are using the default parameters for the disease dynamics and contact patterns, which are based on empirical data from school settings.
+
+```{r}
+#| label: building-the-model
+model_measles <- ModelMeaslesSchool(
+  n = 1000,
+  prevalence = 1,
+  prop_vaccinated = 0.8
+)
+
+# Taking a look at the model summary
+model_measles |>
+  summary()
+```
+
+In principle, the user could add other tools (like masking) or global events that change the model parameters at specific time steps (e.g., school closures). For this vignette, we will focus on the impact of PEP--implemented as `InterventionMeaslesPEP`--which we will add later.
+
+## Running the model
+
+While we can run a single instance of the model, it is recommended to run multiple simulations to capture the stochastic nature of disease transmission and to analyze the distribution of outcomes. We will use the `run_multiple` function for this purpose, specifying the number of simulations (`nsims`), the number of days to simulate (`ndays`), a random seed for reproducibility, and a saver function to store the outbreak size at each time step.
+
+```{r}
+#| label: running-and-printing
+# Running and printing
+run_multiple(
+  model_measles,
+  nsims    = 200,
+  ndays    = 365,
+  seed     = 1912,
+  saver    = make_saver("outbreak_size"),
+  nthreads = 2L
+)
+```
+
+For analyzing the model output, we can use the `run_multiple_get_results` function, which retrieves the results of the simulations in a structured format. This function returns a list of data frames, including the outbreak size over time for each simulation. To analyze this data, our preferred approach is to convert it into a `data.table` for efficient manipulation and visualization.
+
+```{r}
+library(data.table)
+sim_res <- run_multiple_get_results(model_measles)$outbreak_size |>
+  as.data.table()
+
+sim_res[date == 365, outbreak_size] |>
+  hist(
+    main = "Outbreak size distribution at day 365",
+    xlab = "Outbreak size",
+    ylab = "Frequency"
+  )
+
+# Adding a line for marking the median outbreak size
+median_outbreak_size <- median(sim_res[date == 365, outbreak_size])
+abline(v = median_outbreak_size, col = "red", lwd = 2)
+text(
+  x = median_outbreak_size, y = 10,
+  labels = paste("Median:", median_outbreak_size),
+  pos = 4, col = "red"
+)
+```
+
+## Adding post-exposure prophylaxis (PEP)
+
+The post-exposure prophylaxis (PEP) intervention can be added to the model as a global event using the `add_globalevent` function. The `InterventionMeaslesPEP` function allows us to specify the parameters of the PEP intervention, such as the efficacy of the MMR vaccine and immunoglobulin (IG), the half-life of IG, the willingness of individuals to accept PEP, and the time window for MMR administration. The function requires specifying which states are targets for the PEP intervention and which states individuals will be moved to after receiving PEP (e.g., quarantine states). Importantly, agents who have been exposed (have the virus) are only moved out of quarantine if the PEP (either IG or MMR) is effective. In contrast, susceptible agents are moved out of quarantine regardless of the effectiveness of PEP, as they are not infected.
+
+```{r}
+model_measles |>
+  add_globalevent({
+    InterventionMeaslesPEP(
+      name = "PEP",
+      mmr_efficacy = 0.83,
+      ig_efficacy  = 0.97,
+      ig_half_life_mean = 6 * 7,
+      ig_half_life_sd = 7 * .5,
+      pep_willingness = 1.0,
+      mmr_window = 3,
+      target_states = c(
+        7L,  # Quarantined Exposed
+        8L,  # Quarantined Susceptible
+        9L   # Quarantined Prodromal
+      ),
+      states_if_pep_effective = c(
+        0L, # Susceptible
+        0L, # Susceptible
+        0L  # Susceptible
+      ),
+      states_if_pep_ineffective = c(
+        1L, # Exposed
+        0L, # Susceptible
+        3L  # Prodromal
+      )
+    )
+  })
+```
+
+If the user wanted to evaluate the impact of PEP in a model using contact tracing, they could use this same intervention in the `ModelMeaslesMixingRiskQuarantine` model, which has a more detailed quarantine process that moves only exposed agents to quarantine states.
+
+```{r}
+#| label: running-and-printing2
+# Running and printing
+run_multiple(
+  model_measles,
+  nsims    = 200,
+  ndays    = 365,
+  seed     = 1912,
+  saver    = make_saver("outbreak_size", "tool_hist", "tool_info"),
+  nthreads = 2L
+)
+
+# To see what the last run looks like
+summary(model_measles)
+```
+
+After running the model, we can see that parameters related to the PEP intervention have been added to the model summary: "PEP IG efficacy", "PEP IG half-life mean", "PEP IG half-life sd", "PEP MMR efficacy", "PEP willingness", and "PEP MMR window". Let's look at the outbreak size distribution at day 365 across simulations again, and then analyze the usage of the PEP tool across simulations:
+
+```{r}
+library(data.table)
+sim <- run_multiple_get_results(model_measles)
+
+sim_os <- sim$outbreak_size |>
+  as.data.table()
+
+sim_os[date == 365, outbreak_size] |>
+  hist(
+    main = "Outbreak size distribution at day 365",
+    xlab = "Outbreak size",
+    ylab = "Frequency"
+  )
+
+# Adding a line for marking the median outbreak size
+median_outbreak_size <- median(sim_os[date == 365, outbreak_size])
+abline(v = median_outbreak_size, col = "red", lwd = 2)
+text(
+  x = median_outbreak_size, y = 10,
+  labels = paste("Median:", median_outbreak_size),
+  pos = 4, col = "red"
+)
+```
+
+We can also inspect the usage of the PEP tool across simulations. The `tool_hist` data frame contains the history of tool usage across states. Since IG may be removed from the toolset after its half-life, we will extract the maximum number of each tool used across time steps for each simulation to analyze the overall usage of PEP (both MMR and IG) during the simulations:
+
+```{r}
+#| label: analyzing-tool-usage
+# To get the tool names
+sim_ti <- sim$tool_info |>
+  as.data.table() |>
+  subset(select = c(id, tool_name)) |>
+  unique()
+
+# Extracting the history
+sim_th <- sim$tool_hist |>
+  as.data.table() |>
+  merge(sim_ti)
+
+# Collapsing by simulation id, tool, and date
+sim_th <- sim_th[, .(n = sum(n)), by = .(sim_num, tool_name, date)]
+sim_th <- sim_th[, is_top := n == max(n),  by = .(sim_num, tool_name)]
+sim_th <- sim_th[is_top == TRUE][, is_top := NULL]
+
+boxplot(
+  n ~ tool_name, data = sim_th[tool_name != "MMR"],
+  main = "Distribution of PEP tool usage across simulations",
+  ylab = "Number of individuals receiving PEP"
+)
+```

@@ -45,7 +45,7 @@ expect_silent(model_factory())
 measles_model <- model_factory()
 
 # Check model initialization
-expect_inherits(measles_model, "epiworld_measlesquarantine")
+expect_inherits(measles_model, "epiworld_measlesschool")
 expect_inherits(measles_model, "epiworld_model")
 
 # Check plot

@@ -27,6 +27,7 @@ SEXP ModelMeaslesSchool_cpp(
   int quarantine_period,
   double quarantine_willingness,
   int isolation_period
+
 ) {
 
   // Creating a pointer to a ModelMeaslesSchool model
@@ -178,7 +179,10 @@ std::vector<double> get_contact_matrix_mixing_cpp(SEXP model) {
 
 // Set contact matrix for ModelMeaslesMixing
 [[cpp11::register]]
-void set_contact_matrix_mixing_cpp(SEXP model, std::vector<double> contact_matrix) {
+void set_contact_matrix_mixing_cpp(
+  SEXP model,
+  std::vector<double> contact_matrix
+) {
   cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixing<>> ptr(model);
   ptr->set_contact_matrix(contact_matrix);
 }
