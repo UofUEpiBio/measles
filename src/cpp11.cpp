@@ -56,17 +56,17 @@ extern "C" SEXP _measles_set_contact_matrix_mixing_risk_quarantine_cpp(SEXP mode
     return R_NilValue;
   END_CPP11
 }
-// epimodels.cpp
-SEXP InterventionMeaslesPEP_cpp(std::string name, double mmr_efficacy, double ig_efficacy, double ig_half_life_mean, double ig_half_life_sd, double pep_willingness, double mmr_window, std::vector< int > quarantine_states, std::vector< int > quarantine_states_for_pep);
-extern "C" SEXP _measles_InterventionMeaslesPEP_cpp(SEXP name, SEXP mmr_efficacy, SEXP ig_efficacy, SEXP ig_half_life_mean, SEXP ig_half_life_sd, SEXP pep_willingness, SEXP mmr_window, SEXP quarantine_states, SEXP quarantine_states_for_pep) {
+// interventions.cpp
+SEXP InterventionMeaslesPEP_cpp(std::string name, double mmr_efficacy, double ig_efficacy, double ig_half_life_mean, double ig_half_life_sd, double pep_willingness, double mmr_window, std::vector< int > target_states, std::vector< int > states_if_pep_effective, std::vector< int > states_if_pep_ineffective);
+extern "C" SEXP _measles_InterventionMeaslesPEP_cpp(SEXP name, SEXP mmr_efficacy, SEXP ig_efficacy, SEXP ig_half_life_mean, SEXP ig_half_life_sd, SEXP pep_willingness, SEXP mmr_window, SEXP target_states, SEXP states_if_pep_effective, SEXP states_if_pep_ineffective) {
   BEGIN_CPP11
-    return cpp11::as_sexp(InterventionMeaslesPEP_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<double>>(mmr_efficacy), cpp11::as_cpp<cpp11::decay_t<double>>(ig_efficacy), cpp11::as_cpp<cpp11::decay_t<double>>(ig_half_life_mean), cpp11::as_cpp<cpp11::decay_t<double>>(ig_half_life_sd), cpp11::as_cpp<cpp11::decay_t<double>>(pep_willingness), cpp11::as_cpp<cpp11::decay_t<double>>(mmr_window), cpp11::as_cpp<cpp11::decay_t<std::vector< int >>>(quarantine_states), cpp11::as_cpp<cpp11::decay_t<std::vector< int >>>(quarantine_states_for_pep)));
+    return cpp11::as_sexp(InterventionMeaslesPEP_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<double>>(mmr_efficacy), cpp11::as_cpp<cpp11::decay_t<double>>(ig_efficacy), cpp11::as_cpp<cpp11::decay_t<double>>(ig_half_life_mean), cpp11::as_cpp<cpp11::decay_t<double>>(ig_half_life_sd), cpp11::as_cpp<cpp11::decay_t<double>>(pep_willingness), cpp11::as_cpp<cpp11::decay_t<double>>(mmr_window), cpp11::as_cpp<cpp11::decay_t<std::vector< int >>>(target_states), cpp11::as_cpp<cpp11::decay_t<std::vector< int >>>(states_if_pep_effective), cpp11::as_cpp<cpp11::decay_t<std::vector< int >>>(states_if_pep_ineffective)));
   END_CPP11
 }
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_measles_InterventionMeaslesPEP_cpp",                    (DL_FUNC) &_measles_InterventionMeaslesPEP_cpp,                     9},
+    {"_measles_InterventionMeaslesPEP_cpp",                    (DL_FUNC) &_measles_InterventionMeaslesPEP_cpp,                    10},
     {"_measles_ModelMeaslesMixingRiskQuarantine_cpp",          (DL_FUNC) &_measles_ModelMeaslesMixingRiskQuarantine_cpp,          22},
     {"_measles_ModelMeaslesMixing_cpp",                        (DL_FUNC) &_measles_ModelMeaslesMixing_cpp,                        20},
     {"_measles_ModelMeaslesSchool_cpp",                        (DL_FUNC) &_measles_ModelMeaslesSchool_cpp,                        16},

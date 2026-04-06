@@ -203,35 +203,3 @@ void set_contact_matrix_mixing_risk_quarantine_cpp(
   cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixingRiskQuarantine<>> ptr(model);
   ptr->set_contact_matrix(contact_matrix);
 }
-
-
-[[cpp11::register]]
-SEXP InterventionMeaslesPEP_cpp(
-    std::string name,
-    double mmr_efficacy,
-    double ig_efficacy,
-    double ig_half_life_mean,
-    double ig_half_life_sd,
-    double pep_willingness,
-    double mmr_window,
-    std::vector< int > quarantine_states,
-    std::vector< int > quarantine_states_for_pep
-) {
-
-  cpp11::external_pointer<epiworld::epimodels::InterventionMeaslesPEP<>> ptr(
-      new epiworld::epimodels::InterventionMeaslesPEP<>(
-          name,
-          mmr_efficacy,
-          ig_efficacy,
-          ig_half_life_mean,
-          ig_half_life_sd,
-          pep_willingness,
-          mmr_window,
-          quarantine_states,
-          quarantine_states_for_pep
-      )
-  );
-
-  return ptr;
-
-}

@@ -12,8 +12,9 @@ InterventionMeaslesPEP(
   ig_half_life_sd,
   pep_willingness,
   mmr_window,
-  quarantine_states,
-  quarantine_states_for_pep
+  target_states,
+  states_if_pep_effective,
+  states_if_pep_ineffective
 )
 }
 \arguments{
@@ -31,8 +32,7 @@ InterventionMeaslesPEP(
 
 \item{mmr_window}{Time window for MMR vaccine administration.}
 
-\item{quarantine_states, quarantine_states_for_pep}{Integer vector of
-target and destination states (see details).}
+\item{target_states, states_if_pep_effective, states_if_pep_ineffective}{Integer vectors of target and destination states (see details).}
 }
 \value{
 An object of class \code{epiworld_globalevent} representing the measles PEP
@@ -53,7 +53,7 @@ immunoglobulin (IG). The system decides which agent gets MMR or IG
 based on the time since exposure and the willingness to accept PEP.
 The flow is the following:
 \enumerate{
-\item Agents in \code{quarantine_states} are eligible for PEP if they are
+\item Agents in \code{target_states} are eligible for PEP if they are
 willing to accept it (based on \code{pep_willingness}).
 \item If the agent has been exposed (has the virus in their system)
 for at most \code{mmr_window} days, they are offered MMR vaccine.
@@ -62,7 +62,10 @@ Otherwise, they are offered IG.
 they are automatically moved out of the quarantine process.
 \item Agents who were exposed and got either MMR of IG may move
 out of the quarantine process if the PEP is effective (based on
-\code{mmr_efficacy} or \code{ig_efficacy}).
+\code{mmr_efficacy} or \code{ig_efficacy}). The destination state depends
+on whether the PEP was effective or not, and is determined by
+\code{states_if_pep_effective} and \code{states_if_pep_ineffective},
+respectively.
 }
 
 Since IG winds down over time, the IG "tool" may be removed from

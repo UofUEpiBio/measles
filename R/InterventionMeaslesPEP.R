@@ -9,8 +9,8 @@
 #' @param ig_half_life_sd Standard deviation of the half-life of immunoglobulin (IG) in days.
 #' @param pep_willingness Probability that an individual will accept PEP.
 #' @param mmr_window Time window for MMR vaccine administration.
-#' @param quarantine_states,quarantine_states_for_pep Integer vector of
-#' target and destination states (see details).
+#' @param target_states,states_if_pep_effective,states_if_pep_ineffective
+#' Integer vectors of target and destination states (see details).
 #'
 #' @details
 #' This functions creates a global event that represents a post-exposure
@@ -24,7 +24,7 @@
 #' based on the time since exposure and the willingness to accept PEP.
 #' The flow is the following:
 #'
-#' 1. Agents in `quarantine_states` are eligible for PEP if they are
+#' 1. Agents in `target_states` are eligible for PEP if they are
 #' willing to accept it (based on `pep_willingness`).
 #'
 #' 2. If the agent has been exposed (has the virus in their system)
@@ -36,7 +36,10 @@
 #'
 #' 4. Agents who were exposed and got either MMR of IG may move
 #' out of the quarantine process if the PEP is effective (based on
-#' `mmr_efficacy` or `ig_efficacy`).
+#' `mmr_efficacy` or `ig_efficacy`). The destination state depends
+#' on whether the PEP was effective or not, and is determined by
+#' `states_if_pep_effective` and `states_if_pep_ineffective`,
+#'  respectively.
 #'
 #' Since IG winds down over time, the IG "tool" may be removed from
 #' the agent as a function of the half-life of IG (based on
@@ -60,8 +63,9 @@ InterventionMeaslesPEP <- function(
   ig_half_life_sd,
   pep_willingness,
   mmr_window,
-  quarantine_states,
-  quarantine_states_for_pep
+  target_states,
+  states_if_pep_effective,
+  states_if_pep_ineffective
 ) {
 
   stopifnot_character(name)
@@ -71,8 +75,9 @@ InterventionMeaslesPEP <- function(
   stopifnot_double(ig_half_life_sd, lb = 0)
   stopifnot_double(pep_willingness, lb = 0, ub = 1)
   stopifnot_double(mmr_window, lb = 0)
-  stopifnot_int(quarantine_states, lb = 0)
-  stopifnot_int(quarantine_states_for_pep, lb = 0)
+  stopifnot_int(target_states, lb = 0)
+  stopifnot_int(states_if_pep_effective, lb = 0)
+  stopifnot_int(states_if_pep_ineffective, lb = 0)
 
   InterventionMeaslesPEP_cpp(
     name,
@@ -82,8 +87,9 @@ InterventionMeaslesPEP <- function(
     ig_half_life_sd,
     pep_willingness,
     mmr_window,
-    quarantine_states,
-    quarantine_states_for_pep
+    target_states,
+    states_if_pep_effective,
+    states_if_pep_ineffective
   ) |>
     structure(class = c("epiworld_globalevent"))
 

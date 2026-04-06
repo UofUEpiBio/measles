@@ -12,6 +12,9 @@ vignette: >
 
 This vignette illustrates the usage of `ModelMeaslesSchool` and `InterventionMeaslesPEP` to model measles transmission in a school setting and the impact of post-exposure prophylaxis (PEP) on outbreak dynamics. The model features a population of 1000 individuals with a vaccination coverage of 80% and an initial prevalence of 1 case. We will run multiple simulations to analyze the outbreak size distribution and the usage of PEP as an intervention tool.
 
+This example uses immunoglobulin (IG) to illustrate how to model a tool with a half-life, which is relevant for IG as its protective effect wanes over time. However, the use of IG for measles PEP is generally limited to specific populations (e.g., immunocompromised individuals, infants under 6 months) and is not commonly used in school settings. Therefore, while we include IG in this example for demonstration purposes, it may not be the most realistic choice for modeling PEP in a school-based transmission scenario. In practice, the MMR vaccine is more commonly used for PEP in school settings, and the parameters of the `InterventionMeaslesPEP` function can be adjusted accordingly to reflect this.
+
+
 ## Building the model
 
 We start by loading the `measles` package. This will automatically load the `epiworldR` package as well, which is a dependency for building and running the model.
@@ -88,34 +91,32 @@ model_measles |>
   add_globalevent({
     InterventionMeaslesPEP(
       name = "PEP",
-      mmr_efficacy = 0.90,
+      mmr_efficacy = 0.83,
       ig_efficacy  = 0.97,
       ig_half_life_mean = 6 * 7,
       ig_half_life_sd = 7 * .5,
       pep_willingness = 1.0,
       mmr_window = 3,
-      quarantine_states         = c(
+      target_states = c(
         7L,  # Quarantined Exposed
-        # 8L # Quarantined Susceptible (see note)
+        8L,  # Quarantined Susceptible
         9L   # Quarantined Prodromal
       ),
-      quarantine_states_for_pep = c(
-        0L,  # Susceptible
-        # 0L # Susceptible (see note)
-        12L  # Recovered (for exposed agents for which PEP is effective)
+      states_if_pep_effective = c(
+        0L, # Susceptible
+        0L, # Susceptible
+        0L  # Susceptible
+      ),
+      states_if_pep_ineffective = c(
+        1L, # Exposed
+        0L, # Susceptible
+        3L  # Prodromal
       )
     )
   })
-
-model_measles |>
-  summary()
 ```
 
-Although PEP is not beign applied to susceptible agents at first, since this intervention runs on a daily basis, agents transitioning to Quarantined Exposed may receive PEP as well. If the user wanted to evaluate the impact of PEP in a model using contact tracing, they could use this same intervention in the `ModelMeaslesMixingRiskQuarantine` model, which has a more detailed quarantine process that moves only exposed agents to quarantine states.
-
-::: {.callout-note title="When to use PEP in the model?"}
-During the development of the intervention, we observed that the MMR was beign applied signigicantly more frequently than IG, which is not consistent with real-world practices. This is mostly due to the fact that the quarantine process implemented in the model moves both exposed and susceptible individuals to quarantine states. Since the number of exposed agents is significantly lower than the number of susceptible agents, the PEP intervention is mostly being applied to susceptible agents, for which the MMR is distributed.
-:::
+If the user wanted to evaluate the impact of PEP in a model using contact tracing, they could use this same intervention in the `ModelMeaslesMixingRiskQuarantine` model, which has a more detailed quarantine process that moves only exposed agents to quarantine states.
 
 ```{r}
 #| label: running-and-printing2
@@ -128,7 +129,12 @@ run_multiple(
   saver    = make_saver("outbreak_size", "tool_hist", "tool_info"),
   nthreads = 2L
 )
+
+# To see what the last run looks like
+summary(model_measles)
 ```
+
+After running the model, we can see that parameters related to the PEP intervention have been added to the model summary: "PEP IG efficacy", "PEP IG half-life mean", "PEP IG half-life sd", "PEP MMR efficacy", "PEP willingness", and "PEP MMR window". Let's look at the outbreak size distribution at day 365 across simulations again, and then analyze the usage of the PEP tool across simulations:
 
 ```{r}
 library(data.table)
