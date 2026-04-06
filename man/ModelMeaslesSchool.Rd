@@ -62,11 +62,6 @@ see details).}
 \item{isolation_period}{Number of days an agent is in isolation.}
 
 \item{...}{Further arguments (not used).}
-
-\item{pep_efficacy}{Probability of post-exposure prophylaxis (PEP) efficacy.}
-
-\item{pep_willingness}{Probability of accepting post-exposure prophylaxis
-(PEP).}
 }
 \value{
 \itemize{

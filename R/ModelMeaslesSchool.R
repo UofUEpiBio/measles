@@ -22,9 +22,6 @@
 #' @param quarantine_willingness Probability of accepting quarantine (
 #' see details).
 #' @param isolation_period Number of days an agent is in isolation.
-#' @param pep_efficacy Probability of post-exposure prophylaxis (PEP) efficacy.
-#' @param pep_willingness Probability of accepting post-exposure prophylaxis
-#' (PEP).
 #' @param ... Further arguments (not used).
 #' @details
 #' This model can be described as a SEIHR model with isolation and quarantine.
