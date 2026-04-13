@@ -69,14 +69,14 @@ see details).}
 }
 }
 \description{
-Implements a Susceptible-Exposed-Infectious-Hospitalized-Recovered (SEIHR)
+Implements a Susceptible-Latent-Infectious-Hospitalized-Recovered (SLIHR)
 model for Measles within a school. The model includes isolation of
 detected cases and optional quarantine of unvaccinated individuals.
 }
 \details{
-This model can be described as a SEIHR model with isolation and quarantine.
+This model can be described as a SLIHR model with isolation and quarantine.
 The infectious state is divided into prodromal and rash phases. Furthermore,
-the quarantine state includes exposed, susceptible, prodromal, and recovered
+the quarantine state includes latent, susceptible, prodromal, and recovered
 states.
 
 The model is a perfect mixing model, meaning that all agents are in contact

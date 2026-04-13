@@ -57,7 +57,7 @@ The `measles` package builds upon the `epiworld` C++ library, which provides a g
 
 All models in `measles` are discrete-time agent-based models that differ in how contacts between agents are represented. The package includes three approaches: a single-school model assuming perfect mixing; a community-level model that uses a mixing matrix to represent within- and between-group interactions; and an extended model that incorporates risk-dependent quarantine durations.
 
-Each model implements the full disease progression of measles, including susceptible, exposed, prodromal, rash, and recovered states, as well as hospitalization and quarantine processes. The API allows users to modify key components such as contact rates, individual susceptibility, index cases, initial conditions, and quarantine policies.
+Each model implements the full disease progression of measles, including susceptible, latent, prodromal, rash, and recovered states, as well as hospitalization and quarantine processes. The API allows users to modify key components such as contact rates, individual susceptibility, index cases, initial conditions, and quarantine policies.
 
 An extended example in the form of a vignette simulates an outbreak in the Utah-Arizona border region (encompassing Hildale, Utah and Colorado City, Arizona—collectively known as Short Creek—an area with low vaccination coverage). The simulation integrates school-level vaccination data from both the Utah Department of Health and Human Services and publicly available Arizona school data, population age structure from the U.S. Census for both states, and age-specific mixing patterns from the POLYMOD survey.
 
