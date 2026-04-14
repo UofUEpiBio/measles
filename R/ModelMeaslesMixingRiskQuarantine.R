@@ -47,8 +47,8 @@
 #' matrix should be of size `n x n`, where `n` is the number of entities.
 #' This is a row-stochastic matrix, i.e., the sum of each row should be 1.
 #'
-#' The model includes three distinct phases of measles infection: incubation (exposed),
-#' prodromal, and rash periods. Vaccination provides protection against
+#' The model includes three distinct phases of measles infection: latent
+#' (incubation), prodromal, and rash periods. Vaccination provides protection against
 #' transmission.
 #'
 #' Risk-based quarantine strategies assign different quarantine durations based on

@@ -4,6 +4,8 @@
 
 * The school model now includes post-exposure prophylaxis MMR. The default behavior of the model is not distribuing it, but users can easily activate it.
 
+* Aligned the package documentation and examples with the updated measles state names from `epiworldR`, replacing `Exposed`/`Quarantined Exposed` with `Latent`/`Quarantined Latent` where those names refer to model states.
+
 
 # measles 0.2.0
 

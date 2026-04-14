@@ -83,7 +83,7 @@ text(
 
 ## Adding post-exposure prophylaxis (PEP)
 
-The post-exposure prophylaxis (PEP) intervention can be added to the model as a global event using the `add_globalevent` function. The `InterventionMeaslesPEP` function allows us to specify the parameters of the PEP intervention, such as the efficacy of the MMR vaccine and immunoglobulin (IG), the half-life of IG, the willingness of individuals to accept PEP, and the time window for MMR administration. The function requires specifying which states are targets for the PEP intervention and which states individuals will be moved to after receiving PEP (e.g., quarantine states). Importantly, agents who have been exposed (have the virus) are only moved out of quarantine if the PEP (either IG or MMR) is effective. In contrast, susceptible agents are moved out of quarantine regardless of the effectiveness of PEP, as they are not infected.
+The post-exposure prophylaxis (PEP) intervention can be added to the model as a global event using the `add_globalevent` function. The `InterventionMeaslesPEP` function allows us to specify the parameters of the PEP intervention, such as the efficacy of the MMR vaccine and immunoglobulin (IG), the half-life of IG, the willingness of individuals to accept PEP, and the time window for MMR administration. The function requires specifying which states are targets for the PEP intervention and which states individuals will be moved to after receiving PEP (e.g., quarantine states). Importantly, agents who are already infected are only moved out of quarantine if the PEP (either IG or MMR) is effective. In contrast, susceptible agents are moved out of quarantine regardless of the effectiveness of PEP, as they are not infected.
 
 ```{r}
 model_measles |>
@@ -97,7 +97,7 @@ model_measles |>
       pep_willingness = 1.0,
       mmr_window = 3,
       target_states = c(
-        7L,  # Quarantined Exposed
+        7L,  # Quarantined Latent
         8L,  # Quarantined Susceptible
         9L   # Quarantined Prodromal
       ),
@@ -107,7 +107,7 @@ model_measles |>
         0L  # Susceptible
       ),
       states_if_pep_ineffective = c(
-        1L, # Exposed
+        1L, # Latent
         0L, # Susceptible
         3L  # Prodromal
       )
@@ -115,7 +115,7 @@ model_measles |>
   })
 ```
 
-If the user wanted to evaluate the impact of PEP in a model using contact tracing, they could use this same intervention in the `ModelMeaslesMixingRiskQuarantine` model, which has a more detailed quarantine process that moves only exposed agents to quarantine states.
+If the user wanted to evaluate the impact of PEP in a model using contact tracing, they could use this same intervention in the `ModelMeaslesMixingRiskQuarantine` model, which has a more detailed quarantine process that moves only latent agents to quarantine states.
 
 ```{r}
 #| label: running-and-printing2
