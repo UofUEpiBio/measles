@@ -13,8 +13,10 @@ SEXP InterventionMeaslesPEP_cpp(
     double ig_efficacy,
     double ig_half_life_mean,
     double ig_half_life_sd,
-    double pep_willingness,
+    double mmr_willingness,
+    double ig_willingness,
     double mmr_window,
+    double ig_window,
     std::vector< int > target_states,
     std::vector< int > states_if_pep_effective,
     std::vector< int > states_if_pep_ineffective
@@ -27,8 +29,10 @@ SEXP InterventionMeaslesPEP_cpp(
           ig_efficacy,
           ig_half_life_mean,
           ig_half_life_sd,
-          pep_willingness,
+          mmr_willingness,
+          ig_willingness,
           mmr_window,
+          ig_window,
           target_states,
           states_if_pep_effective,
           states_if_pep_ineffective

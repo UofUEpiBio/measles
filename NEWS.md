@@ -2,7 +2,9 @@
 
 ## User visible changes
 
-* The school model now includes post-exposure prophylaxis MMR. The default behavior of the model is not distribuing it, but users can easily activate it.
+* The function `InterventionMeaslesPEP()` implements post-exposure prophylaxis featuring both MMR and IG. The process is highly configurable and can be attached to the `ModelMeaslesSchool()`. Not available yet for other models.
+
+* The model `ModelMeaslesMixin()` no longer uses `contact_rate`; instead, the model's `contact_matrix` provides a more flexible framework in which agents can have heterogenous contact rates across groups.
 
 
 # measles 0.2.0

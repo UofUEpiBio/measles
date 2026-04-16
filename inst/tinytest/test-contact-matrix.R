@@ -18,14 +18,13 @@ e2 <- entity("Population 2", 1000, FALSE)
 e3 <- entity("Population 3", 1000, FALSE)
 
 # (1) Initialize the model with an identity matrix for the mixing matrix
-identity_matrix <- diag(3)
+identity_matrix <- diag(3) * 15
 
 N <- 3000
 
 model_mixing <- measles::ModelMeaslesMixing(
   n                          = N,
   prevalence                 = 1 / N,
-  contact_rate               = 15,
   transmission_rate          = 0.9,
   vax_efficacy               = 0.97,
   vax_reduction_recovery_rate = 0.8,
@@ -96,7 +95,8 @@ model_risk_quar <- measles::ModelMeaslesMixingRiskQuarantine(
   incubation_period          = 10,
   prodromal_period           = 3,
   rash_period                = 7,
-  contact_matrix             = identity_matrix,
+  # This needs to be row-stochastic, so we will normalize it here
+  contact_matrix             = identity_matrix / rowSums(identity_matrix),
   hospitalization_rate       = 0.1,
   hospitalization_period     = 10,
   days_undetected            = 2,
@@ -157,3 +157,4 @@ expect_error(
   set_contact_matrix(list(a = 1), diag(3)),
   "set_contact_matrix\\(\\) is not available for this model type"
 )
+

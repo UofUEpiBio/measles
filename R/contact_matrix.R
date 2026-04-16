@@ -37,7 +37,7 @@
 #' e3 <- entity("Population 3", 1000, as_proportion = FALSE)
 #'
 #' # Create an identity contact matrix (no mixing between groups)
-#' cmatrix <- diag(3)
+#' cmatrix <- diag(3) * 15
 #'
 #' N <- 3000
 #'
@@ -45,7 +45,6 @@
 #' model <- ModelMeaslesMixing(
 #'   n                        = N,
 #'   prevalence               = 1 / N,
-#'   contact_rate             = 15,
 #'   transmission_rate        = 0.9,
 #'   vax_efficacy             = 0.97,
 #'   vax_reduction_recovery_rate = 0.8,
@@ -83,7 +82,7 @@
 #'     0.1, 0.7, 0.2,
 #'     0.15, 0.15, 0.7),
 #'   nrow = 3, byrow = TRUE
-#' )
+#' ) * 15
 #'
 #' # Set the new contact matrix
 #' set_contact_matrix(model, new_matrix)
@@ -161,8 +160,8 @@ set_contact_matrix.epiworld_measlesmixing <- function(model, value) {
     stop("value must be a numeric matrix")
   }
 
-  # Check that all values are probabilities (between 0 and 1)
-  stopifnot_double(as.vector(value), lb = 0, ub = 1)
+  # Check that all values are greater than 0
+  stopifnot_double(as.vector(value), lb = 0)
 
   # as.vector() converts matrix to column-major order (same as C++ expects)
   set_contact_matrix_mixing_cpp(model, as.vector(value))

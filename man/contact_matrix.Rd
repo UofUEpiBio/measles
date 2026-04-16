@@ -72,7 +72,7 @@ e2 <- entity("Population 2", 1000, as_proportion = FALSE)
 e3 <- entity("Population 3", 1000, as_proportion = FALSE)
 
 # Create an identity contact matrix (no mixing between groups)
-cmatrix <- diag(3)
+cmatrix <- diag(3) * 15
 
 N <- 3000
 
@@ -80,7 +80,6 @@ N <- 3000
 model <- ModelMeaslesMixing(
   n                        = N,
   prevalence               = 1 / N,
-  contact_rate             = 15,
   transmission_rate        = 0.9,
   vax_efficacy             = 0.97,
   vax_reduction_recovery_rate = 0.8,
@@ -118,7 +117,7 @@ new_matrix <- matrix(
     0.1, 0.7, 0.2,
     0.15, 0.15, 0.7),
   nrow = 3, byrow = TRUE
-)
+) * 15
 
 # Set the new contact matrix
 set_contact_matrix(model, new_matrix)
