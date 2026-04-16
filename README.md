@@ -50,8 +50,8 @@ in ForeSITE’s measles repository:
 
 The package includes three measles-specific models:
 
-1.  **ModelMeaslesSchool**: A SEIHR
-    (Susceptible-Exposed-Infectious-Hospitalized-Recovered) model
+1.  **ModelMeaslesSchool**: A SLIHR
+    (Susceptible-Latent-Infectious-Hospitalized-Recovered) model
     designed for school settings with isolation and quarantine policies.
 
 2.  **ModelMeaslesMixing**: A measles model with population mixing
@@ -136,21 +136,21 @@ summary(model_school)
 #> Number of entities  : 0
 #> Days (duration)     : 200 (of 200)
 #> Number of viruses   : 1
-#> Last run elapsed t  : 1.00ms
-#> Total elapsed t     : 115.00ms (400 runs)
-#> Last run speed      : 77.94 million agents x day / second
-#> Average run speed   : 347.30 million agents x day / second
+#> Last run elapsed t  : 8.00ms
+#> Total elapsed t     : 832.00ms (400 runs)
+#> Last run speed      : 11.67 million agents x day / second
+#> Average run speed   : 48.07 million agents x day / second
 #> Rewiring            : off
 #> Last seed used      : 1264933217
 #>
 #> Global events:
-#>  - Update model (runs daily)
+#>  - Quarantine process (runs daily)
 #>
 #> Virus(es):
 #>  - Measles
 #>
 #> Tool(s):
-#>  - MMR 0.970000
+#>  - MMR
 #>
 #> Model parameters:
 #>  - (IGNORED) Vax improved recovery : 0.0e+00
@@ -170,13 +170,13 @@ summary(model_school)
 #>
 #> Distribution of the population at time 200:
 #>   - ( 0) Susceptible             : 499 -> 346
-#>   - ( 1) Exposed                 :   1 -> 0
+#>   - ( 1) Latent                  :   1 -> 0
 #>   - ( 2) Prodromal               :   0 -> 0
 #>   - ( 3) Rash                    :   0 -> 0
 #>   - ( 4) Isolated                :   0 -> 0
 #>   - ( 5) Isolated Recovered      :   0 -> 0
 #>   - ( 6) Detected Hospitalized   :   0 -> 0
-#>   - ( 7) Quarantined Exposed     :   0 -> 0
+#>   - ( 7) Quarantined Latent      :   0 -> 0
 #>   - ( 8) Quarantined Susceptible :   0 -> 0
 #>   - ( 9) Quarantined Prodromal   :   0 -> 0
 #>   - (10) Quarantined Recovered   :   0 -> 0
@@ -185,13 +185,13 @@ summary(model_school)
 #>
 #> Transition Probabilities:
 #>  - Susceptible              1.00  0.00     -     -     -     -     -     -     -     -     -     -     -
-#>  - Exposed                     -  0.92  0.08     -     -     -     -     -     -     -     -     -     -
+#>  - Latent                      -  0.92  0.08     -     -     -     -     -     -     -     -     -     -
 #>  - Prodromal                   -     -  0.77  0.23     -     -     -     -     -     -     -     -     -
 #>  - Rash                        -     -     -  0.29  0.18  0.15  0.08     -     -     -     -  0.13  0.16
 #>  - Isolated                    -     -     -  0.12  0.35  0.20  0.22     -     -     -     -  0.03  0.08
 #>  - Isolated Recovered          -     -     -     -     -  0.56     -     -     -     -     -     -  0.44
 #>  - Detected Hospitalized       -     -     -     -     -     -  0.87     -     -     -     -     -  0.13
-#>  - Quarantined Exposed         -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined Latent          -     -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Quarantined Susceptible     -     -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Quarantined Prodromal       -     -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Quarantined Recovered       -     -     -     -     -     -     -     -     -     -     -     -     -
@@ -311,20 +311,20 @@ summary(measles_model)
 #> Days (duration)     : 100 (of 100)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 0.00s
-#> Total elapsed t     : 3.00s (400 runs)
-#> Last run speed      : 19.84 million agents x day / second
-#> Average run speed   : 91.46 million agents x day / second
+#> Total elapsed t     : 17.00s (400 runs)
+#> Last run speed      : 4.67 million agents x day / second
+#> Average run speed   : 20.86 million agents x day / second
 #> Rewiring            : off
 #> Last seed used      : 1428497254
 #>
 #> Global events:
-#>  - Update infected individuals (runs daily)
+#>  (none)
 #>
 #> Virus(es):
 #>  - Measles
 #>
 #> Tool(s):
-#>  - MMR 0.970000
+#>  - MMR
 #>
 #> Model parameters:
 #>  - (IGNORED) Vax improved recovery : 0.5000
@@ -347,13 +347,13 @@ summary(measles_model)
 #>
 #> Distribution of the population at time 100:
 #>   - ( 0) Susceptible             : 8999 -> 8326
-#>   - ( 1) Exposed                 :    1 -> 50
+#>   - ( 1) Latent                  :    1 -> 50
 #>   - ( 2) Prodromal               :    0 -> 20
 #>   - ( 3) Rash                    :    0 -> 6
 #>   - ( 4) Isolated                :    0 -> 2
 #>   - ( 5) Isolated Recovered      :    0 -> 25
 #>   - ( 6) Detected Hospitalized   :    0 -> 16
-#>   - ( 7) Quarantined Exposed     :    0 -> 6
+#>   - ( 7) Quarantined Latent      :    0 -> 6
 #>   - ( 8) Quarantined Susceptible :    0 -> 2
 #>   - ( 9) Quarantined Prodromal   :    0 -> 3
 #>   - (10) Quarantined Recovered   :    0 -> 0
@@ -362,13 +362,13 @@ summary(measles_model)
 #>
 #> Transition Probabilities:
 #>  - Susceptible              1.00  0.00     -     -     -     -     -     -  0.00     -     -     -     -
-#>  - Exposed                     -  0.89  0.08     -     -     -     -  0.02     -  0.00     -     -     -
+#>  - Latent                      -  0.89  0.08     -     -     -     -  0.02     -  0.00     -     -     -
 #>  - Prodromal                   -     -  0.74  0.25  0.00     -     -     -     -  0.01     -     -     -
 #>  - Rash                        -     -     -  0.22  0.22  0.15  0.08     -     -     -     -  0.12  0.19
 #>  - Isolated                    -     -     -     -  0.47  0.36  0.18     -     -     -     -     -     -
 #>  - Isolated Recovered          -     -     -     -     -  0.88     -     -     -     -     -     -  0.12
 #>  - Detected Hospitalized       -     -     -     -     -     -  0.86     -     -     -     -     -  0.14
-#>  - Quarantined Exposed         -  0.04  0.00     -     -     -     -  0.89     -  0.07     -     -     -
+#>  - Quarantined Latent          -  0.04  0.00     -     -     -     -  0.89     -  0.07     -     -     -
 #>  - Quarantined Susceptible  0.07     -     -     -     -     -     -     -  0.93     -     -     -     -
 #>  - Quarantined Prodromal       -     -  0.01     -  0.27     -     -     -     -  0.72     -     -     -
 #>  - Quarantined Recovered       -     -     -     -     -     -     -     -     -     -     -     -     -

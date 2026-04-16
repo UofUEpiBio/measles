@@ -54,8 +54,8 @@ Create a measles post-exposure prophylaxis (PEP) intervention
 \details{
 This functions creates a global event that represents a post-exposure
 prophylaxis (PEP) intervention for measles. The intervention includes the
-administration of MMR vaccine and immunoglobulin (IG) to individuals who
-have been exposed to the virus, with the goal of reducing the probability
+administration of MMR vaccine and immunoglobulin (IG) to individuals after
+exposure to the virus, with the goal of reducing the probability
 of infection and preventing the spread of the disease.
 
 The process involves both PEP Measles-Mumps-Rubella (MMR) vaccine and
@@ -65,12 +65,12 @@ The flow is the following:
 \enumerate{
 \item Agents in \code{target_states} are eligible for PEP if they are
 willing to accept it (based on \code{pep_willingness}).
-\item If the agent has been exposed (has the virus in their system)
+\item If the agent is already infected (for example, in a latent state)
 for at most \code{mmr_window} days, they are offered MMR vaccine.
 Otherwise, they are offered IG.
-\item Unexposed agents are offered the MMR vaccine, and if they accept,
+\item Susceptible agents are offered the MMR vaccine, and if they accept,
 they are automatically moved out of the quarantine process.
-\item Agents who were exposed and got either MMR of IG may move
+\item Agents who were already infected and got either MMR or IG may move
 out of the quarantine process if the PEP is effective (based on
 \code{mmr_efficacy} or \code{ig_efficacy}). The destination state depends
 on whether the PEP was effective or not, and is determined by
@@ -85,7 +85,7 @@ applied, the IG "tool" will have a random duration based on a normal
 distribution with mean \code{ig_half_life_mean} and standard deviation
 \code{ig_half_life_sd}. Once the duration is over, the IG "tool" is removed
 from the agent, and they are again eligible for PEP if they
-get exposed again.
+are exposed again.
 }
 \seealso{
 \link[epiworldR:global-events]{epiworldR::global-events}

@@ -103,8 +103,8 @@ The \code{contact_matrix} is a matrix of contact rates between entities. The
 matrix should be of size \verb{n x n}, where \code{n} is the number of entities.
 This is a row-stochastic matrix, i.e., the sum of each row should be 1.
 
-The model includes three distinct phases of measles infection: incubation (exposed),
-prodromal, and rash periods. Vaccination provides protection against
+The model includes three distinct phases of measles infection: latent
+(incubation), prodromal, and rash periods. Vaccination provides protection against
 transmission.
 
 Risk-based quarantine strategies assign different quarantine durations based on

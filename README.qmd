@@ -49,7 +49,7 @@ You can learn more about the ongoing efforts to model measles outbreaks in ForeS
 
 The package includes three measles-specific models:
 
-1. **ModelMeaslesSchool**: A SEIHR (Susceptible-Exposed-Infectious-Hospitalized-Recovered) model designed for school settings with isolation and quarantine policies.
+1. **ModelMeaslesSchool**: A SLIHR (Susceptible-Latent-Infectious-Hospitalized-Recovered) model designed for school settings with isolation and quarantine policies.
 
 2. **ModelMeaslesMixing**: A measles model with population mixing between different groups, including vaccination, quarantine, isolation, and contact tracing mechanisms.
 
