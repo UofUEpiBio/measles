@@ -1,18 +1,18 @@
 # Test just this file: tinytest::run_test_file("inst/tinytest/test-measlesmixingriskquarantine.R")
-# Row-stochastic matrix (rowsums 1)
+# Contact matrix containing both mixing proportions and row-specific contact rates
 self <- .83
 others <- (1 - self) / 2
+r0 <- 15
+c_rate <- 20
+i_rate <- r0 / c_rate * (1 / 3)
+
 cmatrix <- c(
   c(self, others, others),
   c(others, self, others),
   c(others, others, self)
-) |> as.double() |> matrix(byrow = TRUE, nrow = 3)
+) |> as.double() |> matrix(byrow = TRUE, nrow = 3) * c_rate
 
 N <- 600
-
-r0 <- 15
-c_rate <- 20
-i_rate <- r0 / c_rate * (1/3)
 
 model_factory <- function(durations, nsims = 100) {
 
@@ -23,7 +23,6 @@ model_factory <- function(durations, nsims = 100) {
   measles_model <- measles::ModelMeaslesMixingRiskQuarantine(
     n                          = N,
     prevalence                 = 1 / N,
-    contact_rate               = c_rate,
     transmission_rate          = i_rate,
     vax_efficacy               = 0.97,
     incubation_period          = 10,
@@ -85,5 +84,4 @@ expect_true(ans_none > ans_low)
 expect_true(ans_base < ans_high)
 expect_true(ans_base < ans_mid)
 expect_true(ans_base < ans_low)
-
 

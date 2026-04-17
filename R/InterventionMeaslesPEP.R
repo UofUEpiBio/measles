@@ -5,10 +5,16 @@
 #' @param name Name of the intervention.
 #' @param mmr_efficacy Probability of MMR vaccine efficacy.
 #' @param ig_efficacy Probability of immunoglobulin (IG) efficacy.
-#' @param ig_half_life_mean Mean of the half-life of immunoglobulin (IG) in days.
-#' @param ig_half_life_sd Standard deviation of the half-life of immunoglobulin (IG) in days.
-#' @param pep_willingness Probability that an individual will accept PEP.
+#' @param ig_half_life_mean Mean of the half-life of immunoglobulin (IG) in
+#' days.
+#' @param ig_half_life_sd Standard deviation of the half-life of immunoglobulin
+#' (IG) in days.
+#' @param mmr_willingness Probability that an individual will accept MMR
+#' vaccine.
+#' @param ig_willingness Probability that an individual will accept
+#' immunoglobulin (IG).
 #' @param mmr_window Time window for MMR vaccine administration.
+#' @param ig_window Time window for immunoglobulin (IG) administration.
 #' @param target_states,states_if_pep_effective,states_if_pep_ineffective
 #' Integer vectors of target and destination states (see details).
 #'
@@ -61,8 +67,10 @@ InterventionMeaslesPEP <- function(
   ig_efficacy,
   ig_half_life_mean,
   ig_half_life_sd,
-  pep_willingness,
+  mmr_willingness,
+  ig_willingness,
   mmr_window,
+  ig_window,
   target_states,
   states_if_pep_effective,
   states_if_pep_ineffective
@@ -73,7 +81,8 @@ InterventionMeaslesPEP <- function(
   stopifnot_double(ig_efficacy, lb = 0, ub = 1)
   stopifnot_double(ig_half_life_mean, lb = 0)
   stopifnot_double(ig_half_life_sd, lb = 0)
-  stopifnot_double(pep_willingness, lb = 0, ub = 1)
+  stopifnot_double(mmr_willingness, lb = 0, ub = 1)
+  stopifnot_double(ig_willingness, lb = 0, ub = 1)
   stopifnot_double(mmr_window, lb = 0)
   stopifnot_int(target_states, lb = 0)
   stopifnot_int(states_if_pep_effective, lb = 0)
@@ -85,8 +94,10 @@ InterventionMeaslesPEP <- function(
     ig_efficacy,
     ig_half_life_mean,
     ig_half_life_sd,
-    pep_willingness,
+    mmr_willingness,
+    ig_willingness,
     mmr_window,
+    ig_window,
     target_states,
     states_if_pep_effective,
     states_if_pep_ineffective

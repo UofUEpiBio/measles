@@ -2,7 +2,11 @@
 
 ## User visible changes
 
-* The school model now includes post-exposure prophylaxis MMR. The default behavior of the model is not distribuing it, but users can easily activate it.
+* The function `InterventionMeaslesPEP()` implements post-exposure prophylaxis featuring both MMR and IG. The process is highly configurable and can be attached to the `ModelMeaslesSchool()`. Not available yet for other models.
+
+* The models `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` no longer use `contact_rate`; instead, their `contact_matrix` stores the expected number of contacts between groups.
+
+* Updated the documentation, examples, and contact-matrix helpers for the mixing models so they consistently treat `contact_matrix` as the full contact-rate matrix.
 
 * Aligned the package documentation and examples with the updated measles state names from `epiworldR`, replacing `Exposed`/`Quarantined Exposed` with `Latent`/`Quarantined Latent` where those names refer to model states.
 

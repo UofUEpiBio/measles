@@ -94,12 +94,14 @@ model_measles |>
       ig_efficacy  = 0.97,
       ig_half_life_mean = 6 * 7,
       ig_half_life_sd = 7 * .5,
-      pep_willingness = 1.0,
+      mmr_willingness = 1.0,
+      ig_willingness = 0.5,
       mmr_window = 3,
+      ig_window = 6,
       target_states = c(
-        7L,  # Quarantined Latent
-        8L,  # Quarantined Susceptible
-        9L   # Quarantined Prodromal
+        6L,  # Quarantined Latent
+        7L,  # Quarantined Susceptible
+        8L   # Quarantined Prodromal
       ),
       states_if_pep_effective = c(
         0L, # Susceptible
@@ -109,7 +111,7 @@ model_measles |>
       states_if_pep_ineffective = c(
         1L, # Latent
         0L, # Susceptible
-        3L  # Prodromal
+        2L  # Prodromal
       )
     )
   })

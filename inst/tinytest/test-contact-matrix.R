@@ -1,11 +1,10 @@
 # Test just this file: tinytest::run_test_file("inst/tinytest/test-contact-matrix.R")
 
-# Helper function to create a random row-stochastic matrix
-create_random_row_stochastic_matrix <- function(n) {
+# Helper function to create a random contact matrix
+create_random_contact_matrix <- function(n) {
   mat <- matrix(runif(n * n), nrow = n, ncol = n)
-  # Normalize rows to sum to 1
   mat <- mat / rowSums(mat)
-  return(mat)
+  mat * runif(n, min = 5, max = 20)
 }
 
 # ------------------------------------------------------------------------------
@@ -18,14 +17,13 @@ e2 <- entity("Population 2", 1000, FALSE)
 e3 <- entity("Population 3", 1000, FALSE)
 
 # (1) Initialize the model with an identity matrix for the mixing matrix
-identity_matrix <- diag(3)
+identity_matrix <- diag(3) * 15
 
 N <- 3000
 
 model_mixing <- measles::ModelMeaslesMixing(
   n                          = N,
   prevalence                 = 1 / N,
-  contact_rate               = 15,
   transmission_rate          = 0.9,
   vax_efficacy               = 0.97,
   vax_reduction_recovery_rate = 0.8,
@@ -65,9 +63,9 @@ run(model_mixing, ndays = 10)
 extracted_matrix <- get_contact_matrix(model_mixing)
 expect_equal(dim(extracted_matrix), c(3, 3))
 
-# (3) Create a random row-stochastic matrix of the same dimension
+# (3) Create a random contact matrix of the same dimension
 set.seed(456)
-random_matrix <- create_random_row_stochastic_matrix(3)
+random_matrix <- create_random_contact_matrix(3)
 
 # Set it using set_contact_matrix()
 set_contact_matrix(model_mixing, random_matrix)
@@ -90,7 +88,6 @@ e3_rq <- entity("Population 3", 1000, FALSE)
 model_risk_quar <- measles::ModelMeaslesMixingRiskQuarantine(
   n                          = N,
   prevalence                 = 1 / N,
-  contact_rate               = 15,
   transmission_rate          = 0.9,
   vax_efficacy               = 0.97,
   incubation_period          = 10,
@@ -132,9 +129,9 @@ run(model_risk_quar, ndays = 10)
 extracted_matrix_rq <- get_contact_matrix(model_risk_quar)
 expect_equal(dim(extracted_matrix_rq), c(3, 3))
 
-# (3) Create a random row-stochastic matrix of the same dimension
+# (3) Create a random contact matrix of the same dimension
 set.seed(101112)
-random_matrix_rq <- create_random_row_stochastic_matrix(3)
+random_matrix_rq <- create_random_contact_matrix(3)
 
 # Set it using set_contact_matrix()
 set_contact_matrix(model_risk_quar, random_matrix_rq)

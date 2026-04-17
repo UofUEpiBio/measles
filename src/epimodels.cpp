@@ -60,7 +60,6 @@ SEXP ModelMeaslesSchool_cpp(
 SEXP ModelMeaslesMixing_cpp(
     unsigned int n,
     double prevalence,
-    double contact_rate,
     double transmission_rate,
     double vax_efficacy,
     double vax_reduction_recovery_rate,
@@ -86,7 +85,6 @@ SEXP ModelMeaslesMixing_cpp(
       new epiworld::epimodels::ModelMeaslesMixing<>(
           n,
           prevalence,
-          contact_rate,
           transmission_rate,
           vax_efficacy,
           vax_reduction_recovery_rate,
@@ -115,7 +113,6 @@ SEXP ModelMeaslesMixing_cpp(
 SEXP ModelMeaslesMixingRiskQuarantine_cpp(
     unsigned int n,
     double prevalence,
-    double contact_rate,
     double transmission_rate,
     double vax_efficacy,
     double incubation_period,
@@ -143,7 +140,6 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
       new epiworld::epimodels::ModelMeaslesMixingRiskQuarantine<>(
           n,
           prevalence,
-          contact_rate,
           transmission_rate,
           vax_efficacy,
           incubation_period,

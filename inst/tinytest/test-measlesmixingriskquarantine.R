@@ -3,19 +3,18 @@ e1 <- entity("Population 1", 3e3, FALSE)
 e2 <- entity("Population 2", 3e3, FALSE)
 e3 <- entity("Population 3", 3e3, FALSE)
 
-# Row-stochastic matrix (rowsums 1)
+# Contact matrix with within-group contact rates of 15
 cmatrix <- c(
   c(1, 0, 0),
   c(0, 1, 0),
   c(0, 0, 1)
-) |> as.double() |> matrix(byrow = TRUE, nrow = 3)
+) |> as.double() |> matrix(byrow = TRUE, nrow = 3) * 15
 
 N <- 9e3
 
 measles_model <- measles::ModelMeaslesMixingRiskQuarantine(
   n                          = N,
   prevalence                 = 1 / N,
-  contact_rate               = 15,
   transmission_rate          = 0.9,
   vax_efficacy               = 0.97,
   incubation_period          = 10,
@@ -80,7 +79,6 @@ transmissions[, table(entity)]
 model_factory <- function(
   n = 9e3,
   prevalence = 1 / 9e3,
-  contact_rate = 15,
   transmission_rate = 0.9,
   vax_efficacy = 0.97,
   incubation_period = 10,
@@ -104,7 +102,6 @@ model_factory <- function(
   ModelMeaslesMixingRiskQuarantine(
     n = n,
     prevalence = prevalence,
-    contact_rate = contact_rate,
     transmission_rate = transmission_rate,
     vax_efficacy = vax_efficacy,
     incubation_period = incubation_period,
@@ -142,7 +139,6 @@ expect_silent(model_factory())
 # Test each parameter with bad input
 expect_error(model_factory(n = bad_int_input), expected_error_msg_int)
 expect_error(model_factory(prevalence = bad_numeric_input), expected_error_msg_double)
-expect_error(model_factory(contact_rate = bad_numeric_input), expected_error_msg_double)
 expect_error(model_factory(transmission_rate = bad_numeric_input), expected_error_msg_double)
 expect_error(model_factory(vax_efficacy = bad_numeric_input), expected_error_msg_double)
 expect_error(model_factory(incubation_period = bad_numeric_input), expected_error_msg_double)
@@ -167,4 +163,3 @@ expect_error(model_factory(contact_tracing_days_prior = bad_int_input), expected
 expect_error(model_factory(vax_efficacy = 1.5), "must be")
 expect_error(model_factory(quarantine_willingness = -0.1), "must be")
 expect_error(model_factory(detection_rate_quarantine = 1.5), "must be")
-

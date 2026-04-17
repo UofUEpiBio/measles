@@ -10,8 +10,10 @@ InterventionMeaslesPEP(
   ig_efficacy,
   ig_half_life_mean,
   ig_half_life_sd,
-  pep_willingness,
+  mmr_willingness,
+  ig_willingness,
   mmr_window,
+  ig_window,
   target_states,
   states_if_pep_effective,
   states_if_pep_ineffective
@@ -24,13 +26,21 @@ InterventionMeaslesPEP(
 
 \item{ig_efficacy}{Probability of immunoglobulin (IG) efficacy.}
 
-\item{ig_half_life_mean}{Mean of the half-life of immunoglobulin (IG) in days.}
+\item{ig_half_life_mean}{Mean of the half-life of immunoglobulin (IG) in
+days.}
 
-\item{ig_half_life_sd}{Standard deviation of the half-life of immunoglobulin (IG) in days.}
+\item{ig_half_life_sd}{Standard deviation of the half-life of immunoglobulin
+(IG) in days.}
 
-\item{pep_willingness}{Probability that an individual will accept PEP.}
+\item{mmr_willingness}{Probability that an individual will accept MMR
+vaccine.}
+
+\item{ig_willingness}{Probability that an individual will accept
+immunoglobulin (IG).}
 
 \item{mmr_window}{Time window for MMR vaccine administration.}
+
+\item{ig_window}{Time window for immunoglobulin (IG) administration.}
 
 \item{target_states, states_if_pep_effective, states_if_pep_ineffective}{Integer vectors of target and destination states (see details).}
 }

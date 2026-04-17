@@ -6,10 +6,9 @@
 #'
 #' @param model An epiworld model object of class `epiworld_measlesmixing` or
 #'   `epiworld_measlesmixingriskquarantine`.
-#' @param value A row-stochastic matrix representing contact rates between
-#'   population groups. The matrix should be square with dimensions matching
-#'   the number of entities (population groups) in the model, and each row
-#'   should sum to 1.
+#' @param value A numeric square matrix representing contact rates between
+#'   population groups. The matrix should have one row and one column per
+#'   entity in the model.
 #'
 #' @return
 #' - `get_contact_matrix()` returns a numeric matrix representing the contact
@@ -18,10 +17,9 @@
 #'   its side effects).
 #'
 #' @details
-#' The contact matrix is a row-stochastic matrix where entry `[i, j]`
-#' represents the probability that an individual in group `i` will make
-#' contact with someone in group `j`, given that they make a contact.
-#' Each row must sum to 1.
+#' Entry `[i, j]` of the contact matrix represents the expected number of
+#' contacts that an individual in group `i` has with individuals in group `j`
+#' during a time step.
 #'
 #' These functions are currently only available for:
 #' - [ModelMeaslesMixing]
@@ -37,7 +35,7 @@
 #' e3 <- entity("Population 3", 1000, as_proportion = FALSE)
 #'
 #' # Create an identity contact matrix (no mixing between groups)
-#' cmatrix <- diag(3)
+#' cmatrix <- diag(3) * 15
 #'
 #' N <- 3000
 #'
@@ -45,7 +43,6 @@
 #' model <- ModelMeaslesMixing(
 #'   n                        = N,
 #'   prevalence               = 1 / N,
-#'   contact_rate             = 15,
 #'   transmission_rate        = 0.9,
 #'   vax_efficacy             = 0.97,
 #'   vax_reduction_recovery_rate = 0.8,
@@ -77,11 +74,11 @@
 #' original_matrix <- get_contact_matrix(model)
 #' print(original_matrix)
 #'
-#' # Create a new random row-stochastic matrix
+#' # Create a new contact matrix
 #' new_matrix <- matrix(
-#'   c(0.8, 0.1, 0.1,
-#'     0.1, 0.7, 0.2,
-#'     0.15, 0.15, 0.7),
+#'   c(12, 1.5, 1.5,
+#'     2, 11, 2,
+#'     2.25, 2.25, 10.5),
 #'   nrow = 3, byrow = TRUE
 #' )
 #'
@@ -156,13 +153,13 @@ set_contact_matrix.default <- function(model, value) {
 set_contact_matrix.epiworld_measlesmixing <- function(model, value) {
   stopifnot_model(model)
 
-  # Validate the matrix: must be numeric and contain probabilities [0, 1]
+  # Validate the matrix: must be numeric and contain non-negative rates.
   if (!is.matrix(value) || !is.numeric(value)) {
     stop("value must be a numeric matrix")
   }
 
-  # Check that all values are probabilities (between 0 and 1)
-  stopifnot_double(as.vector(value), lb = 0, ub = 1)
+  # Check that all values are greater than 0
+  stopifnot_double(as.vector(value), lb = 0)
 
   # as.vector() converts matrix to column-major order (same as C++ expects)
   set_contact_matrix_mixing_cpp(model, as.vector(value))
@@ -174,13 +171,13 @@ set_contact_matrix.epiworld_measlesmixing <- function(model, value) {
 set_contact_matrix.epiworld_measlesmixingriskquarantine <- function(model, value) {
   stopifnot_model(model)
 
-  # Validate the matrix: must be numeric and contain probabilities [0, 1]
+  # Validate the matrix: must be numeric and contain non-negative rates.
   if (!is.matrix(value) || !is.numeric(value)) {
     stop("value must be a numeric matrix")
   }
 
-  # Check that all values are probabilities (between 0 and 1)
-  stopifnot_double(as.vector(value), lb = 0, ub = 1)
+  # Check that all values are greater than or equal to zero.
+  stopifnot_double(as.vector(value), lb = 0)
 
   # as.vector() converts matrix to column-major order (same as C++ expects)
   set_contact_matrix_mixing_risk_quarantine_cpp(model, as.vector(value))

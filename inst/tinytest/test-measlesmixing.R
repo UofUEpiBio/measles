@@ -4,18 +4,17 @@ e2 <- entity("Population 2", 3e3, FALSE)
 e3 <- entity("Population 3", 3e3, FALSE)
 
 # Row-stochastic matrix (rowsums 1)
-cmatrix <- c(
+cmatrix <- (c(
   c(1, 0, 0),
   c(0, 1, 0),
   c(0, 0, 1)
-) |> as.double() |> matrix(byrow = TRUE, nrow = 3)
+) * 15) |> as.double() |> matrix(byrow = TRUE, nrow = 3)
 
 N <- 9e3
 
 measles_model <- measles::ModelMeaslesMixing(
   n                          = N,
   prevalence                 = 1 / N,
-  contact_rate               = 15,
   transmission_rate          = 0.9,
   vax_efficacy               = 0.97,
   vax_reduction_recovery_rate = 0.8,
@@ -76,7 +75,6 @@ transmissions[, table(entity)]
 # Check functions fail with invalid inputs -------------------------------------
 good_n <- 9e3
 good_prevalence <- 1 / good_n
-good_contact_rate <- 15
 good_transmission_rate <- 0.9
 good_vax_efficacy <- 0.97
 good_vax_reduction_recovery_rate <- 0.8
@@ -107,7 +105,6 @@ expected_error_msg_any_na <- "must not contain NA values"
 expect_error(test_model <- measles::ModelMeaslesMixing(
   n                          = bad_numeric_input,
   prevalence                 = good_prevalence,
-  contact_rate               = good_contact_rate,
   transmission_rate          = good_transmission_rate,
   vax_efficacy               = good_vax_efficacy,
   vax_reduction_recovery_rate = good_vax_reduction_recovery_rate,
@@ -130,7 +127,6 @@ expect_error(test_model <- measles::ModelMeaslesMixing(
 expect_error(test_model <- ModelMeaslesMixing(
   n                          = good_n,
   prevalence                 = bad_numeric_input,
-  contact_rate               = good_contact_rate,
   transmission_rate          = good_transmission_rate,
   vax_efficacy               = good_vax_efficacy,
   vax_reduction_recovery_rate = good_vax_reduction_recovery_rate,
@@ -153,7 +149,6 @@ expect_error(test_model <- ModelMeaslesMixing(
 expect_error(test_model <- ModelMeaslesMixing(
   n                          = good_n,
   prevalence                 = good_prevalence,
-  contact_rate               = good_contact_rate,
   transmission_rate          = good_transmission_rate,
   vax_efficacy               = good_vax_efficacy,
   vax_reduction_recovery_rate = good_vax_reduction_recovery_rate,
@@ -176,7 +171,6 @@ expect_error(test_model <- ModelMeaslesMixing(
 expect_error(test_model <- ModelMeaslesMixing(
   n                          = good_n,
   prevalence                 = good_prevalence,
-  contact_rate               = good_contact_rate,
   transmission_rate          = good_transmission_rate,
   vax_efficacy               = good_vax_efficacy,
   vax_reduction_recovery_rate = good_vax_reduction_recovery_rate,
@@ -199,7 +193,6 @@ expect_error(test_model <- ModelMeaslesMixing(
 expect_error(test_model <- ModelMeaslesMixing(
   n                          = good_n,
   prevalence                 = good_prevalence,
-  contact_rate               = good_contact_rate,
   transmission_rate          = good_transmission_rate,
   vax_efficacy               = good_vax_efficacy,
   vax_reduction_recovery_rate = good_vax_reduction_recovery_rate,
@@ -222,7 +215,6 @@ expect_error(test_model <- ModelMeaslesMixing(
 expect_error(test_model <- ModelMeaslesMixing(
   n                          = good_n,
   prevalence                 = good_prevalence,
-  contact_rate               = good_contact_rate,
   transmission_rate          = good_transmission_rate,
   vax_efficacy               = good_vax_efficacy,
   vax_reduction_recovery_rate = good_vax_reduction_recovery_rate,
@@ -246,7 +238,6 @@ expect_error(test_model <- ModelMeaslesMixing(
 expect_error(test_model <- ModelMeaslesMixing(
   n                          = good_n,
   prevalence                 = good_prevalence,
-  contact_rate               = good_contact_rate,
   transmission_rate          = good_transmission_rate,
   vax_efficacy               = 1.5, # Invalid: > 1
   vax_reduction_recovery_rate = good_vax_reduction_recovery_rate,
@@ -269,7 +260,6 @@ expect_error(test_model <- ModelMeaslesMixing(
 expect_error(test_model <- ModelMeaslesMixing(
   n                          = good_n,
   prevalence                 = good_prevalence,
-  contact_rate               = good_contact_rate,
   transmission_rate          = good_transmission_rate,
   vax_efficacy               = good_vax_efficacy,
   vax_reduction_recovery_rate = good_vax_reduction_recovery_rate,
