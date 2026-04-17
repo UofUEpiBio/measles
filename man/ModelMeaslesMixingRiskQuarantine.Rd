@@ -10,7 +10,6 @@ ModelMeaslesMixingRiskQuarantine(
   prevalence,
   contact_matrix,
   transmission_rate = 0.9,
-  contact_rate = 15/transmission_rate/prodromal_period,
   prop_vaccinated,
   vax_efficacy = 0.99,
   quarantine_period_high = 21,
@@ -35,13 +34,11 @@ ModelMeaslesMixingRiskQuarantine(
 
 \item{prevalence}{Double. Initial proportion of individuals with the virus.}
 
-\item{contact_matrix}{A row-stochastic matrix of mixing proportions between
-population groups.}
+\item{contact_matrix}{A numeric square matrix with the expected number of
+contacts per time step between population groups.}
 
 \item{transmission_rate}{Numeric scalar between 0 and 1. Probability of
 transmission (default: 0.9).}
-
-\item{contact_rate}{Numeric scalar. Average number of contacts per step.}
 
 \item{prop_vaccinated}{Double. Proportion of population that is vaccinated.}
 
@@ -99,9 +96,10 @@ includes vaccination, quarantine with three risk levels (high, medium, low), iso
 and contact tracing mechanisms.
 }
 \details{
-The \code{contact_matrix} is a matrix of contact rates between entities. The
-matrix should be of size \verb{n x n}, where \code{n} is the number of entities.
-This is a row-stochastic matrix, i.e., the sum of each row should be 1.
+The \code{contact_matrix} is a square matrix of contact rates between entities.
+Entry \verb{[i, j]} gives the expected number of contacts that an agent in entity
+\code{i} has with agents in entity \code{j} during a time step. The matrix should have
+one row and one column per entity in the model.
 
 The model includes three distinct phases of measles infection: latent
 (incubation), prodromal, and rash periods. Vaccination provides protection against
@@ -120,11 +118,6 @@ The \link[epiworldR:epiworld-methods]{epiworldR::initial_states} function allows
 model. In particular, the user can specify how many of the non-infected
 agents have been removed at the beginning of the simulation.
 
-The default value for the contact rate is an approximation to the disease's
-basic reproduction number (R0), but it is not 100\% accurate. A more accurate
-way to set the contact rate is available, and will be distributed in the
-future.
-
 The model uses hospitalization rates instead of probabilities. To learn
 more about this, see the documentation in \code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}.
 }
@@ -141,19 +134,18 @@ e1 <- entity("Population 1", 3e3, as_proportion = FALSE)
 e2 <- entity("Population 2", 3e3, as_proportion = FALSE)
 e3 <- entity("Population 3", 3e3, as_proportion = FALSE)
 
-# Row-stochastic matrix (rowsums 1)
+# Contact matrix including within- and between-group contact rates
 cmatrix <- c(
   c(0.9, 0.05, 0.05),
   c(0.1, 0.8, 0.1),
   c(0.1, 0.2, 0.7)
-) |> matrix(byrow = TRUE, nrow = 3)
+) |> matrix(byrow = TRUE, nrow = 3) * 15
 
 N <- 9e3
 
 measles_model <- ModelMeaslesMixingRiskQuarantine(
   n                        = N,
   prevalence               = 1 / N,
-  contact_rate             = 15,
   transmission_rate        = 0.9,
   vax_efficacy             = 0.97,
   incubation_period        = 10,

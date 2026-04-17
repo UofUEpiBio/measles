@@ -6,8 +6,8 @@
 #'
 #' @param n Number of individuals in the population.
 #' @param prevalence Double. Initial proportion of individuals with the virus.
-#' @param contact_matrix A numeric matrix representing the contact rates
-#' between population groups.
+#' @param contact_matrix A numeric square matrix with the expected number of
+#' contacts per time step between population groups.
 #' @param vax_reduction_recovery_rate Double. Vaccine reduction in recovery
 #' rate (default: 0.5).
 #' @param transmission_rate Numeric scalar between 0 and 1. Probability of
@@ -37,9 +37,10 @@
 #' @family measles models
 #' @concept measles-models
 #' @details
-#' The `contact_matrix` is a matrix of contact rates between entities. The
-#' matrix should be of size `n x n`, where `n` is the number of entities.
-#' This is a row-stochastic matrix, i.e., the sum of each row should be 1.
+#' The `contact_matrix` is a square matrix of contact rates between entities.
+#' Entry `[i, j]` gives the expected number of contacts that an agent in entity
+#' `i` has with agents in entity `j` during a time step. The matrix should have
+#' one row and one column per entity in the model.
 #'
 #' The model includes three distinct phases of measles infection: incubation,
 #' prodromal, and rash periods. Vaccination provides protection against
@@ -48,11 +49,6 @@
 #' The [initial_states] function allows the user to set the initial state of the
 #' model. In particular, the user can specify how many of the non-infected
 #' agents have been removed at the beginning of the simulation.
-#'
-#' The default value for the contact rate is an approximation to the disease's
-#' basic reproduction number (R0), but it is not 100% accurate. A more accurate
-#' way to se the contact rate is available, and will be distributed in the
-#' future.
 #'
 #' @section Hospitalization Probability:
 #' Instead of hospitalization probability, the model uses hospitalization rate.
@@ -90,7 +86,7 @@
 #' e2 <- entity("Population 2", 3e3, as_proportion = FALSE)
 #' e3 <- entity("Population 3", 3e3, as_proportion = FALSE)
 #'
-#' # Row-stochastic matrix (rowsums 1)
+#' # Contact matrix including within- and between-group contact rates
 #' cmatrix <- (c(
 #'   c(0.9, 0.05, 0.05),
 #'   c(0.1, 0.8, 0.1),

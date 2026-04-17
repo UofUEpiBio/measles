@@ -32,10 +32,9 @@ set_contact_matrix(model, value)
 \item{model}{An epiworld model object of class \code{epiworld_measlesmixing} or
 \code{epiworld_measlesmixingriskquarantine}.}
 
-\item{value}{A row-stochastic matrix representing contact rates between
-population groups. The matrix should be square with dimensions matching
-the number of entities (population groups) in the model, and each row
-should sum to 1.}
+\item{value}{A numeric square matrix representing contact rates between
+population groups. The matrix should have one row and one column per
+entity in the model.}
 }
 \value{
 \itemize{
@@ -51,10 +50,9 @@ measles mixing models. The contact matrix specifies the mixing patterns
 between different population groups.
 }
 \details{
-The contact matrix is a row-stochastic matrix where entry \verb{[i, j]}
-represents the probability that an individual in group \code{i} will make
-contact with someone in group \code{j}, given that they make a contact.
-Each row must sum to 1.
+Entry \verb{[i, j]} of the contact matrix represents the expected number of
+contacts that an individual in group \code{i} has with individuals in group \code{j}
+during a time step.
 
 These functions are currently only available for:
 \itemize{
@@ -111,13 +109,13 @@ run(model, ndays = 10)
 original_matrix <- get_contact_matrix(model)
 print(original_matrix)
 
-# Create a new random row-stochastic matrix
+# Create a new contact matrix
 new_matrix <- matrix(
-  c(0.8, 0.1, 0.1,
-    0.1, 0.7, 0.2,
-    0.15, 0.15, 0.7),
+  c(12, 1.5, 1.5,
+    2, 11, 2,
+    2.25, 2.25, 10.5),
   nrow = 3, byrow = TRUE
-) * 15
+)
 
 # Set the new contact matrix
 set_contact_matrix(model, new_matrix)
