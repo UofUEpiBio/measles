@@ -2,7 +2,6 @@
 title: "School-based transmission model"
 author: "George G. Vega Yon, Ph.D."
 date: today
-embed-resources: false
 vignette: >
   %\VignetteIndexEntry{School-based transmission model}
   %\VignetteEngine{quarto::html}

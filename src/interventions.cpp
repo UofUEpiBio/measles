@@ -3,6 +3,7 @@
 #include "cpp11/external_pointer.hpp"
 #include "cpp11/matrix.hpp"
 #include "epiworld/epiworld.hpp"
+#include "measles/measles.hpp"
 
 using namespace cpp11;
 
@@ -22,8 +23,8 @@ SEXP InterventionMeaslesPEP_cpp(
     std::vector< int > states_if_pep_ineffective
 ) {
 
-  cpp11::external_pointer<epiworld::epimodels::InterventionMeaslesPEP<>> ptr(
-      new epiworld::epimodels::InterventionMeaslesPEP<>(
+  cpp11::external_pointer<measles::InterventionMeaslesPEP<>> ptr(
+      new measles::InterventionMeaslesPEP<>(
           name,
           mmr_efficacy,
           ig_efficacy,

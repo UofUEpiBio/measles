@@ -8,7 +8,11 @@
 
 * Updated the documentation, examples, and contact-matrix helpers for the mixing models so they consistently treat `contact_matrix` as the full contact-rate matrix.
 
-* Aligned the package documentation and examples with the updated measles state names from `epiworldR`, replacing `Exposed`/`Quarantined Exposed` with `Latent`/`Quarantined Latent` where those names refer to model states.
+* Aligned the package documentation and examples with the updated measles state names from `{epiworldR}`, replacing `Exposed`/`Quarantined Exposed` with `Latent`/`Quarantined Latent` where those names refer to model states.
+
+## Internal changes
+
+* The Measles models were removed from `{epiworldR}`. This to streamline the development process. So, if we need to update Measles related models, we only need to update the `{measles}` R package, not `{epiworldR}` and `{measles}`.
 
 
 # measles 0.2.0

@@ -40,4 +40,4 @@ VignetteBuilder:
     quarto
 LazyData: true
 Remotes:
-  UofUEpiBio/epiworldR
+  UofUEpiBio/epiworldR@gvegayon/remove-measles
