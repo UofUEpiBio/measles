@@ -11,7 +11,7 @@ ModelMeaslesMixingRiskQuarantine(
   contact_matrix,
   transmission_rate = 0.9,
   prop_vaccinated,
-  vax_efficacy = 0.99,
+  vax_efficacy = 0.97,
   quarantine_period_high = 21,
   quarantine_period_medium = 14,
   quarantine_period_low = 7,

@@ -129,7 +129,7 @@ ModelMeaslesMixingRiskQuarantine <- function(
   contact_matrix,
   transmission_rate = .9,
   prop_vaccinated,
-  vax_efficacy = .99,
+  vax_efficacy = .97,
   quarantine_period_high = 21,
   quarantine_period_medium = 14,
   quarantine_period_low = 7,

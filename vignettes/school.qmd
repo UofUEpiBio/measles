@@ -103,9 +103,9 @@ model_measles |>
         8L   # Quarantined Prodromal
       ),
       states_if_pep_effective = c(
-        0L, # Susceptible
-        0L, # Susceptible
-        0L  # Susceptible
+        11L, # Recovered
+        0L,  # Susceptible
+        11L  # Recovered
       ),
       states_if_pep_ineffective = c(
         1L, # Latent

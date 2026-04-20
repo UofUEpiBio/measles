@@ -12,7 +12,7 @@ ModelMeaslesMixing(
   vax_reduction_recovery_rate = 0.5,
   transmission_rate = 0.9,
   prop_vaccinated,
-  vax_efficacy = 0.99,
+  vax_efficacy = 0.97,
   quarantine_period = 21,
   quarantine_willingness = 1,
   isolation_willingness = 1,
