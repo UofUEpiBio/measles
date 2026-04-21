@@ -135,7 +135,7 @@ ModelMeaslesMixing <- function(
   vax_reduction_recovery_rate = .5,
   transmission_rate = .9,
   prop_vaccinated,
-  vax_efficacy = .99,
+  vax_efficacy = .97,
   quarantine_period = 21,
   quarantine_willingness = 1,
   isolation_willingness = 1,

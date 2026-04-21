@@ -3,6 +3,7 @@
 #include "cpp11/external_pointer.hpp"
 #include "cpp11/matrix.hpp"
 #include "epiworld/epiworld.hpp"
+#include "measles/measles.hpp"
 
 using namespace cpp11;
 
@@ -31,8 +32,8 @@ SEXP ModelMeaslesSchool_cpp(
 ) {
 
   // Creating a pointer to a ModelMeaslesSchool model
-  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesSchool<>> ptr(
-      new epiworld::epimodels::ModelMeaslesSchool<>(
+  cpp11::external_pointer<measles::ModelMeaslesSchool<>> ptr(
+      new measles::ModelMeaslesSchool<>(
           n,
           prevalence,
           contact_rate,
@@ -81,8 +82,8 @@ SEXP ModelMeaslesMixing_cpp(
 ) {
 
   // Creating a pointer to a ModelMeaslesMixing model
-  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixing<>> ptr(
-      new epiworld::epimodels::ModelMeaslesMixing<>(
+  cpp11::external_pointer<measles::ModelMeaslesMixing<>> ptr(
+      new measles::ModelMeaslesMixing<>(
           n,
           prevalence,
           transmission_rate,
@@ -136,8 +137,8 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
 ) {
 
   // Creating a pointer to a ModelMeaslesMixingRiskQuarantine model
-  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixingRiskQuarantine<>> ptr(
-      new epiworld::epimodels::ModelMeaslesMixingRiskQuarantine<>(
+  cpp11::external_pointer<measles::ModelMeaslesMixingRiskQuarantine<>> ptr(
+      new measles::ModelMeaslesMixingRiskQuarantine<>(
           n,
           prevalence,
           transmission_rate,
@@ -169,7 +170,7 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
 // Get contact matrix from ModelMeaslesMixing
 [[cpp11::register]]
 std::vector<double> get_contact_matrix_mixing_cpp(SEXP model) {
-  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixing<>> ptr(model);
+  cpp11::external_pointer<measles::ModelMeaslesMixing<>> ptr(model);
   return ptr->get_contact_matrix();
 }
 
@@ -179,14 +180,14 @@ void set_contact_matrix_mixing_cpp(
   SEXP model,
   std::vector<double> contact_matrix
 ) {
-  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixing<>> ptr(model);
+  cpp11::external_pointer<measles::ModelMeaslesMixing<>> ptr(model);
   ptr->set_contact_matrix(contact_matrix);
 }
 
 // Get contact matrix from ModelMeaslesMixingRiskQuarantine
 [[cpp11::register]]
 std::vector<double> get_contact_matrix_mixing_risk_quarantine_cpp(SEXP model) {
-  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixingRiskQuarantine<>> ptr(model);
+  cpp11::external_pointer<measles::ModelMeaslesMixingRiskQuarantine<>> ptr(model);
   return ptr->get_contact_matrix();
 }
 
@@ -196,6 +197,6 @@ void set_contact_matrix_mixing_risk_quarantine_cpp(
     SEXP model,
     std::vector<double> contact_matrix
 ) {
-  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixingRiskQuarantine<>> ptr(model);
+  cpp11::external_pointer<measles::ModelMeaslesMixingRiskQuarantine<>> ptr(model);
   ptr->set_contact_matrix(contact_matrix);
 }

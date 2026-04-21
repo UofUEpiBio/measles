@@ -1,4 +1,4 @@
-# measles 0.2.0.9000
+# measles 0.2.0-99.99 (dev)
 
 ## User visible changes
 
@@ -8,7 +8,13 @@
 
 * Updated the documentation, examples, and contact-matrix helpers for the mixing models so they consistently treat `contact_matrix` as the full contact-rate matrix.
 
-* Aligned the package documentation and examples with the updated measles state names from `epiworldR`, replacing `Exposed`/`Quarantined Exposed` with `Latent`/`Quarantined Latent` where those names refer to model states.
+* Aligned the package documentation and examples with the updated measles state names from `{epiworldR}`, replacing `Exposed`/`Quarantined Exposed` with `Latent`/`Quarantined Latent` where those names refer to model states.
+
+* Changed the default vaccine efficacy of Measles from 99% to 97%.
+
+## Internal changes
+
+* The Measles models were removed from `{epiworldR}`. This streamlines the development process. So, if we need to update Measles related models, we only need to update the `{measles}` R package, not `{epiworldR}` and `{measles}`.
 
 
 # measles 0.2.0

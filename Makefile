@@ -41,4 +41,16 @@ data-raw: data-raw/*.R
 clean:
 	Rscript -e 'devtools::clean_dll()'
 
-.PHONY: build update check clean docs docker-debug dev website install install-dev help local-update local-update-diagrams checkv debug
+EPIWORLD_BRANCH ?= master
+
+update: clean-update
+	git clone --depth=1 -b $(EPIWORLD_BRANCH) https://github.com/UofUEpiBio/epiworld tmp_epiworld && \
+	rsync -avz --delete tmp_epiworld/include/measles inst/include/. && \
+	rm -f inst/include/measles/*.mmd && \
+	rsync -avz --delete tmp_epiworld/docs/assets/img/measles*png man/figures && \
+	rm -rf tmp_epiworld
+
+clean-update:
+	rm -rf tmp_epiworld
+
+.PHONY: build update check clean docs docker-debug dev website install install-dev help local-update local-update-diagrams checkv debug clean-update

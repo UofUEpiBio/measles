@@ -137,9 +137,9 @@ summary(model_school)
 #> Days (duration)     : 200 (of 200)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 1.00ms
-#> Total elapsed t     : 170.00ms (400 runs)
-#> Last run speed      : 52.11 million agents x day / second
-#> Average run speed   : 234.92 million agents x day / second
+#> Total elapsed t     : 122.00ms (400 runs)
+#> Last run speed      : 73.42 million agents x day / second
+#> Average run speed   : 325.50 million agents x day / second
 #> Rewiring            : off
 #> Last seed used      : 1264933217
 #>
@@ -312,9 +312,9 @@ summary(measles_model)
 #> Days (duration)     : 100 (of 100)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 0.00s
-#> Total elapsed t     : 5.00s (400 runs)
-#> Last run speed      : 14.09 million agents x day / second
-#> Average run speed   : 69.08 million agents x day / second
+#> Total elapsed t     : 3.00s (400 runs)
+#> Last run speed      : 19.85 million agents x day / second
+#> Average run speed   : 90.85 million agents x day / second
 #> Rewiring            : off
 #> Last seed used      : 1428497254
 #>

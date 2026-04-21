@@ -11,7 +11,7 @@ ModelMeaslesSchool(
   prevalence = 1,
   contact_rate = 15/transmission_rate/prodromal_period,
   transmission_rate = 0.9,
-  vax_efficacy = 0.99,
+  vax_efficacy = 0.97,
   incubation_period = 12,
   prodromal_period = 4,
   rash_period = 3,

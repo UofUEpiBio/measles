@@ -103,7 +103,7 @@ ModelMeaslesSchool <- function(
   prevalence = 1,
   contact_rate = 15 / transmission_rate / prodromal_period,
   transmission_rate = .9,
-  vax_efficacy = .99,
+  vax_efficacy = .97,
   incubation_period = 12,
   prodromal_period = 4,
   rash_period = 3,
