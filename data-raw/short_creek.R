@@ -99,10 +99,7 @@ row.names = FALSE, format = "markdown")
 ################################################
 # Short Creek Data Preparation
 ################################################
-
-# Making it row-stochastic for use in epiworld
 short_creek_matrix <- cm
-short_creek_matrix <- short_creek_matrix / rowSums(short_creek_matrix)
 
 usethis::use_data(
   short_creek_matrix,
