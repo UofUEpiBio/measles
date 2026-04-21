@@ -1,7 +1,7 @@
 Package: measles
 Type: Package
 Title: Measles Epidemiological Models
-Version: 0.2.0.9000
+Version: 0.2.0-99.99
 Depends:
     R (>= 4.1.0),
     epiworldR (>= 0.14.99.99)
@@ -40,4 +40,4 @@ VignetteBuilder:
     quarto
 LazyData: true
 Remotes:
-  UofUEpiBio/epiworldR@gvegayon/remove-measles
+  UofUEpiBio/epiworldR
