@@ -37,7 +37,8 @@ Imports:
 Suggests:
   tinytest,
   data.table,
-  quarto
+  quarto,
+  multigroup.vaccine
 VignetteBuilder:
   quarto
 LazyData: true
