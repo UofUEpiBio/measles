@@ -31,13 +31,15 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 LinkingTo: cpp11, epiworldR (>= 0.14.99.99)
 SystemRequirements: C++17
-Imports: utils
+Imports:
+  utils,
+  stats
 Suggests:
-    tinytest,
-    data.table,
-    quarto
+  tinytest,
+  data.table,
+  quarto
 VignetteBuilder:
-    quarto
+  quarto
 LazyData: true
 Remotes:
   UofUEpiBio/epiworldR
