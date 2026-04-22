@@ -250,7 +250,8 @@ hist_ans <- with(
         nsims
       ),
       breaks = 20,
-      xlim = c(0, max(outbreak_size, n_unvax) * 1.1)
+      xlab   = "Cases",
+      xlim   = c(0, max(outbreak_size, n_unvax) * 1.1)
     )
 })
 
