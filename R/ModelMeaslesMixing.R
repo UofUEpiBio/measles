@@ -30,8 +30,8 @@
 #' (default: 2).
 #' @param contact_tracing_success_rate Double. Probability of successful
 #' contact tracing (default: 1.0).
-#' @param contact_tracing_days_prior Integer. Number of days prior to the onset
-#' of the infection for which contact tracing is effective (default: 4).
+#' @param contact_tracing_days_window Integer. Number of days before rash onset
+#' that will be considered for contact tracing (default: 4).
 #' @export
 #' @family Models
 #' @family measles models
@@ -114,7 +114,7 @@
 #'   isolation_period         = 10,
 #'   prop_vaccinated          = 0.95,
 #'   contact_tracing_success_rate = 0.8,
-#'   contact_tracing_days_prior = 4
+#'   contact_tracing_days_window = 4
 #' )
 #'
 #' # Adding the entities to the model
@@ -147,7 +147,7 @@ ModelMeaslesMixing <- function(
   hospitalization_period = 7,
   days_undetected = 2,
   contact_tracing_success_rate = 1.0,
-  contact_tracing_days_prior = 4
+  contact_tracing_days_window = 4
 ) {
   # Check input parameters
   stopifnot_int(n)
@@ -168,7 +168,7 @@ ModelMeaslesMixing <- function(
   stopifnot_int(isolation_period)
   stopifnot_double(prop_vaccinated, lb = 0, ub = 1)
   stopifnot_double(contact_tracing_success_rate, lb = 0, ub = 1)
-  stopifnot_int(contact_tracing_days_prior, lb = 0)
+  stopifnot_int(contact_tracing_days_window, lb = 0)
 
   structure(
     ModelMeaslesMixing_cpp(
@@ -190,7 +190,7 @@ ModelMeaslesMixing <- function(
       isolation_period = isolation_period,
       prop_vaccinated = prop_vaccinated,
       contact_tracing_success_rate = contact_tracing_success_rate,
-      contact_tracing_days_prior = contact_tracing_days_prior
+      contact_tracing_days_window = contact_tracing_days_window
     ),
     class = c("epiworld_measlesmixing", "epiworld_model")
   )

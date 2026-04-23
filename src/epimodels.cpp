@@ -78,7 +78,7 @@ SEXP ModelMeaslesMixing_cpp(
     int isolation_period,
     double prop_vaccinated,
     double contact_tracing_success_rate = 1.0,
-    unsigned int contact_tracing_days_prior = 4u
+    unsigned int contact_tracing_days_window = 4u
 ) {
 
   // Creating a pointer to a ModelMeaslesMixing model
@@ -102,7 +102,7 @@ SEXP ModelMeaslesMixing_cpp(
           isolation_period,
           prop_vaccinated,
           contact_tracing_success_rate,
-          contact_tracing_days_prior
+          contact_tracing_days_window
       )
   );
 

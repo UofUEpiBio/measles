@@ -12,6 +12,8 @@
 
 * Changed the default vaccine efficacy of Measles from 99% to 97%.
 
+* The contact tracing window parameter in `ModelsMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` was capturing agents that may have been in contact with infected cases way past the window. No important regressions observed from this change.
+
 ## Internal changes
 
 * The Measles models were removed from `{epiworldR}`. This streamlines the development process. So, if we need to update Measles related models, we only need to update the `{measles}` R package, not `{epiworldR}` and `{measles}`.
