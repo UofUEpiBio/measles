@@ -38,7 +38,14 @@ Let's take a look at the datasets:
 short_creek
 ```
 
-As we can see, the vaccination rates in this area are significantly low. The vaccination rate needed to avert an outbreak is close to the 0.93 percent of the population. Let's now look at the first few entries of the contact matrix
+```{r}
+#| label: vax-rate-calcs
+#| echo: false
+vax_rate <- with(short_creek, sum(vacc_rate * agepops) / sum(agepops))
+n_unvax <- (1 - vax_rate) * sum(short_creek$agepops)
+```
+
+As we can see, the vaccination rates in this area are significantly low. The vaccination rate needed to avert an outbreak is close to the 0.93 percent of the population. The overall vaccination rate is `r vax_rate * 100`%, meaning that `r n_unvax` people are unvaccinated. Let's now look at the first few entries of the contact matrix
 
 ```{r}
 #| label: data-peak-matrix
@@ -63,7 +70,7 @@ $$
 Where the $\text{recovery}_\text{rate}$ is given by the rash period (1/duration of it, three days in this simulation). Programatically, we can do the following:
 
 ```{r}
-#| label: create-model
+#| label: identify-hosp-rate
 N <- sum(short_creek$agepops)
 
 # Finding hospitalization rate for
@@ -73,24 +80,43 @@ N <- sum(short_creek$agepops)
 #             = P(hosp) * hosp_r + P(hosp) * rec_r
 #   => hosp_r = P(hosp) * rec_r / (1 - P(hosp))
 h_rate <- 0.1 * (1 / 3) / (1 - 0.1)
+```
 
+For calibration, we can make use of the function `calibrate_mixing_model()`, which will give us the needed scaleing factor to apply to the contact matrix to get the desired R0. In this case, we will use an R0 of 12, which is consistent with the literature on measles.
+
+```{r}
+#| label: calibrate
+r0 <- 12
+scaling_factor <- calibrate_mixing_model(
+  contact_matrix = short_creek_matrix,
+  target_rep_number = r0,
+  infectious_period_days = 4,
+  transmission_prob = 0.2
+)
+```
+
+```{r}
+#| label: create-model
 measles_model <- ModelMeaslesMixing(
   n                            = N,
   prevalence                   = 1 / N,
-  transmission_rate            = 0.9,
+  transmission_rate            = 0.2,
   vax_efficacy                 = 0.97,
-  contact_matrix               = short_creek_matrix * 15 / 0.9 / 4,
-  hospitalization_rate         = h_rate,
-  hospitalization_period       = 7,
+  contact_matrix               = short_creek_matrix * scaling_factor,
+  prop_vaccinated              = 0.0, # This is modified later
+  # Quarantine and isolation parameters
   days_undetected              = 2,
   quarantine_period            = 21,
   quarantine_willingness       = 0.9,
   isolation_willingness        = 0.9,
   isolation_period             = 4,
-  prop_vaccinated              = 0.95,
   contact_tracing_success_rate = 0.8,
   contact_tracing_days_prior   = 4,
-  rash_period                  = 3
+  # Disease paramters
+  rash_period                  = 3,
+  prodromal_period             = 4,
+  hospitalization_rate         = h_rate,
+  hospitalization_period       = 7
 )
 ```
 
@@ -131,8 +157,8 @@ Now, we can specify what to record from the simulation.
 #| label: running-model
 measles_model |>
   run_multiple(
-    ndays = 200,
-    nsims = 200,
+    ndays = 365,
+    nsims = 400,
     seed  = 8812,
     saver = make_saver("outbreak_size", "hospitalizations"),
     nthreads = 2L
@@ -155,9 +181,6 @@ ans <- measles_model |>
   run_multiple_get_results(
     freader = data.table::fread
   )
-
-# Taking a look at the structure
-str(ans)
 ```
 
 The function call will get us the results as a list of data.frames (data.table objects in this case). We will use the `data.table` package to manipulate the information.
@@ -177,20 +200,38 @@ Finally, since we are only interested about the final outbreak size (in this cas
 ```{r}
 #| label: timeline-outbreak-size
 # Aggregating to get the final
+set.seed(331)
+nsims <- length(unique(outbreak_size$sim_num))
 with(
-  outbreak_size,
+  outbreak_size[sample(1:.N, 20000)],
   {
     plot(
       x = date,
       y = outbreak_size,
-      col = adjustcolor("blue", alpha.f = .2),
+      col = adjustcolor("blue", alpha.f = .1),
       pch = 19,
       ylab = "Cases",
       xlab = "Day",
       main = "Measles outbreak size in Short Creek",
-      sub = "Mixing model with age and school data (100 simulations)"
+      sub = sprintf(
+        "Mixing model with age and school data (%i simulations)",
+        nsims
+      )
     )
 })
+
+# Adding a 50th percentile line
+fiftieth <- outbreak_size[,
+  .(outbreak_size = quantile(outbreak_size, probs = 0.5)),
+  by = date]$outbreak_size
+
+lines(
+  x = outbreak_size$date |> unique() |> sort(),
+  y = fiftieth,
+  col = "black",
+  lwd = 4,
+  lty = "dashed"
+)
 ```
 
 We can also investigate the distribution of the final counts
@@ -198,17 +239,36 @@ We can also investigate the distribution of the final counts
 ```{r}
 #| label: hist-outbreak-size
 # Aggregating to get the final
-with(
+hist_ans <- with(
   outbreak_size[date == max(date)],
   {
     hist(
       outbreak_size,
       main = "Measles outbreak size in Short Creek",
-      sub = "Mixing model with age and school data (100 simulations)",
-      breaks = 20
+      sub = sprintf(
+        "Mixing model with age and school data (%i simulations)",
+        nsims
+      ),
+      breaks = 20,
+      xlab   = "Cases",
+      xlim   = c(0, max(outbreak_size, n_unvax) * 1.1)
     )
 })
+
+# Adding the maximum number of unvaccinated individuals as
+# a vertical line
+abline(v = n_unvax, col = "black", lwd = 2, lty = "dashed")
+text(
+  x = n_unvax,
+  y = hist_ans$counts |> max() * 0.5,
+  labels = "Total unvaccinated",
+  pos = 4,
+  srt = 90,
+  col = "black"
+)
 ```
+
+The probability of a large outbreak (more than 100 cases) is `r mean(outbreak_size[date == max(date), outbreak_size > 100]) * 100`%.
 
 ## Hospitalizations
 
@@ -249,10 +309,13 @@ hosp_tot[, .(vax, unvax)] |>
     ylab = "Count",
     xlab = "Status",
     main = "Hospitalization per vaccination status",
-    sub  = "Mixing model with age and school data (100 simulations)"
+    sub  = sprintf(
+      "Mixing model with age and school data (%i simulations)",
+      nsims
+    )
   )
 ```
 
 ## Final comments
 
-Ultimately, based on the current results, we would be expecting all unvaccinated individuals to become infected, with a small number of vaccinated individuals also getting infected. This is consistent with the high R0 of measles and the low vaccination rates in the area. Nonetheless, these results should be taken with caution, as this simulation is a simplification of reality that does not consider, for example, individuals' changing their behavior as a function of what is observed; it would be natural to expect some level of precaution, *e.g.*, reducing contact rates, would be observed in such a situation.
+Ultimately, based on the current results, we would be expecting a large proportion (close to 85%) of unvaccinated individuals to become infected, with a small number of vaccinated individuals also getting infected. Running other scenarios where the quarantine process is not implemented results in unvaccinated individuals having a higher chance of becoming infected. This is consistent with the high R0 of measles and the low vaccination rates in the area. Nonetheless, these results should be taken with caution, as this simulation is a simplification of reality that does not consider, for example, individuals' changing their behavior as a function of what is observed; it would be natural to expect some level of precaution, *e.g.*, reducing contact rates, would be observed in such a situation.

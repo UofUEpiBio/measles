@@ -19,13 +19,13 @@ docker-debug:
 		--no-docs --build .
 
 install:
-	Rscript --vanilla -e 'devtools::install()'
+	Rscript -e 'devtools::install()'
 
 README.md: README.qmd
 	quarto render README.qmd
 
 check:
-	Rscript --vanilla -e 'devtools::check()'
+	Rscript -e 'devtools::check()'
 
 docs:
 	Rscript -e 'devtools::document()'
