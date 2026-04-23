@@ -129,25 +129,39 @@ public:
      *
      * @param n The number of entities in the model.
      * @param prevalence The initial prevalence of the disease in the model.
-     * @param transmission_rate The transmission rate of the disease in the model.
+     * @param transmission_rate The transmission rate of the disease in the
+     * model.
      * @param vax_efficacy The efficacy of the vaccine.
-     * @param vax_reduction_recovery_rate The reduction in recovery rate due to the vaccine.
-     * @param incubation_period The incubation period of the disease in the model.
-     * @param prodromal_period The prodromal period of the disease in the model.
+     * @param vax_reduction_recovery_rate The reduction in recovery rate due
+     * to the vaccine.
+     * @param incubation_period The incubation period of the disease in the
+     * model.
+     * @param prodromal_period The prodromal period of the disease in the
+     * model.
      * @param rash_period The rash period of the disease in the model.
-     * @param contact_matrix The contact matrix between entities in the model. Specified in
+     * @param contact_matrix The contact matrix between entities in the model.
+     * Specified in
      * column-major order. Each entry (i,j) represents the expected number of
      * contacts an agent in group i has with agents in group j per day.
-     * @param hospitalization_rate The rate at which infected individuals are hospitalized.
-     * @param hospitalization_period The average duration of hospitalization in days.
-     * @param days_undetected The average number of days an infected individual remains undetected.
-     * @param quarantine_period The duration of quarantine in days for latent contacts.
-     * @param quarantine_willingness The proportion of individuals willing to comply with quarantine measures.
-     * @param isolation_willingness The proportion of individuals willing to self-isolate when detected.
-     * @param isolation_period The duration of isolation in days for detected infected individuals.
+     * @param hospitalization_rate The rate at which infected individuals are
+     * hospitalized.
+     * @param hospitalization_period The average duration of hospitalization in
+     * days.
+     * @param days_undetected The average number of days an infected individual
+     * remains undetected.
+     * @param quarantine_period The duration of quarantine in days for latent
+     * contacts.
+     * @param quarantine_willingness The proportion of individuals willing to
+     * comply with quarantine measures.
+     * @param isolation_willingness The proportion of individuals willing to
+     * self-isolate when detected.
+     * @param isolation_period The duration of isolation in days for detected
+     * infected individuals.
      * @param prop_vaccinated The proportion of vaccinated agents.
-     * @param contact_tracing_success_rate The probability of successfully identifying and tracing contacts (default: 1.0).
-     * @param contact_tracing_days_prior The number of days prior to detection for which contacts are traced (default: 4).
+     * @param contact_tracing_success_rate The probability of successfully
+     * identifying and tracing contacts (default: 1.0).
+     * @param contact_tracing_days_prior The number of days prior to detection
+     * for which contacts are traced (default: 4).
      */
     ModelMeaslesMixing(
         epiworld_fast_uint n,
@@ -828,7 +842,7 @@ inline void ModelMeaslesMixing<TSeq>::_quarantine_process(Model<TSeq> * m) {
             n_contacts = EPI_MAX_TRACKING;
 
         // When the rash onset started (this is for contact tracing)
-        size_t day_rash_onset_agent_i = model->day_rash_onset[agent_i];
+        int day_rash_onset_agent_i = model->day_rash_onset[agent_i];
 
         for (size_t contact_i = 0u; contact_i < n_contacts; ++contact_i)
         {
@@ -947,6 +961,29 @@ inline ModelMeaslesMixing<TSeq>::ModelMeaslesMixing(
     epiworld_fast_uint contact_tracing_days_prior
     )
 {
+
+    // Assertions
+    auto max_uint = std::numeric_limits< size_t >::max();
+    auto max_double = std::numeric_limits< double >::max();
+    auto max_int = std::numeric_limits< int >::max();
+    EpiAssert::check_probability(prevalence, "prevalence", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(n, static_cast<size_t>(1), max_uint, "n", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(contact_matrix, 0.0, max_double, "contact_matrix", "ModelMeaslesMixing");
+    EpiAssert::check_probability(transmission_rate, "transmission_rate", "ModelMeaslesMixing");
+    EpiAssert::check_probability(vax_efficacy, "vax_efficacy", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(vax_reduction_recovery_rate, 0.0, 1.0, "vax_reduction_recovery_rate", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(incubation_period, 0.0, max_double, "incubation_period", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(prodromal_period, 0.0, max_double, "prodromal_period", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(rash_period, 0.0, max_double, "rash_period", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(days_undetected, 0.0, max_double, "days_undetected", "ModelMeaslesMixing");
+    EpiAssert::check_probability(hospitalization_rate, "hospitalization_rate", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(hospitalization_period, 0.0, max_double, "hospitalization_period", "ModelMeaslesMixing");
+    EpiAssert::check_probability(prop_vaccinated, "prop_vaccinated", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(quarantine_period, -1, max_int, "quarantine_period", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(quarantine_willingness, 0.0, 1.0, "quarantine_willingness", "ModelMeaslesMixing");
+    EpiAssert::check_bounds(isolation_period, -1, max_int, "isolation_period", "ModelMeaslesMixing");
+    EpiAssert::check_probability(contact_tracing_success_rate, "contact_tracing_success_rate", "ModelMeaslesMixing");
+
 
     // Setting up the contact matrix
     this->contact_matrix = contact_matrix;

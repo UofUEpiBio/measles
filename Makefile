@@ -9,6 +9,13 @@ help:
 	@echo "  docs      Generate documentation with roxygen2"
 	@echo "  website   Build the pkgdown website"
 	@echo "  data-raw  Run the Rscripts in data-raw to regenerate datasets"
+	@echo "  update     Update the measles model from the EpiWorld repository"
+	@echo "  clean     Clean up compiled files and temporary directories"
+	@echo ""
+	@echo "When calling the update command, you can specify the branch of the"
+	@echo "EpiWorld repository to use with the EPIWORLD_BRANCH environment"
+	@echo "variable. For example:"
+	@echo "  EPIWORLD_BRANCH=develop make update"
 
 
 debug: clean
