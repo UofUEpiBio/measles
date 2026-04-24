@@ -30,14 +30,14 @@ expected_r0 <- multigroup.vaccine::vaxrepnum(
 expect_equal(r0, expected_r0)
 
 # Now we test it empirically by running a simulation with the calibrated
-# contact matrix and checking the average reproduction number across 
-# simulations.
+# transmission rate (scaling factor applied to transmission_rate) and checking
+# the average reproduction number across simulations.
 m_model <- ModelMeaslesMixing(
   n = 3000,
   prevalence = 1 / 3000,
-  transmission_rate = 0.2,
+  transmission_rate = 0.2 * calib_val,
   vax_efficacy = 0.97,
-  contact_matrix = cmat * calib_val,
+  contact_matrix = cmat,
   hospitalization_rate = 0.05,
   hospitalization_period = 7,
   days_undetected = 2,
