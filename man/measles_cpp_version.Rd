@@ -11,7 +11,8 @@ A character string representing the version of the C++ library.
 }
 \description{
 Returns the version of the C++ library measles. The code
-is hosted on GitHub at \url{https://github.com/UofUEpiBio/measles}.
+is hosted on GitHub at \url{https://github.com/UofUEpiBio/epiworld},
+and it is part of the epiworld C++ library.
 }
 \examples{
 measles_cpp_version()

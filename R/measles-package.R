@@ -15,7 +15,8 @@
 #' Version of the measles C++ code
 #'
 #' Returns the version of the C++ library measles. The code
-#' is hosted on GitHub at <https://github.com/UofUEpiBio/measles>.
+#' is hosted on GitHub at <https://github.com/UofUEpiBio/epiworld>,
+#' and it is part of the epiworld C++ library.
 #'
 #' @return
 #' A character string representing the version of the C++ library.
