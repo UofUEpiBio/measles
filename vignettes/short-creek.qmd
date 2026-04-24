@@ -82,7 +82,11 @@ N <- sum(short_creek$agepops)
 h_rate <- 0.1 * (1 / 3) / (1 - 0.1)
 ```
 
-For calibration, we can make use of the function `calibrate_mixing_model()`, which will give us the needed scaleing factor to apply to the contact matrix to get the desired R0. In this case, we will use an R0 of 12, which is consistent with the literature on measles.
+For calibration, we can make use of the function `calibrate_mixing_model()`, which will give us the needed scaleing factor to apply to the transmission probability (or contact matrix) to get the desired R0. In this case, we will use an R0 of 12, which is consistent with the literature on measles.
+
+::: {.callout-important}
+While the decision to calibrate the contact matrix or the transmission probability is most likely irrelevant for the effective reproductive number, downscaling the contact matrix may result in fewer cases quarantined, which will affect the outbreak size.
+:::
 
 ```{r}
 #| label: calibrate
@@ -100,9 +104,9 @@ scaling_factor <- calibrate_mixing_model(
 measles_model <- ModelMeaslesMixing(
   n                            = N,
   prevalence                   = 1 / N,
-  transmission_rate            = 0.2,
+  transmission_rate            = 0.2 * scaling_factor,
   vax_efficacy                 = 0.97,
-  contact_matrix               = short_creek_matrix * scaling_factor,
+  contact_matrix               = short_creek_matrix,
   prop_vaccinated              = 0.0, # This is modified later
   # Quarantine and isolation parameters
   days_undetected              = 2,
@@ -315,6 +319,97 @@ hosp_tot[, .(vax, unvax)] |>
       nsims
     )
   )
+```
+
+## Scenario without Quarantine
+
+The previous scenario included a quarantine process based on contact tracing. Using the same model object, we can run a separate scenario that does not include quarantine. To do so, we simply need to set the quarantine duration to `-1`, which effectively disables the quarantine process. We can do this as follows:
+
+```{r}
+#| label: run-with-quarantine
+# Setting the new parameter
+set_param(measles_model, "Quarantine period", -1)
+
+# We can now re-run the model (we need a new saver)
+measles_model |>
+  run_multiple(
+    ndays = 365,
+    nsims = 400,
+    seed  = 8812,
+    saver = make_saver("outbreak_size", "hospitalizations"),
+    nthreads = 2L
+  )
+
+# Checking no quarantine in scenario summary
+summary(measles_model)
+```
+
+Like before, we can extract the results using the `run_multiple_get_results()` function:
+
+```{r}
+#| label: get-results-no-quarantine
+# Extracting the results
+ans_no_quarantine <- measles_model |>
+  run_multiple_get_results(
+    freader = data.table::fread
+  )
+
+outbreak_size_no_quarantine <-
+  ans_no_quarantine$outbreak_size |> as.data.table()
+hospitalizations_no_quarantine <-
+  ans_no_quarantine$hospitalizations |> as.data.table()
+```
+
+We can compare both using a simple boxplot:
+
+```{r}
+#| label: compare-scenarios
+os_nq <- outbreak_size_no_quarantine[date == max(date)]$outbreak_size
+os_q  <- outbreak_size[date == max(date)]$outbreak_size
+
+bar_cols <- c("tomato", "steelblue") |>
+  adjustcolor(alpha.f = 0.5)
+
+hist(
+  os_nq, breaks = 20,
+  main = "Outbreak Size",
+  col = bar_cols[1],
+  xlab = "Outbreak size"
+)
+hist(
+  os_q,
+  col = bar_cols[2],
+  add = TRUE, breaks = 20
+)
+
+legend(
+  "topleft",
+  legend = c("No quarantine", "Quarantine"),
+  fill = bar_cols,
+  border = NA,
+  bty = "n"
+)
+```
+
+So, although mild, the quarantine process seems to have an effect in the outbreak size, with a higher number of cases observed in the scenario without quarantine.
+
+```{r}
+#| label: saving-for-manuscript
+#| echo: false
+#| warning: false
+#| message: false
+# This little codechunk is just for internal use
+if (Sys.getenv("SAVE_PAPER", "") != "") {
+  saveRDS(
+    list(
+      outbreak_size = outbreak_size,
+      outbreak_size_no_quarantine = outbreak_size_no_quarantine,
+      hospitalizations = hospitalizations,
+      hospitalizations_no_quarantine = hospitalizations_no_quarantine
+    ),
+    file = "short-creek-scenarios.rds"
+  )
+}
 ```
 
 ## Final comments

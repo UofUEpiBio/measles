@@ -35,9 +35,9 @@ expect_equal(r0, expected_r0)
 m_model <- ModelMeaslesMixing(
   n = 3000,
   prevalence = 1 / 3000,
-  transmission_rate = 0.2,
+  transmission_rate = 0.2 * calib_val,
   vax_efficacy = 0.97,
-  contact_matrix = cmat * calib_val,
+  contact_matrix = cmat,
   hospitalization_rate = 0.05,
   hospitalization_period = 7,
   days_undetected = 2,
