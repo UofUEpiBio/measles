@@ -82,7 +82,7 @@ N <- sum(short_creek$agepops)
 h_rate <- 0.1 * (1 / 3) / (1 - 0.1)
 ```
 
-For calibration, we can make use of the function `calibrate_mixing_model()`, which will give us the needed scaleing factor to apply to the transmission probability (or contact matrix) to get the desired R0. In this case, we will use an R0 of 12, which is consistent with the literature on measles.
+For calibration, we can make use of the function `calibrate_mixing_model()`, which will give us the needed scaling factor to apply to the transmission probability (or contact matrix) to get the desired R0. In this case, we will use an R0 of 12, which is consistent with the literature on measles.
 
 ::: {.callout-important}
 While the decision to calibrate the contact matrix or the transmission probability is most likely irrelevant for the effective reproductive number, downscaling the contact matrix may result in fewer cases quarantined, which will affect the outbreak size.
@@ -326,7 +326,7 @@ hosp_tot[, .(vax, unvax)] |>
 The previous scenario included a quarantine process based on contact tracing. Using the same model object, we can run a separate scenario that does not include quarantine. To do so, we simply need to set the quarantine duration to `-1`, which effectively disables the quarantine process. We can do this as follows:
 
 ```{r}
-#| label: run-with-quarantine
+#| label: run-without-quarantine
 # Setting the new parameter
 set_param(measles_model, "Quarantine period", -1)
 
