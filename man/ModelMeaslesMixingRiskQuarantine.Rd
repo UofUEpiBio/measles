@@ -26,7 +26,7 @@ ModelMeaslesMixingRiskQuarantine(
   days_undetected = 2,
   detection_rate_quarantine = 0.5,
   contact_tracing_success_rate = 1,
-  contact_tracing_days_prior = 4
+  contact_tracing_days_window = 4
 )
 }
 \arguments{
@@ -80,8 +80,8 @@ quarantine (default: 1).}
 \item{contact_tracing_success_rate}{Double. Probability of successful
 contact tracing (default: 1.0).}
 
-\item{contact_tracing_days_prior}{Integer. Number of days prior to the onset
-of the infection for which contact tracing is effective (default: 4).}
+\item{contact_tracing_days_window}{Integer. Number of days before and after
+the onset of symptoms for which contact tracing is effective (default: 4).}
 }
 \value{
 \itemize{
@@ -164,7 +164,7 @@ measles_model <- ModelMeaslesMixingRiskQuarantine(
   prop_vaccinated          = 0.95,
   detection_rate_quarantine = 0.5,
   contact_tracing_success_rate = 0.8,
-  contact_tracing_days_prior = 4
+  contact_tracing_days_window = 4
 )
 
 # Adding the entities to the model

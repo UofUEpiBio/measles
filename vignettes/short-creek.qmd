@@ -111,7 +111,7 @@ measles_model <- ModelMeaslesMixing(
   isolation_willingness        = 0.9,
   isolation_period             = 4,
   contact_tracing_success_rate = 0.8,
-  contact_tracing_days_prior   = 4,
+  contact_tracing_days_window  = 4,
   # Disease paramters
   rash_period                  = 3,
   prodromal_period             = 4,
@@ -202,6 +202,7 @@ Finally, since we are only interested about the final outbreak size (in this cas
 # Aggregating to get the final
 set.seed(331)
 nsims <- length(unique(outbreak_size$sim_num))
+
 with(
   outbreak_size[sample(1:.N, 20000)],
   {

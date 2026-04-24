@@ -7,6 +7,12 @@
 
 using namespace cpp11;
 
+[[cpp11::register]]
+std::string measles_cpp_version_cpp()
+{
+    return measles_version();
+}
+
 // Measles Model definitions
 // Based on epiworld library: https://github.com/UofUEpiBio/epiworld
 
@@ -78,7 +84,7 @@ SEXP ModelMeaslesMixing_cpp(
     int isolation_period,
     double prop_vaccinated,
     double contact_tracing_success_rate = 1.0,
-    unsigned int contact_tracing_days_prior = 4u
+    unsigned int contact_tracing_days_window = 4u
 ) {
 
   // Creating a pointer to a ModelMeaslesMixing model
@@ -102,7 +108,7 @@ SEXP ModelMeaslesMixing_cpp(
           isolation_period,
           prop_vaccinated,
           contact_tracing_success_rate,
-          contact_tracing_days_prior
+          contact_tracing_days_window
       )
   );
 
@@ -133,7 +139,7 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
     double prop_vaccinated,
     double detection_rate_quarantine,
     double contact_tracing_success_rate = 1.0,
-    unsigned int contact_tracing_days_prior = 4u
+    unsigned int contact_tracing_days_window = 4u
 ) {
 
   // Creating a pointer to a ModelMeaslesMixingRiskQuarantine model
@@ -159,7 +165,7 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
           prop_vaccinated,
           detection_rate_quarantine,
           contact_tracing_success_rate,
-          contact_tracing_days_prior
+          contact_tracing_days_window
       )
   );
 

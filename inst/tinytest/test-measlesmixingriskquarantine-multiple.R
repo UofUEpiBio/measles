@@ -41,7 +41,7 @@ model_factory <- function(durations, nsims = 100) {
     prop_vaccinated            = 0.3,
     detection_rate_quarantine  = 0.5,
     contact_tracing_success_rate = 0.8,
-    contact_tracing_days_prior = 4
+    contact_tracing_days_window = 4
   )
 
   # Adding the entities 

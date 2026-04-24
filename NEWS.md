@@ -1,4 +1,4 @@
-# measles 0.2.0-99.99 (dev)
+# measles 0.3.0-0
 
 ## User visible changes
 
@@ -10,12 +10,17 @@
 
 * Aligned the package documentation and examples with the updated measles state names from `{epiworldR}`, replacing `Exposed`/`Quarantined Exposed` with `Latent`/`Quarantined Latent` where those names refer to model states.
 
-
 * Changed the default vaccine efficacy of Measles from 99% to 97%.
+
+* The contact tracing window parameter in `ModelsMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` was capturing agents that may have been in contact with infected cases way past the window. No important regressions observed from this change.
 
 ## Internal changes
 
 * The Measles models were removed from `{epiworldR}`. This streamlines the development process. So, if we need to update Measles related models, we only need to update the `{measles}` R package, not `{epiworldR}` and `{measles}`.
+
+* The `ModelMeaslesMixing` includes parameter validation on the C++ side.
+
+* The latest version of `epiworld` optimizes the binomial sampler, switching to a Poisson sampler based on Le Cam's inequality.
 
 
 # measles 0.2.0

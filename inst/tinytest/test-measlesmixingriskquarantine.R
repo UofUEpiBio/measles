@@ -33,7 +33,7 @@ measles_model <- measles::ModelMeaslesMixingRiskQuarantine(
   prop_vaccinated            = 0.95,
   detection_rate_quarantine  = 0.5,
   contact_tracing_success_rate = 0.8,
-  contact_tracing_days_prior = 4
+  contact_tracing_days_window = 4
 )
 
 # Adding the entities 
@@ -97,7 +97,7 @@ model_factory <- function(
   prop_vaccinated = 0.95,
   detection_rate_quarantine = 0.5,
   contact_tracing_success_rate = 0.8,
-  contact_tracing_days_prior = 4L
+  contact_tracing_days_window = 4L
 ) {
   ModelMeaslesMixingRiskQuarantine(
     n = n,
@@ -120,7 +120,7 @@ model_factory <- function(
     prop_vaccinated = prop_vaccinated,
     detection_rate_quarantine = detection_rate_quarantine,
     contact_tracing_success_rate = contact_tracing_success_rate,
-    contact_tracing_days_prior = contact_tracing_days_prior
+    contact_tracing_days_window = contact_tracing_days_window
   )
 }
 
@@ -157,7 +157,7 @@ expect_error(model_factory(isolation_period = bad_int_input), expected_error_msg
 expect_error(model_factory(prop_vaccinated = bad_numeric_input), expected_error_msg_double)
 expect_error(model_factory(detection_rate_quarantine = bad_numeric_input), expected_error_msg_double)
 expect_error(model_factory(contact_tracing_success_rate = bad_numeric_input), expected_error_msg_double)
-expect_error(model_factory(contact_tracing_days_prior = bad_int_input), expected_error_msg_int)
+expect_error(model_factory(contact_tracing_days_window = bad_int_input), expected_error_msg_int)
 
 # Test bound checks for probability parameters
 expect_error(model_factory(vax_efficacy = 1.5), "must be")
