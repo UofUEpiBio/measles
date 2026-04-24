@@ -101,6 +101,11 @@ scaling_factor <- calibrate_mixing_model(
 
 ```{r}
 #| label: create-model
+# Note: calibrating via the transmission rate can be tricky, as the product
+# `0.2 * scaling_factor` must remain in [0, 1]. If the calibration factor is
+# large (e.g. when the baseline contact rate is low), the transmission rate can
+# exceed 1, causing an error. Calibrating the contact matrix instead is usually
+# safer and avoids this constraint.
 measles_model <- ModelMeaslesMixing(
   n                            = N,
   prevalence                   = 1 / N,
