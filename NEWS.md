@@ -1,4 +1,4 @@
-# measles 0.2.0-99.99 (dev)
+# measles 0.3.0-0
 
 ## User visible changes
 
@@ -20,7 +20,7 @@
 
 * The `ModelMeaslesMixing` includes parameter validation on the C++ side.
 
-* The latest version of `epiworld` optimizes the binomial sampled, switching to a poisson sampler based on Le Cam's inequality.
+* The latest version of `epiworld` optimizes the binomial sampler, switching to a Poisson sampler based on Le Cam's inequality.
 
 
 # measles 0.2.0

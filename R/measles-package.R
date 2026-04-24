@@ -11,3 +11,19 @@
 #' @importFrom graphics boxplot plot
 #' @keywords internal
 "_PACKAGE"
+
+#' Version of the measles C++ code
+#'
+#' Returns the version of the C++ library measles. The code
+#' is hosted on GitHub at <https://github.com/UofUEpiBio/measles>.
+#'
+#' @return
+#' A character string representing the version of the C++ library.
+#'
+#' @examples
+#' measles_cpp_version()
+#'
+#' @export
+measles_cpp_version <- function() {
+  measles_cpp_version_cpp()
+}

@@ -6,6 +6,13 @@
 #include <R_ext/Visibility.h>
 
 // epimodels.cpp
+std::string measles_cpp_version_cpp();
+extern "C" SEXP _measles_measles_cpp_version_cpp() {
+  BEGIN_CPP11
+    return cpp11::as_sexp(measles_cpp_version_cpp());
+  END_CPP11
+}
+// epimodels.cpp
 SEXP ModelMeaslesSchool_cpp(unsigned int n, unsigned int prevalence, double contact_rate, double transmission_rate, double vax_efficacy, double vax_reduction_recovery_rate, double incubation_period, double prodromal_period, double rash_period, double days_undetected, double hospitalization_rate, double hospitalization_period, double prop_vaccinated, int quarantine_period, double quarantine_willingness, int isolation_period);
 extern "C" SEXP _measles_ModelMeaslesSchool_cpp(SEXP n, SEXP prevalence, SEXP contact_rate, SEXP transmission_rate, SEXP vax_efficacy, SEXP vax_reduction_recovery_rate, SEXP incubation_period, SEXP prodromal_period, SEXP rash_period, SEXP days_undetected, SEXP hospitalization_rate, SEXP hospitalization_period, SEXP prop_vaccinated, SEXP quarantine_period, SEXP quarantine_willingness, SEXP isolation_period) {
   BEGIN_CPP11
@@ -72,6 +79,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_measles_ModelMeaslesSchool_cpp",                        (DL_FUNC) &_measles_ModelMeaslesSchool_cpp,                        16},
     {"_measles_get_contact_matrix_mixing_cpp",                 (DL_FUNC) &_measles_get_contact_matrix_mixing_cpp,                  1},
     {"_measles_get_contact_matrix_mixing_risk_quarantine_cpp", (DL_FUNC) &_measles_get_contact_matrix_mixing_risk_quarantine_cpp,  1},
+    {"_measles_measles_cpp_version_cpp",                       (DL_FUNC) &_measles_measles_cpp_version_cpp,                        0},
     {"_measles_set_contact_matrix_mixing_cpp",                 (DL_FUNC) &_measles_set_contact_matrix_mixing_cpp,                  2},
     {"_measles_set_contact_matrix_mixing_risk_quarantine_cpp", (DL_FUNC) &_measles_set_contact_matrix_mixing_risk_quarantine_cpp,  2},
     {NULL, NULL, 0}

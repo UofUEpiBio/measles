@@ -7,6 +7,12 @@
 
 using namespace cpp11;
 
+[[cpp11::register]]
+std::string measles_cpp_version_cpp()
+{
+    return measles_version();
+}
+
 // Measles Model definitions
 // Based on epiworld library: https://github.com/UofUEpiBio/epiworld
 

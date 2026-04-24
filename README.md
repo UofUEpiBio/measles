@@ -137,9 +137,9 @@ summary(model_school)
 #> Days (duration)     : 200 (of 200)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 1.00ms
-#> Total elapsed t     : 122.00ms (400 runs)
-#> Last run speed      : 73.42 million agents x day / second
-#> Average run speed   : 325.50 million agents x day / second
+#> Total elapsed t     : 186.00ms (400 runs)
+#> Last run speed      : 52.71 million agents x day / second
+#> Average run speed   : 214.04 million agents x day / second
 #> Rewiring            : off
 #> Last seed used      : 1264933217
 #>
@@ -169,7 +169,7 @@ summary(model_school)
 #>  - Vax efficacy                    : 0.9700
 #>
 #> Distribution of the population at time 200:
-#>   - ( 0) Susceptible             : 499 -> 342
+#>   - ( 0) Susceptible             : 499 -> 350
 #>   - ( 1) Latent                  :   1 -> 0
 #>   - ( 2) Prodromal               :   0 -> 0
 #>   - ( 3) Rash                    :   0 -> 0
@@ -180,20 +180,20 @@ summary(model_school)
 #>   - ( 8) Quarantined Prodromal   :   0 -> 0
 #>   - ( 9) Quarantined Recovered   :   0 -> 0
 #>   - (10) Hospitalized            :   0 -> 0
-#>   - (11) Recovered               :   0 -> 158
+#>   - (11) Recovered               :   0 -> 150
 #>
 #> Transition Probabilities:
 #>  - Susceptible              1.00  0.00     -     -     -     -     -     -     -     -     -     -
 #>  - Latent                      -  0.92  0.08     -     -     -     -     -     -     -     -     -
-#>  - Prodromal                   -     -  0.77  0.13  0.11     -     -     -     -     -     -     -
-#>  - Rash                        -     -     -  0.19  0.22     -     -     -     -     -  0.20  0.39
-#>  - Isolated                    -     -     -  0.01  0.44  0.32     -     -     -     -  0.18  0.05
-#>  - Isolated Recovered          -     -     -     -     -  0.55     -     -     -     -     -  0.45
+#>  - Prodromal                   -     -  0.73  0.14  0.13     -     -     -     -     -     -     -
+#>  - Rash                        -     -     -  0.23  0.21     -     -     -     -     -  0.21  0.35
+#>  - Isolated                    -     -     -  0.03  0.46  0.26     -     -     -     -  0.21  0.04
+#>  - Isolated Recovered          -     -     -     -     -  0.57     -     -     -     -     -  0.43
 #>  - Quarantined Latent          -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Quarantined Susceptible     -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Quarantined Prodromal       -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Quarantined Recovered       -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Hospitalized                -     -     -     -     -     -     -     -     -     -  0.84  0.16
+#>  - Hospitalized                -     -     -     -     -     -     -     -     -     -  0.88  0.12
 #>  - Recovered                   -     -     -     -     -     -     -     -     -     -     -  1.00
 ```
 
@@ -214,42 +214,42 @@ table(ans) |>
 
 | Outbreak Size | Proportion of Simulations |
 |:--------------|--------------------------:|
-| 1             |                     0.175 |
-| 2             |                     0.035 |
-| 3             |                     0.015 |
-| 4             |                     0.007 |
+| 1             |                     0.195 |
+| 2             |                     0.032 |
+| 3             |                     0.013 |
+| 4             |                     0.010 |
+| 6             |                     0.002 |
 | 7             |                     0.002 |
-| 41            |                     0.002 |
-| 134           |                     0.002 |
 | 136           |                     0.002 |
-| 139           |                     0.002 |
+| 137           |                     0.002 |
+| 139           |                     0.005 |
 | 140           |                     0.002 |
-| 141           |                     0.005 |
+| 141           |                     0.002 |
 | 142           |                     0.007 |
-| 143           |                     0.005 |
-| 144           |                     0.010 |
-| 145           |                     0.015 |
-| 146           |                     0.013 |
-| 147           |                     0.013 |
-| 148           |                     0.025 |
-| 149           |                     0.020 |
-| 150           |                     0.035 |
-| 151           |                     0.058 |
-| 152           |                     0.040 |
-| 153           |                     0.078 |
-| 154           |                     0.048 |
-| 155           |                     0.060 |
-| 156           |                     0.050 |
-| 157           |                     0.068 |
-| 158           |                     0.072 |
-| 159           |                     0.038 |
-| 160           |                     0.025 |
-| 161           |                     0.010 |
-| 162           |                     0.022 |
+| 143           |                     0.007 |
+| 144           |                     0.020 |
+| 145           |                     0.002 |
+| 146           |                     0.015 |
+| 147           |                     0.025 |
+| 148           |                     0.010 |
+| 149           |                     0.032 |
+| 150           |                     0.040 |
+| 151           |                     0.050 |
+| 152           |                     0.048 |
+| 153           |                     0.050 |
+| 154           |                     0.062 |
+| 155           |                     0.045 |
+| 156           |                     0.070 |
+| 157           |                     0.050 |
+| 158           |                     0.065 |
+| 159           |                     0.045 |
+| 160           |                     0.022 |
+| 161           |                     0.020 |
+| 162           |                     0.007 |
 | 163           |                     0.015 |
-| 164           |                     0.007 |
-| 165           |                     0.013 |
-| 166           |                     0.002 |
+| 164           |                     0.002 |
+| 165           |                     0.010 |
+| 166           |                     0.007 |
 
 Distribution of outbreak sizes across 400 simulations
 
@@ -312,14 +312,14 @@ summary(measles_model)
 #> Days (duration)     : 100 (of 100)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 0.00s
-#> Total elapsed t     : 3.00s (400 runs)
-#> Last run speed      : 19.85 million agents x day / second
-#> Average run speed   : 90.85 million agents x day / second
+#> Total elapsed t     : 1.00s (400 runs)
+#> Last run speed      : 82.84 million agents x day / second
+#> Average run speed   : 323.49 million agents x day / second
 #> Rewiring            : off
 #> Last seed used      : 1428497254
 #>
 #> Global events:
-#>  (none)
+#>  - Quarantine process (runs daily)
 #>
 #> Virus(es):
 #>  - Measles
@@ -329,7 +329,7 @@ summary(measles_model)
 #>
 #> Model parameters:
 #>  - (IGNORED) Vax improved recovery : 0.5000
-#>  - Contact tracing days prior      : 4.0000
+#>  - Contact tracing days window     : 4.0000
 #>  - Contact tracing success rate    : 1.0000
 #>  - Days undetected                 : 2.0000
 #>  - Hospitalization period          : 7.0000
@@ -346,29 +346,29 @@ summary(measles_model)
 #>  - Vax efficacy                    : 0.9700
 #>
 #> Distribution of the population at time 100:
-#>   - ( 0) Susceptible             : 8999 -> 8326
-#>   - ( 1) Latent                  :    1 -> 50
-#>   - ( 2) Prodromal               :    0 -> 20
-#>   - ( 3) Rash                    :    0 -> 6
-#>   - ( 4) Isolated                :    0 -> 2
-#>   - ( 5) Isolated Recovered      :    0 -> 25
-#>   - ( 6) Quarantined Latent      :    0 -> 6
-#>   - ( 7) Quarantined Susceptible :    0 -> 2
-#>   - ( 8) Quarantined Prodromal   :    0 -> 3
+#>   - ( 0) Susceptible             : 8999 -> 8365
+#>   - ( 1) Latent                  :    1 -> 99
+#>   - ( 2) Prodromal               :    0 -> 39
+#>   - ( 3) Rash                    :    0 -> 14
+#>   - ( 4) Isolated                :    0 -> 13
+#>   - ( 5) Isolated Recovered      :    0 -> 47
+#>   - ( 6) Quarantined Latent      :    0 -> 22
+#>   - ( 7) Quarantined Susceptible :    0 -> 5
+#>   - ( 8) Quarantined Prodromal   :    0 -> 10
 #>   - ( 9) Quarantined Recovered   :    0 -> 0
-#>   - (10) Hospitalized            :    0 -> 28
-#>   - (11) Recovered               :    0 -> 532
+#>   - (10) Hospitalized            :    0 -> 38
+#>   - (11) Recovered               :    0 -> 348
 #>
 #> Transition Probabilities:
-#>  - Susceptible              1.00  0.00     -     -     -     -     -  0.00     -     -     -     -
-#>  - Latent                      -  0.89  0.08     -     -     -  0.02     -  0.00     -     -     -
-#>  - Prodromal                   -     -  0.74  0.25  0.00     -     -     -  0.01     -     -     -
-#>  - Rash                        -     -     -  0.22  0.22  0.15     -     -     -     -  0.20  0.19
-#>  - Isolated                    -     -     -     -  0.47  0.36     -     -     -     -  0.18     -
-#>  - Isolated Recovered          -     -     -     -     -  0.88     -     -     -     -     -  0.12
-#>  - Quarantined Latent          -  0.04  0.00     -     -     -  0.89     -  0.07     -     -     -
-#>  - Quarantined Susceptible  0.07     -     -     -     -     -     -  0.93     -     -     -     -
-#>  - Quarantined Prodromal       -     -  0.01     -  0.27     -     -     -  0.72     -     -     -
+#>  - Susceptible              1.00  0.00     -     -     -     -  0.00  0.00     -     -     -     -
+#>  - Latent                      -  0.89  0.08     -     -     -  0.03     -  0.00     -     -     -
+#>  - Prodromal                   -     -  0.75  0.24  0.00     -     -     -  0.01     -     -     -
+#>  - Rash                        -     -     -  0.23  0.24  0.15     -     -     -     -  0.19  0.19
+#>  - Isolated                    -     -     -     -  0.48  0.31     -     -     -     -  0.21     -
+#>  - Isolated Recovered          -     -     -     -     -  0.89     -     -     -     -     -  0.11
+#>  - Quarantined Latent          -  0.03  0.00     -     -     -  0.90     -  0.07     -     -     -
+#>  - Quarantined Susceptible  0.06     -     -     -     -     -     -  0.94     -     -     -     -
+#>  - Quarantined Prodromal       -     -  0.04     -  0.22     -     -     -  0.73     -     -     -
 #>  - Quarantined Recovered       -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Hospitalized                -     -     -     -     -     -     -     -     -     -  0.86  0.14
 #>  - Recovered                   -     -     -     -     -     -     -     -     -     -     -  1.00
