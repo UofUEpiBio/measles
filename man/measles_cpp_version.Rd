@@ -18,3 +18,4 @@ and it is part of the epiworld C++ library.
 measles_cpp_version()
 
 }
+\keyword{internal}

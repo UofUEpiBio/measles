@@ -31,7 +31,7 @@ measles_model <- measles::ModelMeaslesMixing(
   isolation_period           = 10,
   prop_vaccinated            = 0.95,
   contact_tracing_success_rate = 0.8,
-  contact_tracing_days_prior = 4
+  contact_tracing_days_window = 4
 )
 
 # Adding the entities 
@@ -91,7 +91,7 @@ good_isolation_willingness <- 0.8
 good_isolation_period <- 10L
 good_prop_vaccinated <- 0.95
 good_contact_tracing_success_rate <- 0.8
-good_contact_tracing_days_prior <- 4L
+good_contact_tracing_days_window <- 4L
 
 bad_numeric_input <- "not a number"
 bad_int_input <- "not an integer"
@@ -121,7 +121,7 @@ expect_error(test_model <- measles::ModelMeaslesMixing(
   isolation_period           = good_isolation_period,
   prop_vaccinated            = good_prop_vaccinated,
   contact_tracing_success_rate = good_contact_tracing_success_rate,
-  contact_tracing_days_prior = good_contact_tracing_days_prior
+  contact_tracing_days_window = good_contact_tracing_days_window
 ), expected_error_msg_int)
 
 expect_error(test_model <- ModelMeaslesMixing(
@@ -143,7 +143,7 @@ expect_error(test_model <- ModelMeaslesMixing(
   isolation_period           = good_isolation_period,
   prop_vaccinated            = good_prop_vaccinated,
   contact_tracing_success_rate = good_contact_tracing_success_rate,
-  contact_tracing_days_prior = good_contact_tracing_days_prior
+  contact_tracing_days_window = good_contact_tracing_days_window
 ), expected_error_msg_double)
 
 expect_error(test_model <- ModelMeaslesMixing(
@@ -165,7 +165,7 @@ expect_error(test_model <- ModelMeaslesMixing(
   isolation_period           = good_isolation_period,
   prop_vaccinated            = good_prop_vaccinated,
   contact_tracing_success_rate = good_contact_tracing_success_rate,
-  contact_tracing_days_prior = good_contact_tracing_days_prior
+  contact_tracing_days_window = good_contact_tracing_days_window
 ), expected_error_msg_any_na)
 
 expect_error(test_model <- ModelMeaslesMixing(
@@ -187,7 +187,7 @@ expect_error(test_model <- ModelMeaslesMixing(
   isolation_period           = good_isolation_period,
   prop_vaccinated            = good_prop_vaccinated,
   contact_tracing_success_rate = good_contact_tracing_success_rate,
-  contact_tracing_days_prior = good_contact_tracing_days_prior
+  contact_tracing_days_window = good_contact_tracing_days_window
 ), expected_error_msg_double)
 
 expect_error(test_model <- ModelMeaslesMixing(
@@ -209,7 +209,7 @@ expect_error(test_model <- ModelMeaslesMixing(
   isolation_period           = good_isolation_period,
   prop_vaccinated            = good_prop_vaccinated,
   contact_tracing_success_rate = good_contact_tracing_success_rate,
-  contact_tracing_days_prior = good_contact_tracing_days_prior
+  contact_tracing_days_window = good_contact_tracing_days_window
 ), expected_error_msg_int)
 
 expect_error(test_model <- ModelMeaslesMixing(
@@ -231,7 +231,7 @@ expect_error(test_model <- ModelMeaslesMixing(
   isolation_period           = good_isolation_period,
   prop_vaccinated            = good_prop_vaccinated,
   contact_tracing_success_rate = good_contact_tracing_success_rate,
-  contact_tracing_days_prior = good_contact_tracing_days_prior
+  contact_tracing_days_window = good_contact_tracing_days_window
 ), expected_error_msg_na)
 
 # Test bound checks for probability parameters
@@ -254,7 +254,7 @@ expect_error(test_model <- ModelMeaslesMixing(
   isolation_period           = good_isolation_period,
   prop_vaccinated            = good_prop_vaccinated,
   contact_tracing_success_rate = good_contact_tracing_success_rate,
-  contact_tracing_days_prior = good_contact_tracing_days_prior
+  contact_tracing_days_window = good_contact_tracing_days_window
 ), "must be")
 
 expect_error(test_model <- ModelMeaslesMixing(
@@ -276,5 +276,5 @@ expect_error(test_model <- ModelMeaslesMixing(
   isolation_period           = good_isolation_period,
   prop_vaccinated            = good_prop_vaccinated,
   contact_tracing_success_rate = good_contact_tracing_success_rate,
-  contact_tracing_days_prior = good_contact_tracing_days_prior
+  contact_tracing_days_window = good_contact_tracing_days_window
 ), "must be")

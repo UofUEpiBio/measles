@@ -40,7 +40,7 @@ model_mixing <- measles::ModelMeaslesMixing(
   isolation_period           = 10,
   prop_vaccinated            = 0.95,
   contact_tracing_success_rate = 0.8,
-  contact_tracing_days_prior = 4
+  contact_tracing_days_window = 4
 )
 
 # Add entities to the model
@@ -106,7 +106,7 @@ model_risk_quar <- measles::ModelMeaslesMixingRiskQuarantine(
   prop_vaccinated            = 0.95,
   detection_rate_quarantine  = 0.5,
   contact_tracing_success_rate = 0.8,
-  contact_tracing_days_prior = 4
+  contact_tracing_days_window = 4
 )
 
 # Add entities to the model

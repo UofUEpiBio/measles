@@ -25,6 +25,7 @@
 #' measles_cpp_version()
 #'
 #' @export
+#' @keywords internal
 measles_cpp_version <- function() {
   measles_cpp_version_cpp()
 }

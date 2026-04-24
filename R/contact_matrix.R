@@ -59,7 +59,7 @@
 #'   isolation_period         = 10,
 #'   prop_vaccinated          = 0.95,
 #'   contact_tracing_success_rate = 0.8,
-#'   contact_tracing_days_prior = 4
+#'   contact_tracing_days_window = 4
 #' )
 #'
 #' # Add entities to the model

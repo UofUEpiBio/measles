@@ -139,7 +139,7 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
     double prop_vaccinated,
     double detection_rate_quarantine,
     double contact_tracing_success_rate = 1.0,
-    unsigned int contact_tracing_days_prior = 4u
+    unsigned int contact_tracing_days_window = 4u
 ) {
 
   // Creating a pointer to a ModelMeaslesMixingRiskQuarantine model
@@ -165,7 +165,7 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
           prop_vaccinated,
           detection_rate_quarantine,
           contact_tracing_success_rate,
-          contact_tracing_days_prior
+          contact_tracing_days_window
       )
   );
 
