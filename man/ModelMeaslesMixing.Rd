@@ -113,6 +113,22 @@ allow agents with Rash to still contact other agents, albeit at a reduced
 rate. For example, if the user sets \code{rash_reduction_contact_rate} to 0.8,
 agents in the rash period will have 20\% of the contact rates specified in
 the \code{contact_matrix} instead of 0\%.
+
+The basic reproduction number (R0) of the model can be computed as
+
+\deqn{
+\mathcal{R}_0 = p_t c (D_p + (1-r_r) D_r)
+}{
+R0 = p_t c (D_p + (1-r_r) D_r)
+}
+
+Where \eqn{p_t} is the \code{transmission_rate}, \eqn{c} is the average number of
+contacts per time step (given by the \code{contact_matrix}), \eqn{D_p} is
+the duration of the prodromal period, \eqn{D_r} is the duration of the rash
+period, and \eqn{r_r} is the \code{rash_reduction_contact_rate}. Therefore, when
+calibrating the model, the effective infectious period should be considered
+as the sum of the prodromal period and the rash period discounted by the
+\code{rash_reduction_contact_rate}.
 }
 
 \section{Hospitalization Probability}{
