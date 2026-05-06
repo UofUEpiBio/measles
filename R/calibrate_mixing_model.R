@@ -15,6 +15,14 @@
 #' @return
 #' The scaling factor for the contact matrix that achieves the target
 #' reproduction number.
+#' @details
+#' In the case of the [ModelMeaslesMixing()], if agents with rash are assumed
+#' to not be fully isolated, the calibration process needs to incorporate this
+#' information into the function. In practice, this means that the infectious
+#' period should include the days with rash, discouted by the
+#' `rash_reduction_contact_rate`. For instance, if the prodromal period is 4
+#' days, the rash period is 3 days, and the `rash_reduction_contact_rate` is
+#' 0.8, the effective infectious period would be 4 + 3 * 0.2 = 4.6 days.
 #' @examples
 #' data(short_creek_matrix, package = "measles")
 #'

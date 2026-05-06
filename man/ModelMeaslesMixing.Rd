@@ -24,7 +24,8 @@ ModelMeaslesMixing(
   hospitalization_period = 7,
   days_undetected = 2,
   contact_tracing_success_rate = 1,
-  contact_tracing_days_window = 4
+  contact_tracing_days_window = 4,
+  rash_reduction_contact_rate = 1
 )
 }
 \arguments{
@@ -74,6 +75,9 @@ contact tracing (default: 1.0).}
 
 \item{contact_tracing_days_window}{Integer. Number of days before rash onset
 that will be considered for contact tracing (default: 4).}
+
+\item{rash_reduction_contact_rate}{Double. Reduction in contact rate during
+rash period (default: 1.0, full reduction). (see details)}
 }
 \value{
 \itemize{
@@ -100,6 +104,17 @@ The \link[epiworldR:epiworld-methods]{epiworldR::initial_states} function allows
 model. In particular, the user can specify how many of the non-infected
 agents have been removed at the beginning of the simulation.
 }
+\section{Contact Rate Reduction During Rash Period}{
+
+The default behavior of the model is that agents in the rash period
+are self-isolated. Nonetheless, since version 0.3.2-0, the user can
+set the \code{rash_reduction_contact_rate} parameter to a value between 0 and 1 to
+allow agents with Rash to still contact other agents, albeit at a reduced
+rate. For example, if the user sets \code{rash_reduction_contact_rate} to 0.8,
+agents in the rash period will have 20\% of the contact rates specified in
+the \code{contact_matrix} instead of 0\%.
+}
+
 \section{Hospitalization Probability}{
 
 Instead of hospitalization probability, the model uses hospitalization rate.

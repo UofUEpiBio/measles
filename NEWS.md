@@ -1,4 +1,4 @@
-# measles 0.3.1-0
+# measles 0.3.1-9999
 
 ## User visible changes
 
@@ -13,6 +13,8 @@
 * Changed the default vaccine efficacy of Measles from 99% to 97%.
 
 * The contact tracing window parameter in `ModelsMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` was capturing agents that may have been in contact with infected cases way past the window. No important regressions observed from this change.
+
+* The `ModelMeaslesMixing()` now allows agents with Rash to be infectious. Previously, we assumed that Rash agents would stay home. We now relaxed this assumption to allow agents to have a different contact rate.
 
 ## Internal changes
 

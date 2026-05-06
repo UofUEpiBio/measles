@@ -32,6 +32,8 @@
 #' contact tracing (default: 1.0).
 #' @param contact_tracing_days_window Integer. Number of days before rash onset
 #' that will be considered for contact tracing (default: 4).
+#' @param rash_reduction_contact_rate Double. Reduction in contact rate during
+#' rash period (default: 1.0, full reduction). (see details)
 #' @export
 #' @family Models
 #' @family measles models
@@ -49,6 +51,15 @@
 #' The [initial_states] function allows the user to set the initial state of the
 #' model. In particular, the user can specify how many of the non-infected
 #' agents have been removed at the beginning of the simulation.
+#'
+#' @section Contact Rate Reduction During Rash Period:
+#' The default behavior of the model is that agents in the rash period
+#' are self-isolated. Nonetheless, since version 0.3.2-0, the user can
+#' set the `rash_reduction_contact_rate` parameter to a value between 0 and 1 to
+#' allow agents with Rash to still contact other agents, albeit at a reduced
+#' rate. For example, if the user sets `rash_reduction_contact_rate` to 0.8,
+#' agents in the rash period will have 20% of the contact rates specified in
+#' the `contact_matrix` instead of 0%.
 #'
 #' @section Hospitalization Probability:
 #' Instead of hospitalization probability, the model uses hospitalization rate.
@@ -147,7 +158,8 @@ ModelMeaslesMixing <- function(
   hospitalization_period = 7,
   days_undetected = 2,
   contact_tracing_success_rate = 1.0,
-  contact_tracing_days_window = 4
+  contact_tracing_days_window = 4,
+  rash_reduction_contact_rate = 1.0
 ) {
   # Check input parameters
   stopifnot_int(n)
@@ -169,6 +181,7 @@ ModelMeaslesMixing <- function(
   stopifnot_double(prop_vaccinated, lb = 0, ub = 1)
   stopifnot_double(contact_tracing_success_rate, lb = 0, ub = 1)
   stopifnot_int(contact_tracing_days_window, lb = 0)
+  stopifnot_double(rash_reduction_contact_rate, lb = 0, ub = 1)
 
   structure(
     ModelMeaslesMixing_cpp(
@@ -190,7 +203,8 @@ ModelMeaslesMixing <- function(
       isolation_period = isolation_period,
       prop_vaccinated = prop_vaccinated,
       contact_tracing_success_rate = contact_tracing_success_rate,
-      contact_tracing_days_window = contact_tracing_days_window
+      contact_tracing_days_window = contact_tracing_days_window,
+      rash_reduction_contact_rate = rash_reduction_contact_rate
     ),
     class = c("epiworld_measlesmixing", "epiworld_model")
   )

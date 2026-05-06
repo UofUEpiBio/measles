@@ -71,3 +71,43 @@ ans <- run_multiple_get_results(m_model)$reproductive
 ans <- subset(ans, source != -1 & source_exposure_date == 0)
 
 expect_equal(mean(ans$rt), r0, tol = 0.5)
+
+# ===========================================
+# Calibration with MeaslesMixing when agents
+# with rash can be infectious but with reduced
+# contact rates
+
+set_param(m_model, "Rash reduction contact rate", .8)
+set_param(m_model, "Days undetected", -1) # Deactivating
+set_param(m_model, "Quarantine period", -1) # Deactivating
+
+# Homogenizing so it is easier to check
+# the calibration empirically
+epiworldR::set_contact_matrix(
+  m_model, 
+  cmat * 0 + 4
+)
+
+run_multiple(
+  m_model,
+  ndays = 100,
+  nsims = 500,
+  seed = 10203,
+  saver = make_saver("reproductive"),
+  nthreads = 2L
+)
+
+ans <- run_multiple_get_results(m_model)$reproductive
+
+ans <- subset(ans, source != -1 & source_exposure_date == 0)
+
+# Computing the expected R0
+r0 <- (4 * 3) * get_param(m_model, "Transmission rate") * (
+  get_param(m_model, "Prodromal period") +
+  (1 - get_param(m_model, "Rash reduction contact rate")) *
+    get_param(m_model, "Rash period")
+)
+
+expect_equal(mean(ans$rt), r0, tol = 0.5)
+
+
