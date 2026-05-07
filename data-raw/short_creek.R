@@ -8,9 +8,9 @@ library(socialmixr)
 library(data.table)
 
 # Load city data files
-hildale_path <- system.file("extdata", "hildale_ut_2023.csv", package = "multigroup.vaccine")
-colorado_city_path <- system.file("extdata", "colorado_city_az_2023.csv", package = "multigroup.vaccine")
-centennial_park_path <- system.file("extdata", "centennial_park_az_2023.csv", package = "multigroup.vaccine")
+hildale_path <- system.file("extdata", "hildale_ut_2024.csv", package = "multigroup.vaccine")
+colorado_city_path <- system.file("extdata", "colorado_city_az_2024.csv", package = "multigroup.vaccine")
+centennial_park_path <- system.file("extdata", "centennial_park_az_2024.csv", package = "multigroup.vaccine")
 
 
 # ## Measles Model Setup
@@ -52,13 +52,17 @@ schoolpops <- c(250, 350, 190, 86, 150, 84, 114, 108, 205)
 schoolagegroups <- c(3, 3, 3, 4, 4, 4, 5, 5, 5)
 schoolvax <- c(16, 129, 80, 20, 55, 50, 27, 40, 93)
 
-knitr::kable(data.frame(school = c(paste0("elem", 1:3),
-  paste0("middle", 1:3),
-  paste0("high", 1:3)),
-enrolled = schoolpops,
-MMRcoverage = paste0(round(100 * schoolvax / schoolpops), "%")),
-row.names = FALSE, format = "markdown")
-
+knitr::kable(
+  data.frame(
+    school = c(
+      paste0("elem", 1:3),
+      paste0("middle", 1:3),
+      paste0("high", 1:3)),
+    enrolled = schoolpops,
+    MMRcoverage = paste0(round(100 * schoolvax / schoolpops), "%")
+  ),
+  row.names = FALSE, format = "markdown"
+)
 
 ## Create contact matrix and immunization vector
 
