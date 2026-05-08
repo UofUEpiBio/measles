@@ -16,6 +16,8 @@
 
 * The `ModelMeaslesMixing()` now allows agents with Rash to be infectious. Previously, we assumed that Rash agents would stay home. We now relaxed this assumption to allow agents to have a different contact rate.
 
+* The new function `make_cmat_symmetric()` allows symmetrizing a contact matrix based on the population size (adapted from `socialmixr::symmatrize()`).
+
 ## Internal changes
 
 * The Measles models were removed from `{epiworldR}`. This streamlines the development process. So, if we need to update Measles related models, we only need to update the `{measles}` R package, not `{epiworldR}` and `{measles}`.
