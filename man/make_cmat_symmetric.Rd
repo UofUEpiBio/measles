@@ -33,7 +33,7 @@ The operation will change the row and column sums of the contact matrix.
 }
 \examples{
 cmat <- c(4, 2, 1, 3, 5, 6, 4, 5, 2) |>
- matrix(nrow = 3, byrow = TRUE)
+  matrix(nrow = 3, byrow = TRUE)
 pop <- c(100, 200, 300)
 
 cmat_symm <- make_cmat_symmetric(cmat, pop)
