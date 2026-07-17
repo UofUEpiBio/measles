@@ -33,6 +33,15 @@ Uses the \code{\link[epiworldR:compute_reproduction_number]{epiworldR::compute_r
 optimize the scaling factor of the contact matrix to match a target
 reproduction number.
 }
+\details{
+In the case of the \code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}, if agents with rash are assumed
+to not be fully isolated, the calibration process needs to incorporate this
+information into the function. In practice, this means that the infectious
+period should include the days with rash, scaled by
+\code{(1 - rash_reduction_contact_rate)}. For instance, if the prodromal period is
+4 days, the rash period is 3 days, and the \code{rash_reduction_contact_rate} is
+0.8, the effective infectious period would be 4 + 3 * (1 - 0.8) = 4.6 days.
+}
 \examples{
 data(short_creek_matrix, package = "measles")
 

@@ -84,7 +84,8 @@ SEXP ModelMeaslesMixing_cpp(
     int isolation_period,
     double prop_vaccinated,
     double contact_tracing_success_rate = 1.0,
-    unsigned int contact_tracing_days_window = 4u
+    unsigned int contact_tracing_days_window = 4u,
+    double rash_reduction_contact_rate = 1.0
 ) {
 
   // Creating a pointer to a ModelMeaslesMixing model
@@ -108,7 +109,8 @@ SEXP ModelMeaslesMixing_cpp(
           isolation_period,
           prop_vaccinated,
           contact_tracing_success_rate,
-          contact_tracing_days_window
+          contact_tracing_days_window,
+          rash_reduction_contact_rate
       )
   );
 
@@ -171,38 +173,4 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
 
   return ptr;
 
-}
-
-// Get contact matrix from ModelMeaslesMixing
-[[cpp11::register]]
-std::vector<double> get_contact_matrix_mixing_cpp(SEXP model) {
-  cpp11::external_pointer<measles::ModelMeaslesMixing<>> ptr(model);
-  return ptr->get_contact_matrix();
-}
-
-// Set contact matrix for ModelMeaslesMixing
-[[cpp11::register]]
-void set_contact_matrix_mixing_cpp(
-  SEXP model,
-  std::vector<double> contact_matrix
-) {
-  cpp11::external_pointer<measles::ModelMeaslesMixing<>> ptr(model);
-  ptr->set_contact_matrix(contact_matrix);
-}
-
-// Get contact matrix from ModelMeaslesMixingRiskQuarantine
-[[cpp11::register]]
-std::vector<double> get_contact_matrix_mixing_risk_quarantine_cpp(SEXP model) {
-  cpp11::external_pointer<measles::ModelMeaslesMixingRiskQuarantine<>> ptr(model);
-  return ptr->get_contact_matrix();
-}
-
-// Set contact matrix for ModelMeaslesMixingRiskQuarantine
-[[cpp11::register]]
-void set_contact_matrix_mixing_risk_quarantine_cpp(
-    SEXP model,
-    std::vector<double> contact_matrix
-) {
-  cpp11::external_pointer<measles::ModelMeaslesMixingRiskQuarantine<>> ptr(model);
-  ptr->set_contact_matrix(contact_matrix);
 }

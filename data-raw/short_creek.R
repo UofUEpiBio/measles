@@ -8,9 +8,9 @@ library(socialmixr)
 library(data.table)
 
 # Load city data files
-hildale_path <- system.file("extdata", "hildale_ut_2023.csv", package = "multigroup.vaccine")
-colorado_city_path <- system.file("extdata", "colorado_city_az_2023.csv", package = "multigroup.vaccine")
-centennial_park_path <- system.file("extdata", "centennial_park_az_2023.csv", package = "multigroup.vaccine")
+hildale_path <- system.file("extdata", "hildale_ut_2024.csv", package = "multigroup.vaccine")
+colorado_city_path <- system.file("extdata", "colorado_city_az_2024.csv", package = "multigroup.vaccine")
+centennial_park_path <- system.file("extdata", "centennial_park_az_2024.csv", package = "multigroup.vaccine")
 
 
 # ## Measles Model Setup
@@ -66,7 +66,9 @@ row.names = FALSE, format = "markdown")
 # Readjust the school populations to match the age data:
 for (a in unique(schoolagegroups)) {
   inds <- which(schoolagegroups == a)
-  schoolpops[inds] <- round(agepops[a] * schoolpops[inds] / sum(schoolpops[inds]))
+  schoolpopsnew <- round(agepops[a] * schoolpops[inds] / sum(schoolpops[inds]))
+  schoolvax[inds] <- round(schoolpopsnew * schoolvax[inds] / schoolpops[inds])
+  schoolpops[inds] <- schoolpopsnew
 }
 cm <- contactMatrixAgeSchool(agelims, agepops, schoolagegroups, schoolpops, schportion = 0.7)
 grouppops <- c(agepops[1:(min(schoolagegroups) - 1)],

@@ -1,5 +1,9 @@
 # Test just this file: tinytest::run_test_file("inst/tinytest/test-contact-matrix.R")
 
+# get_contact_matrix() and set_contact_matrix() are provided by epiworldR
+# (>= 0.15.1) and operate on the measles model classes directly. This test
+# verifies that measles models remain compatible with those accessors.
+
 # Helper function to create a random contact matrix
 create_random_contact_matrix <- function(n) {
   mat <- matrix(runif(n * n), nrow = n, ncol = n)
@@ -7,20 +11,12 @@ create_random_contact_matrix <- function(n) {
   mat * runif(n, min = 5, max = 20)
 }
 
-# ------------------------------------------------------------------------------
-# Test get_contact_matrix() and set_contact_matrix() for ModelMeaslesMixing
-# ------------------------------------------------------------------------------
-
-# Create entities for three population groups
-e1 <- entity("Population 1", 1000, FALSE)
-e2 <- entity("Population 2", 1000, FALSE)
-e3 <- entity("Population 3", 1000, FALSE)
-
-# (1) Initialize the model with an identity matrix for the mixing matrix
+N <- 3000
 identity_matrix <- diag(3) * 15
 
-N <- 3000
-
+# ------------------------------------------------------------------------------
+# ModelMeaslesMixing
+# ------------------------------------------------------------------------------
 model_mixing <- measles::ModelMeaslesMixing(
   n                          = N,
   prevalence                 = 1 / N,
@@ -43,48 +39,27 @@ model_mixing <- measles::ModelMeaslesMixing(
   contact_tracing_days_window = 4
 )
 
-# Add entities to the model
 model_mixing |>
-  add_entity(e1) |>
-  add_entity(e2) |>
-  add_entity(e3)
+  add_entity(entity("Population 1", 1000, FALSE)) |>
+  add_entity(entity("Population 2", 1000, FALSE)) |>
+  add_entity(entity("Population 3", 1000, FALSE))
 
-# Expecting error
-expect_error(
-  set_contact_matrix(model_mixing, matrix(c(-0.1, 0.5, 0.6, 0.5), 2, 2)),
-  "must be greater than or equal to 0"
-)
-
-# Run the model first so contact matrix is initialized
+# Run the model first so the contact matrix is initialized
 set.seed(123)
 run(model_mixing, ndays = 10)
 
-# (2) Extract the matrix using get_contact_matrix() and check dimensions
-extracted_matrix <- get_contact_matrix(model_mixing)
-expect_equal(dim(extracted_matrix), c(3, 3))
+# Extracted matrix has the expected dimensions
+expect_equal(dim(get_contact_matrix(model_mixing)), c(3, 3))
 
-# (3) Create a random contact matrix of the same dimension
+# Round-trip: setting a matrix and reading it back returns the same matrix
 set.seed(456)
 random_matrix <- create_random_contact_matrix(3)
-
-# Set it using set_contact_matrix()
 set_contact_matrix(model_mixing, random_matrix)
-
-# (4) Extract the matrix and compare with the one used in set_contact_matrix
-extracted_after_set <- get_contact_matrix(model_mixing)
-expect_equal(extracted_after_set, random_matrix, tolerance = 1e-10)
+expect_equal(get_contact_matrix(model_mixing), random_matrix, tolerance = 1e-10)
 
 # ------------------------------------------------------------------------------
-# Test get_contact_matrix() and set_contact_matrix() for
 # ModelMeaslesMixingRiskQuarantine
 # ------------------------------------------------------------------------------
-
-# Create new entities
-e1_rq <- entity("Population 1", 1000, FALSE)
-e2_rq <- entity("Population 2", 1000, FALSE)
-e3_rq <- entity("Population 3", 1000, FALSE)
-
-# (1) Initialize the model with an identity matrix
 model_risk_quar <- measles::ModelMeaslesMixingRiskQuarantine(
   n                          = N,
   prevalence                 = 1 / N,
@@ -109,48 +84,18 @@ model_risk_quar <- measles::ModelMeaslesMixingRiskQuarantine(
   contact_tracing_days_window = 4
 )
 
-# Add entities to the model
 model_risk_quar |>
-  add_entity(e1_rq) |>
-  add_entity(e2_rq) |>
-  add_entity(e3_rq)
+  add_entity(entity("Population 1", 1000, FALSE)) |>
+  add_entity(entity("Population 2", 1000, FALSE)) |>
+  add_entity(entity("Population 3", 1000, FALSE))
 
-# Expecting error
-expect_error(
-  set_contact_matrix(model_risk_quar, matrix(c(-0.1, 0.5, 0.6, 0.5), 2, 2)),
-  "must be greater than or equal to 0"
-)
-
-# Run the model first so contact matrix is initialized
+# Run the model first so the contact matrix is initialized
 set.seed(789)
 run(model_risk_quar, ndays = 10)
 
-# (2) Extract the matrix and check dimensions
-extracted_matrix_rq <- get_contact_matrix(model_risk_quar)
-expect_equal(dim(extracted_matrix_rq), c(3, 3))
+expect_equal(dim(get_contact_matrix(model_risk_quar)), c(3, 3))
 
-# (3) Create a random contact matrix of the same dimension
 set.seed(101112)
 random_matrix_rq <- create_random_contact_matrix(3)
-
-# Set it using set_contact_matrix()
 set_contact_matrix(model_risk_quar, random_matrix_rq)
-
-# (4) Extract and compare
-extracted_after_set_rq <- get_contact_matrix(model_risk_quar)
-expect_equal(extracted_after_set_rq, random_matrix_rq, tolerance = 1e-10)
-
-# ------------------------------------------------------------------------------
-# Test default method returns error for unsupported models
-# ------------------------------------------------------------------------------
-
-# Test with an arbitrary object
-expect_error(
-  get_contact_matrix(list(a = 1)),
-  "get_contact_matrix\\(\\) is not available for this model type"
-)
-
-expect_error(
-  set_contact_matrix(list(a = 1), diag(3)),
-  "set_contact_matrix\\(\\) is not available for this model type"
-)
+expect_equal(get_contact_matrix(model_risk_quar), random_matrix_rq, tolerance = 1e-10)

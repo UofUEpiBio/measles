@@ -8,28 +8,12 @@ ModelMeaslesSchool_cpp <- function(n, prevalence, contact_rate, transmission_rat
   .Call(`_measles_ModelMeaslesSchool_cpp`, n, prevalence, contact_rate, transmission_rate, vax_efficacy, vax_reduction_recovery_rate, incubation_period, prodromal_period, rash_period, days_undetected, hospitalization_rate, hospitalization_period, prop_vaccinated, quarantine_period, quarantine_willingness, isolation_period)
 }
 
-ModelMeaslesMixing_cpp <- function(n, prevalence, transmission_rate, vax_efficacy, vax_reduction_recovery_rate, incubation_period, prodromal_period, rash_period, contact_matrix, hospitalization_rate, hospitalization_period, days_undetected, quarantine_period, quarantine_willingness, isolation_willingness, isolation_period, prop_vaccinated, contact_tracing_success_rate, contact_tracing_days_window) {
-  .Call(`_measles_ModelMeaslesMixing_cpp`, n, prevalence, transmission_rate, vax_efficacy, vax_reduction_recovery_rate, incubation_period, prodromal_period, rash_period, contact_matrix, hospitalization_rate, hospitalization_period, days_undetected, quarantine_period, quarantine_willingness, isolation_willingness, isolation_period, prop_vaccinated, contact_tracing_success_rate, contact_tracing_days_window)
+ModelMeaslesMixing_cpp <- function(n, prevalence, transmission_rate, vax_efficacy, vax_reduction_recovery_rate, incubation_period, prodromal_period, rash_period, contact_matrix, hospitalization_rate, hospitalization_period, days_undetected, quarantine_period, quarantine_willingness, isolation_willingness, isolation_period, prop_vaccinated, contact_tracing_success_rate, contact_tracing_days_window, rash_reduction_contact_rate) {
+  .Call(`_measles_ModelMeaslesMixing_cpp`, n, prevalence, transmission_rate, vax_efficacy, vax_reduction_recovery_rate, incubation_period, prodromal_period, rash_period, contact_matrix, hospitalization_rate, hospitalization_period, days_undetected, quarantine_period, quarantine_willingness, isolation_willingness, isolation_period, prop_vaccinated, contact_tracing_success_rate, contact_tracing_days_window, rash_reduction_contact_rate)
 }
 
 ModelMeaslesMixingRiskQuarantine_cpp <- function(n, prevalence, transmission_rate, vax_efficacy, incubation_period, prodromal_period, rash_period, contact_matrix, hospitalization_rate, hospitalization_period, days_undetected, quarantine_period_high, quarantine_period_medium, quarantine_period_low, quarantine_willingness, isolation_willingness, isolation_period, prop_vaccinated, detection_rate_quarantine, contact_tracing_success_rate, contact_tracing_days_window) {
   .Call(`_measles_ModelMeaslesMixingRiskQuarantine_cpp`, n, prevalence, transmission_rate, vax_efficacy, incubation_period, prodromal_period, rash_period, contact_matrix, hospitalization_rate, hospitalization_period, days_undetected, quarantine_period_high, quarantine_period_medium, quarantine_period_low, quarantine_willingness, isolation_willingness, isolation_period, prop_vaccinated, detection_rate_quarantine, contact_tracing_success_rate, contact_tracing_days_window)
-}
-
-get_contact_matrix_mixing_cpp <- function(model) {
-  .Call(`_measles_get_contact_matrix_mixing_cpp`, model)
-}
-
-set_contact_matrix_mixing_cpp <- function(model, contact_matrix) {
-  invisible(.Call(`_measles_set_contact_matrix_mixing_cpp`, model, contact_matrix))
-}
-
-get_contact_matrix_mixing_risk_quarantine_cpp <- function(model) {
-  .Call(`_measles_get_contact_matrix_mixing_risk_quarantine_cpp`, model)
-}
-
-set_contact_matrix_mixing_risk_quarantine_cpp <- function(model, contact_matrix) {
-  invisible(.Call(`_measles_set_contact_matrix_mixing_risk_quarantine_cpp`, model, contact_matrix))
 }
 
 InterventionMeaslesPEP_cpp <- function(name, mmr_efficacy, ig_efficacy, ig_half_life_mean, ig_half_life_sd, mmr_willingness, ig_willingness, mmr_window, ig_window, target_states, states_if_pep_effective, states_if_pep_ineffective) {

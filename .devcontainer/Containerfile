@@ -8,8 +8,10 @@ RUN wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.9.35/quar
     dpkg -i quarto-1.9.35-linux-${TARGETARCH}.deb && \
     rm quarto-1.9.35-linux-${TARGETARCH}.deb
 
+# Dependency
+RUN apt-get update && apt-get install -y libuv1t64 && rm -rf /var/lib/apt/lists/*
+
 # Adding R packages
 RUN install2.r --error epiworldR tinytest data.table quarto cpp11 rhub
-
 
 CMD ["bash"]
