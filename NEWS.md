@@ -4,6 +4,8 @@
 
 * The function `InterventionMeaslesPEP()` implements post-exposure prophylaxis featuring both MMR and IG. The process is highly configurable and can be attached to the `ModelMeaslesSchool()`. Not available yet for other models.
 
+* Fixed the PEP timelines: eligibility for MMR/IG is now a class-level decision based on the last time the class was exposed to the infectious index case (from contact tracing) relative to the day the case is detected, i.e. whether there is still time to intervene. Previously the `mmr_window`/`ig_window` were compared against the index case's infectious-onset date and gated on the specific day a classmate contacted the index, so realistic windows (e.g. `mmr_window = 3`) did not behave as intended.
+
 * The models `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` no longer use `contact_rate`; instead, their `contact_matrix` stores the expected number of contacts between groups. Calibration can now be done with the new function `calibrate_mixing_model()`.
 
 * Updated the documentation, examples, and contact-matrix helpers for the mixing models so they consistently treat `contact_matrix` as the full contact-rate matrix.
