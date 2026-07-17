@@ -12,7 +12,7 @@ make_cmat_symmetric(cmat, pop)
 \item{pop}{A vector of population sizes for each age group.}
 }
 \description{
-The symmetry is achieve to ensure that \code{n(i) * c(i, j) == n(j) * c(j, i)}
+The symmetry is achieved to ensure that \code{n(i) * c(i, j) == n(j) * c(j, i)}
 where \code{n(i)} is the population size of age group \code{i} and \code{c(i, j)} is the
 contact rate from age group \code{i} to age group \code{j}.
 }

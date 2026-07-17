@@ -1,6 +1,6 @@
 #' Symmetrise a contact matrix based on population sizes
 #'
-#' The symmetry is achieve to ensure that `n(i) * c(i, j) == n(j) * c(j, i)`
+#' The symmetry is achieved to ensure that `n(i) * c(i, j) == n(j) * c(j, i)`
 #' where `n(i)` is the population size of age group `i` and `c(i, j)` is the
 #' contact rate from age group `i` to age group `j`.
 #'
@@ -35,12 +35,16 @@
 #' @export
 make_cmat_symmetric <- function(cmat, pop) {
 
-  if (!is.matrix(cmat)) {
-    stop("The contact matrix must be a matrix.")
+  if (!is.matrix(cmat) || !is.numeric(cmat)) {
+    stop("The contact matrix must be a numeric matrix.")
   }
 
   if (!is.numeric(pop) || length(pop) == 0) {
     stop("The population vector must be a non-empty numeric vector.")
+  }
+
+  if (any(!is.finite(pop)) || any(pop <= 0)) {
+    stop("The population vector must contain only finite, positive values.")
   }
 
   if (ncol(cmat) != length(pop)) {

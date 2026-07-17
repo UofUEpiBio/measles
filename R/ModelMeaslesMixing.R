@@ -74,8 +74,8 @@
 #' the duration of the prodromal period, \eqn{D_r} is the duration of the rash
 #' period, and \eqn{r_r} is the `rash_reduction_contact_rate`. Therefore, when
 #' calibrating the model, the effective infectious period should be considered
-#' as the sum of the prodromal period and the rash period discounted by the
-#' `rash_reduction_contact_rate`.
+#' as the sum of the prodromal period and the rash period scaled by
+#' `(1 - rash_reduction_contact_rate)`.
 #'
 #' @section Hospitalization Probability:
 #' Instead of hospitalization probability, the model uses hospitalization rate.

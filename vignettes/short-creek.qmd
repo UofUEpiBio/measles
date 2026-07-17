@@ -89,7 +89,7 @@ While the decision to calibrate the contact matrix or the transmission probabili
 :::
 
 ::: {.callout-important}
-The default behavior of the model is that agents in the rash period are fully isolated. If this is not the case, when setting the parameter `rash_reduction_contact_rate` to a value below 1, the effective infectious period will be longer, which will affect the calibration process. In this case, the infectious period should include the days with rash, discounted by the `rash_reduction_contact_rate`. For instance, if the prodromal period is 4 days, the rash period is 3 days, and the `rash_reduction_contact_rate` is 0.8, the effective infectious period would be 4 + 3 * 0.2 = 4.6 days.
+The default behavior of the model is that agents in the rash period are fully isolated. If this is not the case, when setting the parameter `rash_reduction_contact_rate` to a value below 1, the effective infectious period will be longer, which will affect the calibration process. In this case, the infectious period should include the days with rash, scaled by `(1 - rash_reduction_contact_rate)`. For instance, if the prodromal period is 4 days, the rash period is 3 days, and the `rash_reduction_contact_rate` is 0.8, the effective infectious period would be 4 + 3 * (1 - 0.8) = 4.6 days.
 :::
 
 ```{r}
