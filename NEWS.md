@@ -18,6 +18,8 @@
 
 * The new function `make_cmat_symmetric()` allows symmetrizing a contact matrix based on the population size (adapted from `socialmixr::symmatrize()`).
 
+* `get_contact_matrix()` and `set_contact_matrix()` are now provided by `{epiworldR}` (>= 0.15.1) and work directly on the measles mixing models. The package's own copies were removed so they no longer mask the `{epiworldR}` versions.
+
 ## Internal changes
 
 * The Measles models were removed from `{epiworldR}`. This streamlines the development process. So, if we need to update Measles related models, we only need to update the `{measles}` R package, not `{epiworldR}` and `{measles}`.

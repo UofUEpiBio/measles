@@ -33,36 +33,6 @@ extern "C" SEXP _measles_ModelMeaslesMixingRiskQuarantine_cpp(SEXP n, SEXP preva
     return cpp11::as_sexp(ModelMeaslesMixingRiskQuarantine_cpp(cpp11::as_cpp<cpp11::decay_t<unsigned int>>(n), cpp11::as_cpp<cpp11::decay_t<double>>(prevalence), cpp11::as_cpp<cpp11::decay_t<double>>(transmission_rate), cpp11::as_cpp<cpp11::decay_t<double>>(vax_efficacy), cpp11::as_cpp<cpp11::decay_t<double>>(incubation_period), cpp11::as_cpp<cpp11::decay_t<double>>(prodromal_period), cpp11::as_cpp<cpp11::decay_t<double>>(rash_period), cpp11::as_cpp<cpp11::decay_t<std::vector< double >>>(contact_matrix), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_rate), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_period), cpp11::as_cpp<cpp11::decay_t<double>>(days_undetected), cpp11::as_cpp<cpp11::decay_t<int>>(quarantine_period_high), cpp11::as_cpp<cpp11::decay_t<int>>(quarantine_period_medium), cpp11::as_cpp<cpp11::decay_t<int>>(quarantine_period_low), cpp11::as_cpp<cpp11::decay_t<double>>(quarantine_willingness), cpp11::as_cpp<cpp11::decay_t<double>>(isolation_willingness), cpp11::as_cpp<cpp11::decay_t<int>>(isolation_period), cpp11::as_cpp<cpp11::decay_t<double>>(prop_vaccinated), cpp11::as_cpp<cpp11::decay_t<double>>(detection_rate_quarantine), cpp11::as_cpp<cpp11::decay_t<double>>(contact_tracing_success_rate), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(contact_tracing_days_window)));
   END_CPP11
 }
-// epimodels.cpp
-std::vector<double> get_contact_matrix_mixing_cpp(SEXP model);
-extern "C" SEXP _measles_get_contact_matrix_mixing_cpp(SEXP model) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(get_contact_matrix_mixing_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model)));
-  END_CPP11
-}
-// epimodels.cpp
-void set_contact_matrix_mixing_cpp(SEXP model, std::vector<double> contact_matrix);
-extern "C" SEXP _measles_set_contact_matrix_mixing_cpp(SEXP model, SEXP contact_matrix) {
-  BEGIN_CPP11
-    set_contact_matrix_mixing_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model), cpp11::as_cpp<cpp11::decay_t<std::vector<double>>>(contact_matrix));
-    return R_NilValue;
-  END_CPP11
-}
-// epimodels.cpp
-std::vector<double> get_contact_matrix_mixing_risk_quarantine_cpp(SEXP model);
-extern "C" SEXP _measles_get_contact_matrix_mixing_risk_quarantine_cpp(SEXP model) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(get_contact_matrix_mixing_risk_quarantine_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model)));
-  END_CPP11
-}
-// epimodels.cpp
-void set_contact_matrix_mixing_risk_quarantine_cpp(SEXP model, std::vector<double> contact_matrix);
-extern "C" SEXP _measles_set_contact_matrix_mixing_risk_quarantine_cpp(SEXP model, SEXP contact_matrix) {
-  BEGIN_CPP11
-    set_contact_matrix_mixing_risk_quarantine_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model), cpp11::as_cpp<cpp11::decay_t<std::vector<double>>>(contact_matrix));
-    return R_NilValue;
-  END_CPP11
-}
 // interventions.cpp
 SEXP InterventionMeaslesPEP_cpp(std::string name, double mmr_efficacy, double ig_efficacy, double ig_half_life_mean, double ig_half_life_sd, double mmr_willingness, double ig_willingness, double mmr_window, double ig_window, std::vector< int > target_states, std::vector< int > states_if_pep_effective, std::vector< int > states_if_pep_ineffective);
 extern "C" SEXP _measles_InterventionMeaslesPEP_cpp(SEXP name, SEXP mmr_efficacy, SEXP ig_efficacy, SEXP ig_half_life_mean, SEXP ig_half_life_sd, SEXP mmr_willingness, SEXP ig_willingness, SEXP mmr_window, SEXP ig_window, SEXP target_states, SEXP states_if_pep_effective, SEXP states_if_pep_ineffective) {
@@ -73,15 +43,11 @@ extern "C" SEXP _measles_InterventionMeaslesPEP_cpp(SEXP name, SEXP mmr_efficacy
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_measles_InterventionMeaslesPEP_cpp",                    (DL_FUNC) &_measles_InterventionMeaslesPEP_cpp,                    12},
-    {"_measles_ModelMeaslesMixingRiskQuarantine_cpp",          (DL_FUNC) &_measles_ModelMeaslesMixingRiskQuarantine_cpp,          21},
-    {"_measles_ModelMeaslesMixing_cpp",                        (DL_FUNC) &_measles_ModelMeaslesMixing_cpp,                        20},
-    {"_measles_ModelMeaslesSchool_cpp",                        (DL_FUNC) &_measles_ModelMeaslesSchool_cpp,                        16},
-    {"_measles_get_contact_matrix_mixing_cpp",                 (DL_FUNC) &_measles_get_contact_matrix_mixing_cpp,                  1},
-    {"_measles_get_contact_matrix_mixing_risk_quarantine_cpp", (DL_FUNC) &_measles_get_contact_matrix_mixing_risk_quarantine_cpp,  1},
-    {"_measles_measles_cpp_version_cpp",                       (DL_FUNC) &_measles_measles_cpp_version_cpp,                        0},
-    {"_measles_set_contact_matrix_mixing_cpp",                 (DL_FUNC) &_measles_set_contact_matrix_mixing_cpp,                  2},
-    {"_measles_set_contact_matrix_mixing_risk_quarantine_cpp", (DL_FUNC) &_measles_set_contact_matrix_mixing_risk_quarantine_cpp,  2},
+    {"_measles_InterventionMeaslesPEP_cpp",           (DL_FUNC) &_measles_InterventionMeaslesPEP_cpp,           12},
+    {"_measles_ModelMeaslesMixingRiskQuarantine_cpp", (DL_FUNC) &_measles_ModelMeaslesMixingRiskQuarantine_cpp, 21},
+    {"_measles_ModelMeaslesMixing_cpp",               (DL_FUNC) &_measles_ModelMeaslesMixing_cpp,               20},
+    {"_measles_ModelMeaslesSchool_cpp",               (DL_FUNC) &_measles_ModelMeaslesSchool_cpp,               16},
+    {"_measles_measles_cpp_version_cpp",              (DL_FUNC) &_measles_measles_cpp_version_cpp,               0},
     {NULL, NULL, 0}
 };
 }
