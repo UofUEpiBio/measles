@@ -4,7 +4,11 @@
 
 * The function `InterventionMeaslesPEP()` implements post-exposure prophylaxis featuring both MMR and IG. The process is highly configurable and can be attached to the `ModelMeaslesSchool()`. Not available yet for other models.
 
-* Fixed the PEP timelines: eligibility for MMR/IG is now a class-level decision based on the last time the class was exposed to the infectious index case (from contact tracing) relative to the day the case is detected, i.e. whether there is still time to intervene. Previously the `mmr_window`/`ig_window` were compared against the index case's infectious-onset date and gated on the specific day a classmate contacted the index, so realistic windows (e.g. `mmr_window = 3`) did not behave as intended.
+* Fixed the PEP timelines. `mmr_window`/`ig_window` are now measured from the exposure to the day the case is identified, i.e. whether there is still time to intervene. The reference date is the *first* day the school encountered the index case on or after its infectious-onset date (rash onset minus the prodromal period); contact tracing is used only to date that first encounter, so if the contact rate is zeroed out on some days (e.g. weekends, via a global event) the first day actually in session anchors the window. When several cases are identified on the same day, the earliest of those first encounters applies. Previously the windows were compared against the index case's infectious-onset date and gated on the specific day a given classmate met the index, so realistic windows (e.g. `mmr_window = 3`) did not behave as intended.
+
+* PEP is now offered to the whole school rather than only to the index case's recorded contacts, reflecting that public health treats the exposed group as exposed rather than tracing individual contacts. Agents already holding a PEP tool are not dosed again (IG still wanes, after which they become eligible once more). Note this makes PEP considerably more widely administered than in previous versions, and outbreak sizes correspondingly smaller.
+
+* Fixed PEP being re-administered every day after a case was identified. The set of triggering cases was only refreshed when a new case was detected, so on quiet days the intervention kept responding to an old detection.
 
 * The models `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` no longer use `contact_rate`; instead, their `contact_matrix` stores the expected number of contacts between groups. Calibration can now be done with the new function `calibrate_mixing_model()`.
 
