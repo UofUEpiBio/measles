@@ -8,6 +8,8 @@
 
 * PEP is now offered to the whole school rather than only to the index case's recorded contacts, reflecting that public health treats the exposed group as exposed rather than tracing individual contacts. Agents already holding a PEP tool are not dosed again (IG still wanes, after which they become eligible once more). Note this makes PEP considerably more widely administered than in previous versions, and outbreak sizes correspondingly smaller.
 
+* `InterventionMeaslesPEP()` gains an optional `agent_groups` argument for circumscribing that exposed group. Offering PEP to the entire population is appropriate for a single classroom but misleading when the population is really a set of separate communities. Supplying one group label per agent (e.g. `agent_groups = rep(1:3, each = 20)`) restricts the offer to the group(s) of the identified case(s), and dates each group's window from its own exposure, so a case identified in one classroom no longer shortens the window available to another. The default, `integer(0)`, keeps the whole-population behavior.
+
 * Fixed PEP being re-administered every day after a case was identified. The set of triggering cases was only refreshed when a new case was detected, so on quiet days the intervention kept responding to an old detection.
 
 * The models `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` no longer use `contact_rate`; instead, their `contact_matrix` stores the expected number of contacts between groups. Calibration can now be done with the new function `calibrate_mixing_model()`.

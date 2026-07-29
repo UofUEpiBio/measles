@@ -16,7 +16,8 @@ InterventionMeaslesPEP(
   ig_window,
   target_states,
   states_if_pep_effective,
-  states_if_pep_ineffective
+  states_if_pep_ineffective,
+  agent_groups = integer(0)
 )
 }
 \arguments{
@@ -43,6 +44,12 @@ immunoglobulin (IG).}
 \item{ig_window}{Time window for immunoglobulin (IG) administration.}
 
 \item{target_states, states_if_pep_effective, states_if_pep_ineffective}{Integer vectors of target and destination states (see details).}
+
+\item{agent_groups}{Optional integer vector of group (e.g. classroom)
+membership, with one entry per agent, in agent order. When supplied, PEP is
+offered only within the group(s) of the identified case(s). Defaults to
+\code{integer(0)}, meaning the whole population is treated as a single exposed
+group (see details).}
 }
 \value{
 An object of class \code{epiworld_globalevent} representing the measles PEP
@@ -87,6 +94,25 @@ distribution with mean \code{ig_half_life_mean} and standard deviation
 from the agent, and they are again eligible for PEP if they
 are exposed again.
 }
+\section{Who is offered PEP}{
+Public health rarely has time to trace individual contacts. When a case is
+identified, the exposed group is treated as exposed as a whole, and the only
+question is how long ago that exposure started. By default that group is the
+entire population, which is appropriate for a single classroom but
+misleading when the population is really a set of separate communities.
+
+\code{agent_groups} circumscribes the response. Supply one group label per agent,
+in agent order, and PEP is offered only to agents sharing the label of an
+identified case. Labels are arbitrary integers: agents with the same label
+are in the same group. For example, with 60 agents in three classrooms,
+\code{agent_groups = rep(1:3, each = 20)}. A vector whose length is neither zero
+nor the number of agents is an error, since it is matched to agents by
+position.
+
+Each group is also timed from its own exposure, so a case identified in one
+classroom does not shorten (or extend) the window available to another.
+}
+
 \seealso{
 \link[epiworldR:global-events]{epiworldR::global-events}
 }
