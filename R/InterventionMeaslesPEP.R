@@ -17,6 +17,11 @@
 #' @param ig_window Time window for immunoglobulin (IG) administration.
 #' @param target_states,states_if_pep_effective,states_if_pep_ineffective
 #' Integer vectors of target and destination states (see details).
+#' @param agent_groups Optional integer vector of group (e.g. classroom)
+#' membership, with one entry per agent, in agent order. When supplied, PEP is
+#' offered only within the group(s) of the identified case(s). Defaults to
+#' `integer(0)`, meaning the whole population is treated as a single exposed
+#' group (see details).
 #'
 #' @details
 #' This functions creates a global event that represents a post-exposure
@@ -56,6 +61,25 @@
 #' from the agent, and they are again eligible for PEP if they
 #' are exposed again.
 #'
+#' # Who is offered PEP
+#'
+#' Public health rarely has time to trace individual contacts. When a case is
+#' identified, the exposed group is treated as exposed as a whole, and the only
+#' question is how long ago that exposure started. By default that group is the
+#' entire population, which is appropriate for a single classroom but
+#' misleading when the population is really a set of separate communities.
+#'
+#' `agent_groups` circumscribes the response. Supply one group label per agent,
+#' in agent order, and PEP is offered only to agents sharing the label of an
+#' identified case. Labels are arbitrary integers: agents with the same label
+#' are in the same group. For example, with 60 agents in three classrooms,
+#' `agent_groups = rep(1:3, each = 20)`. A vector whose length is neither zero
+#' nor the number of agents is an error, since it is matched to agents by
+#' position.
+#'
+#' Each group is also timed from its own exposure, so a case identified in one
+#' classroom does not shorten (or extend) the window available to another.
+#'
 #' @returns
 #' An object of class `epiworld_globalevent` representing the measles PEP
 #' intervention.
@@ -73,7 +97,8 @@ InterventionMeaslesPEP <- function(
   ig_window,
   target_states,
   states_if_pep_effective,
-  states_if_pep_ineffective
+  states_if_pep_ineffective,
+  agent_groups = integer(0)
 ) {
 
   stopifnot_character(name)
@@ -88,6 +113,12 @@ InterventionMeaslesPEP <- function(
   stopifnot_int(states_if_pep_effective, lb = 0)
   stopifnot_int(states_if_pep_ineffective, lb = 0)
 
+  # Labels are arbitrary, so no bounds. The length is only checked against
+  # the model when the intervention first runs, since the number of agents
+  # is not known here.
+  if (length(agent_groups))
+    stopifnot_int(agent_groups)
+
   InterventionMeaslesPEP_cpp(
     name,
     mmr_efficacy,
@@ -100,7 +131,8 @@ InterventionMeaslesPEP <- function(
     ig_window,
     target_states,
     states_if_pep_effective,
-    states_if_pep_ineffective
+    states_if_pep_ineffective,
+    as.integer(agent_groups)
   ) |>
     structure(class = c("epiworld_globalevent"))
 

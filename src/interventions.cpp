@@ -20,7 +20,8 @@ SEXP InterventionMeaslesPEP_cpp(
     double ig_window,
     std::vector< int > target_states,
     std::vector< int > states_if_pep_effective,
-    std::vector< int > states_if_pep_ineffective
+    std::vector< int > states_if_pep_ineffective,
+    std::vector< int > agent_groups
 ) {
 
   cpp11::external_pointer<measles::InterventionMeaslesPEP<>> ptr(
@@ -36,7 +37,8 @@ SEXP InterventionMeaslesPEP_cpp(
           ig_window,
           target_states,
           states_if_pep_effective,
-          states_if_pep_ineffective
+          states_if_pep_ineffective,
+          agent_groups
       )
   );
 
