@@ -1,4 +1,4 @@
-# measles 0.3.2-0
+# measles 0.4.0-0
 
 ## User visible changes
 
