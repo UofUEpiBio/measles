@@ -16,6 +16,16 @@
 
 <!-- badges: end -->
 
+
+<!-- how-to-cite -->
+> [!NOTE]
+> **How to cite measles.** If you use **measles** in published work, please cite it:
+>
+> Vega Yon G. *measles: Measles Epidemiological Models*. doi:[10.32614/CRAN.package.measles](https://doi.org/10.32614/CRAN.package.measles)
+>
+> Run `citation("measles")` in R for the BibTeX entry.
+<!-- how-to-cite -->
+
 ## Overview
 
 The **measles** package is a specialized spinoff from
