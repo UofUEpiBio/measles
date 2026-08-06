@@ -8,6 +8,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+<!-- how-to-cite -->
+::: {.callout-note}
+## How to cite
+
+If you use **measles** in published work, please cite it — run
+`citation("measles")` in R for the full entry.
+:::
+<!-- how-to-cite -->
+
 ::: {.callout-warning title="Warning"}
 The data and model used in this vignette are for demonstration purposes only and do not reflect real-world conditions accurately. As in most agent-based models, the simulations performed here are simplified representations of the reality and provide rich information for scenario modeling, but not necessarily for forecasting or parameter estimation.
 :::

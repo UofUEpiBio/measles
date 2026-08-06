@@ -8,6 +8,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+<!-- how-to-cite -->
+::: {.callout-note}
+## How to cite
+
+If you use **measles** in published work, please cite it — run
+`citation("measles")` in R for the full entry.
+:::
+<!-- how-to-cite -->
+
 This vignette illustrates the usage of `ModelMeaslesSchool` and `InterventionMeaslesPEP` to model measles transmission in a school setting and the impact of post-exposure prophylaxis (PEP) on outbreak dynamics. The model features a population of 1000 individuals with a vaccination coverage of 80% and an initial prevalence of 1 case. We will run multiple simulations to analyze the outbreak size distribution and the usage of PEP as an intervention tool.
 
 This example uses immunoglobulin (IG) to illustrate how to model a tool with a half-life, which is relevant for IG as its protective effect wanes over time. However, the use of IG for measles PEP is generally limited to specific populations (e.g., immunocompromised individuals, infants under 6 months) and is not commonly used in school settings. Therefore, while we include IG in this example for demonstration purposes, it may not be the most realistic choice for modeling PEP in a school-based transmission scenario. In practice, the MMR vaccine is more commonly used for PEP in school settings, and the parameters of the `InterventionMeaslesPEP` function can be adjusted accordingly to reflect this.

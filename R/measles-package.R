@@ -10,6 +10,9 @@
 #' @import epiworldR
 #' @importFrom graphics boxplot plot
 #' @keywords internal
+#' @section How to cite:
+#' If you use \pkg{measles} in published work, please cite it. Run
+#' \code{citation("measles")} in R for the full entry.
 "_PACKAGE"
 
 #' Version of the measles C++ code
