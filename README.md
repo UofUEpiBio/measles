@@ -2,7 +2,7 @@
 
 <!-- README.md is generated from README.qmd. Please edit that file -->
 
-# measles <img src="man/figures/logo.png" width="200px" alt="epiworld logo" align="right">
+# measles <img src="man/figures/logo.png" height="200px" alt="epiworld logo" align="right" style="height: 200px; text-align: right;"/>
 
 <!-- badges: start -->
 
@@ -16,15 +16,25 @@
 
 <!-- badges: end -->
 
-
-<!-- how-to-cite -->
-> [!NOTE]
-> **How to cite measles.** If you use **measles** in published work, please cite it:
->
-> Vega Yon G. *measles: Measles Epidemiological Models*. doi:[10.32614/CRAN.package.measles](https://doi.org/10.32614/CRAN.package.measles)
->
-> Run `citation("measles")` in R for the BibTeX entry.
-<!-- how-to-cite -->
+``` r
+citation(package="measles")
+#> To cite measles in publications use:
+#> 
+#>   Vega Yon G, Toth D, Wagoner J, Banks O (2026). _measles: Measles
+#>   Epidemiological Models_. doi:10.32614/CRAN.package.measles
+#>   <https://doi.org/10.32614/CRAN.package.measles>, R package version
+#>   0.4.0-0, <https://github.com/UofUEpiBio/measles>.
+#> 
+#> Please also cite the underlying epiworldR framework:
+#> 
+#>   Meyer D, Vega Yon GG (2023). epiworldR: Fast Agent-Based Epi Models.
+#>   Journal of Open Source Software, 8(90), 5781.
+#>   https://doi.org/10.21105/joss.05781
+#> 
+#> To see these entries in BibTeX format, use 'print(<citation>,
+#> bibtex=TRUE)', 'toBibtex(.)', or set
+#> 'options(citation.bibtex.max=999)'.
+```
 
 ## Overview
 
@@ -105,6 +115,7 @@ library(measles)
 #> Thank you for using epiworldR! Please consider citing it in your work.
 #> You can find the citation information by running
 #>   citation("epiworldR")
+#> Using measles in your research? Please cite it: citation("measles")
 
 # Create a measles model for a school with 500 students
 model_school <- ModelMeaslesSchool(
@@ -139,7 +150,7 @@ summary(model_school)
 #> ________________________________________________________________________________
 #> ________________________________________________________________________________
 #> SIMULATION STUDY
-#>
+#> 
 #> Name of the model   : (none)
 #> Population size     : 500
 #> Agents' data        : (none)
@@ -147,21 +158,21 @@ summary(model_school)
 #> Days (duration)     : 200 (of 200)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 1.00ms
-#> Total elapsed t     : 186.00ms (400 runs)
-#> Last run speed      : 52.71 million agents x day / second
-#> Average run speed   : 214.04 million agents x day / second
+#> Total elapsed t     : 180.00ms (400 runs)
+#> Last run speed      : 63.94 million agents x day / second
+#> Average run speed   : 221.14 million agents x day / second
 #> Rewiring            : off
 #> Last seed used      : 1264933217
-#>
+#> 
 #> Global events:
 #>  - Quarantine process (runs daily)
-#>
+#> 
 #> Virus(es):
 #>  - Measles
-#>
+#> 
 #> Tool(s):
 #>  - MMR
-#>
+#> 
 #> Model parameters:
 #>  - (IGNORED) Vax improved recovery : 0.0e+00
 #>  - Contact rate                    : 2.7778
@@ -177,7 +188,7 @@ summary(model_school)
 #>  - Transmission rate               : 0.9000
 #>  - Vaccination rate                : 0.7000
 #>  - Vax efficacy                    : 0.9700
-#>
+#> 
 #> Distribution of the population at time 200:
 #>   - ( 0) Susceptible             : 499 -> 350
 #>   - ( 1) Latent                  :   1 -> 0
@@ -191,7 +202,7 @@ summary(model_school)
 #>   - ( 9) Quarantined Recovered   :   0 -> 0
 #>   - (10) Hospitalized            :   0 -> 0
 #>   - (11) Recovered               :   0 -> 150
-#>
+#> 
 #> Transition Probabilities:
 #>  - Susceptible              1.00  0.00     -     -     -     -     -     -     -     -     -     -
 #>  - Latent                      -  0.92  0.08     -     -     -     -     -     -     -     -     -
@@ -314,7 +325,7 @@ summary(measles_model)
 #> ________________________________________________________________________________
 #> ________________________________________________________________________________
 #> SIMULATION STUDY
-#>
+#> 
 #> Name of the model   : Measles with Mixing and Quarantine
 #> Population size     : 9000
 #> Agents' data        : (none)
@@ -323,20 +334,20 @@ summary(measles_model)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 0.00s
 #> Total elapsed t     : 1.00s (400 runs)
-#> Last run speed      : 82.84 million agents x day / second
-#> Average run speed   : 323.49 million agents x day / second
+#> Last run speed      : 46.30 million agents x day / second
+#> Average run speed   : 225.80 million agents x day / second
 #> Rewiring            : off
 #> Last seed used      : 1428497254
-#>
+#> 
 #> Global events:
 #>  - Quarantine process (runs daily)
-#>
+#> 
 #> Virus(es):
 #>  - Measles
-#>
+#> 
 #> Tool(s):
 #>  - MMR
-#>
+#> 
 #> Model parameters:
 #>  - (IGNORED) Vax improved recovery : 0.5000
 #>  - Contact tracing days window     : 4.0000
@@ -351,10 +362,11 @@ summary(measles_model)
 #>  - Quarantine period               : 14.0000
 #>  - Quarantine willingness          : 1.0000
 #>  - Rash period                     : 3.0000
+#>  - Rash reduction contact rate     : 1.0000
 #>  - Transmission rate               : 0.9000
 #>  - Vaccination rate                : 0.9500
 #>  - Vax efficacy                    : 0.9700
-#>
+#> 
 #> Distribution of the population at time 100:
 #>   - ( 0) Susceptible             : 8999 -> 8365
 #>   - ( 1) Latent                  :    1 -> 99
@@ -368,7 +380,7 @@ summary(measles_model)
 #>   - ( 9) Quarantined Recovered   :    0 -> 0
 #>   - (10) Hospitalized            :    0 -> 38
 #>   - (11) Recovered               :    0 -> 348
-#>
+#> 
 #> Transition Probabilities:
 #>  - Susceptible              1.00  0.00     -     -     -     -  0.00  0.00     -     -     -     -
 #>  - Latent                      -  0.89  0.08     -     -     -  0.03     -  0.00     -     -     -
