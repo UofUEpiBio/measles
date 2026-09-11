@@ -14,7 +14,22 @@ bibentry(
   bibtype = "Manual",
   title   = "{{measles: Measles Epidemiological Models}}",
   author  = c(
-    person("George", "Vega Yon", comment = c(ORCID = "0000-0002-3171-0844"))
+    person(
+      "George", "Vega Yon", email = "g.vegayon@gmail.com",
+      comment = c(ORCID = "0000-0002-3171-0844")
+    ),
+    person(
+      "Damon", "Toth", email = "damon.toth@hsc.utah.edu",
+      comment = c(ORCID = "0000-0001-7393-4814")
+    ),
+    person(
+      "Jake", "Wagoner", email = "jakew@sci.utah.edu",
+      comment = c(ORCID = "0009-0000-5053-2281")
+    ),
+    person(
+      "Olivia", "Banks", email = "olivia.banks@utah.edu",
+      comment = c(ORCID = "0009-0008-7611-6030")
+    )
   ),
   year    = year,
   note    = note,
