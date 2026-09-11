@@ -30,6 +30,8 @@
 
 ## Internal changes
 
+* Added repository citation metadata for GitHub and other CFF consumers.
+
 * Added pkgdown author metadata linking George Vega Yon's website.
 
 * The Measles models were removed from `{epiworldR}`. This streamlines the development process. So, if we need to update Measles related models, we only need to update the `{measles}` R package, not `{epiworldR}` and `{measles}`.

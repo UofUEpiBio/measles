@@ -52,3 +52,4 @@ revdep/
 
 data-raw
 paper
+^CITATION\.cff$
