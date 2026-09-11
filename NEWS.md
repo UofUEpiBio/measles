@@ -30,6 +30,8 @@
 
 ## Internal changes
 
+* Updated package citation metadata to include all people listed in `Authors@R`.
+
 * Added repository citation metadata for GitHub and other CFF consumers.
 
 * Added pkgdown author metadata linking George Vega Yon's website.

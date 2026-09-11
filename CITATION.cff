@@ -17,6 +17,18 @@ authors:
   given-names: George
   email: g.vegayon@gmail.com
   orcid: https://orcid.org/0000-0002-3171-0844
+- family-names: Toth
+  given-names: Damon
+  email: damon.toth@hsc.utah.edu
+  orcid: https://orcid.org/0000-0001-7393-4814
+- family-names: Wagoner
+  given-names: Jake
+  email: jakew@sci.utah.edu
+  orcid: https://orcid.org/0009-0000-5053-2281
+- family-names: Banks
+  given-names: Olivia
+  email: olivia.banks@utah.edu
+  orcid: https://orcid.org/0009-0008-7611-6030
 preferred-citation:
   type: manual
   title: 'measles: Measles Epidemiological Models'
@@ -25,6 +37,18 @@ preferred-citation:
     given-names: George
     orcid: https://orcid.org/0000-0002-3171-0844
     email: g.vegayon@gmail.com
+  - family-names: Toth
+    given-names: Damon
+    email: damon.toth@hsc.utah.edu
+    orcid: https://orcid.org/0000-0001-7393-4814
+  - family-names: Wagoner
+    given-names: Jake
+    email: jakew@sci.utah.edu
+    orcid: https://orcid.org/0009-0000-5053-2281
+  - family-names: Banks
+    given-names: Olivia
+    email: olivia.banks@utah.edu
+    orcid: https://orcid.org/0009-0008-7611-6030
   year: '2026'
   notes: R package version 0.4.0-0
   url: https://github.com/UofUEpiBio/measles
