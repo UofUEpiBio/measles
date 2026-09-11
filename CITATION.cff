@@ -1,0 +1,57 @@
+cff-version: 1.2.0
+message: 'To cite package "measles" in publications use:'
+type: software
+license: MIT
+title: 'measles: Measles Epidemiological Models'
+version: 0.4.0-0
+doi: 10.32614/CRAN.package.measles
+abstract: A specialized collection of measles epidemiological models built on the
+  'epiworldR' framework. This package is a spinoff from 'epiworldR' focusing specifically
+  on measles transmission dynamics. It includes models for school settings with quarantine
+  and isolation policies, mixing models with population groups, and risk-based quarantine
+  strategies. The models use Agent-Based Models (ABM) with a fast 'C++' backend from
+  the 'epiworld' library. Ideal for studying measles outbreaks, vaccination strategies,
+  and intervention policies.
+authors:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+  orcid: https://orcid.org/0000-0002-3171-0844
+preferred-citation:
+  type: manual
+  title: 'measles: Measles Epidemiological Models'
+  authors:
+  - family-names: Vega Yon
+    given-names: George
+    orcid: https://orcid.org/0000-0002-3171-0844
+    email: g.vegayon@gmail.com
+  year: '2026'
+  notes: R package version 0.4.0-0
+  url: https://github.com/UofUEpiBio/measles
+  doi: 10.32614/CRAN.package.measles
+repository: https://CRAN.R-project.org/package=measles
+repository-code: https://github.com/UofUEpiBio/measles
+url: https://github.com/UofUEpiBio/measles
+contact:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+  orcid: https://orcid.org/0000-0002-3171-0844
+references:
+- type: article
+  title: 'epiworldR: Fast Agent-Based Epi Models'
+  authors:
+  - family-names: Meyer
+    given-names: Derek
+    orcid: https://orcid.org/0009-0005-1350-6988
+  - family-names: Vega Yon
+    given-names: George
+    orcid: https://orcid.org/0000-0002-3171-0844
+  journal: Journal of Open Source Software
+  year: '2023'
+  month: '10'
+  volume: '8'
+  issue: '90'
+  doi: 10.21105/joss.05781
+  url: https://doi.org/10.21105/joss.05781
+  start: '5781'
