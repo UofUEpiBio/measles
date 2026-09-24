@@ -2,6 +2,8 @@
 
 ## User visible changes
 
+* Updated the GitHub installation instructions in the README to use `pak::pkg_install("UofUEpiBio/measles")` instead of `devtools::install_github()`.
+
 * The function `InterventionMeaslesPEP()` implements post-exposure prophylaxis featuring both MMR and IG. The process is highly configurable and can be attached to the `ModelMeaslesSchool()`. Not available yet for other models.
 
 * Fixed the PEP timelines. `mmr_window`/`ig_window` are now measured from the exposure to the day the case is identified, i.e. whether there is still time to intervene. The reference date is the *first* day the school encountered the index case on or after its infectious-onset date (rash onset minus the prodromal period); contact tracing is used only to date that first encounter, so if the contact rate is zeroed out on some days (e.g. weekends, via a global event) the first day actually in session anchors the window. When several cases are identified on the same day, the earliest of those first encounters applies. Previously the windows were compared against the index case's infectious-onset date and gated on the specific day a given classmate met the index, so realistic windows (e.g. `mmr_window = 3`) did not behave as intended.
