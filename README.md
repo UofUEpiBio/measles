@@ -87,8 +87,8 @@ The package includes three measles-specific models:
 You can install the measles package from GitHub:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("UofUEpiBio/measles")
+# install.packages("pak")
+pak::pkg_install("UofUEpiBio/measles")
 ```
 
 Or from <a href="https://uofuepibio.r-universe.dev/"
