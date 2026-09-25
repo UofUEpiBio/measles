@@ -1,5 +1,11 @@
 # Developing `measles`
 
+## Community guidelines
+
+Third-party contributions are welcome through GitHub pull requests. For
+bug reports, questions, or support requests, please open a GitHub issue:
+<https://github.com/UofUEpiBio/measles/issues>.
+
 ## Versioning
 
 We use [Semantic Versioning](https://semver.org): MAJOR.MINOR.PATCH.

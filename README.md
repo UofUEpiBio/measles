@@ -444,7 +444,9 @@ citation("epiworldR")
 
 Contributions are welcome! Please see the [`measles` development
 guidelines](https://github.com/UofUEpiBio/measles/blob/main/DEVELOPMENT.md)
-for information on how to contribute.
+for information on how to contribute. To report a bug, request support,
+or ask a question, please open an issue at
+<https://github.com/UofUEpiBio/measles/issues>.
 
 ## Acknowledgments
 
