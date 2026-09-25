@@ -28,8 +28,6 @@
 
 * `get_contact_matrix()` and `set_contact_matrix()` are now provided by `{epiworldR}` (>= 0.15.1) and work directly on the measles mixing models. The package's own copies were removed so they no longer mask the `{epiworldR}` versions.
 
-* Expanded community guidelines in the documentation with contribution, issue-reporting, and support instructions via the GitHub repository.
-
 ## Internal changes
 
 * Updated package citation metadata to include all people listed in `Authors@R`.
