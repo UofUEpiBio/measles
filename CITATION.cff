@@ -3,7 +3,7 @@ message: 'To cite package "measles" in publications use:'
 type: software
 license: MIT
 title: 'measles: Measles Epidemiological Models'
-version: 0.4.0-0
+version: 0.4.1-0
 doi: 10.32614/CRAN.package.measles
 abstract: A specialized collection of measles epidemiological models built on the
   'epiworldR' framework. This package is a spinoff from 'epiworldR' focusing specifically
@@ -50,7 +50,7 @@ preferred-citation:
     email: olivia.banks@utah.edu
     orcid: https://orcid.org/0009-0008-7611-6030
   year: '2026'
-  notes: R package version 0.4.0-0
+  notes: R package version 0.4.1-0
   url: https://github.com/UofUEpiBio/measles
   doi: 10.32614/CRAN.package.measles
 repository: https://CRAN.R-project.org/package=measles
