@@ -95,7 +95,22 @@ md <- format(params, markdown = TRUE)
 expect_equal(md[tr, "Parameter (argument)"], "Transmission rate (`transmission_rate`)")
 expect_equal(md[tr, "Default (units)"], "`0.9` (per contact)")
 expect_false("doi_or_url" %in% colnames(md))
-expect_true(grepl("[link](https://", md[tr, "citation"], fixed = TRUE))
+expect_true(grepl("[link](https://", md[tr, "Source (and notes)"], fixed = TRUE))
+
+# Notes are folded into the source
+expect_false(any(c("citation", "notes") %in% colnames(fmt)))
+expect_equal(
+  fmt[tr, "Source (and notes)"],
+  paste0(params$citation[tr], ". Note: ", params$notes[tr])
+)
+no_note <- which(!nzchar(params$notes))[1]
+expect_equal(fmt[no_note, "Source (and notes)"], params$citation[no_note])
+
+# The link goes right after the citation, before the note
+expect_true(grepl(
+  paste0("([link](", params$doi_or_url[tr], ")). *Note:* "),
+  md[tr, "Source (and notes)"], fixed = TRUE
+))
 
 # Pairs are fused only when both columns are present
 sub <- format(params[, c("r_argument", "default")])

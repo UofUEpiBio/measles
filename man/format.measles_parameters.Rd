@@ -14,7 +14,7 @@
 
 \item{markdown}{Logical scalar. If \code{TRUE}, arguments and defaults are
 formatted as code, \code{citation} links to \code{doi_or_url} (which is then
-dropped), and \code{|} is escaped, so the result can be written as a Markdown
+dropped), "Note:" is in italics, and \code{|} is escaped, so the result can be written as a Markdown
 table.}
 
 \item{...}{Further arguments passed to \code{\link[=print.data.frame]{print.data.frame()}}.}
@@ -29,8 +29,10 @@ table.}
 Fuses the columns of \code{\link[=measles_parameters]{measles_parameters()}} for display: \code{parameter} and
 \code{r_argument} become \code{Parameter (argument)} (e.g., "Transmission rate
 (transmission_rate)"), and \code{default} and \code{units} become \code{Default (units)}
-(e.g., "0.9 (per contact)"). Each pair is fused only when both of its
-columns are present, so subsets of the table print as well.
+(e.g., "0.9 (per contact)"), and \code{citation} and \code{notes} become
+\verb{Source (and notes)} (e.g., "Assumption. Note: ..."). Each pair is fused
+only when both of its columns are present, so subsets of the table print
+as well.
 }
 \examples{
 params <- measles_parameters("ModelMeaslesSchool")

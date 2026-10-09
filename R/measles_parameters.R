@@ -79,13 +79,15 @@ measles_parameters <- function(model = NULL) {
 #' Fuses the columns of [measles_parameters()] for display: `parameter` and
 #' `r_argument` become `Parameter (argument)` (e.g., "Transmission rate
 #' (transmission_rate)"), and `default` and `units` become `Default (units)`
-#' (e.g., "0.9 (per contact)"). Each pair is fused only when both of its
-#' columns are present, so subsets of the table print as well.
+#' (e.g., "0.9 (per contact)"), and `citation` and `notes` become
+#' `Source (and notes)` (e.g., "Assumption. Note: ..."). Each pair is fused
+#' only when both of its columns are present, so subsets of the table print
+#' as well.
 #'
 #' @param x An object of class `measles_parameters`.
 #' @param markdown Logical scalar. If `TRUE`, arguments and defaults are
 #' formatted as code, `citation` links to `doi_or_url` (which is then
-#' dropped), and `|` is escaped, so the result can be written as a Markdown
+#' dropped), "Note:" is in italics, and `|` is escaped, so the result can be written as a Markdown
 #' table.
 #' @param ... Further arguments passed to [print.data.frame()].
 #' @returns
@@ -125,23 +127,33 @@ format.measles_parameters <- function(x, markdown = FALSE, ...) {
 
   }
 
+  if (markdown && all(c("citation", "doi_or_url") %in% colnames(x))) {
+    x$citation <- ifelse(
+      nzchar(x$doi_or_url),
+      paste0(x$citation, " ([link](", x$doi_or_url, "))"),
+      x$citation
+    )
+    x$doi_or_url <- NULL
+  }
+
   x <- fuse(x, "parameter", "r_argument", "Parameter (argument)", FALSE, TRUE)
   x <- fuse(x, "default", "units", "Default (units)", TRUE, FALSE)
 
-  if (markdown) {
-
-    if (all(c("citation", "doi_or_url") %in% colnames(x))) {
-      x$citation <- ifelse(
-        nzchar(x$doi_or_url),
-        paste0(x$citation, " ([link](", x$doi_or_url, "))"),
-        x$citation
-      )
-      x$doi_or_url <- NULL
-    }
-
-    x[] <- lapply(x, function(v) gsub("|", "\\|", v, fixed = TRUE))
-
+  if (all(c("citation", "notes") %in% colnames(x))) {
+    x$citation <- ifelse(
+      nzchar(x$notes),
+      paste0(
+        x$citation, ifelse(grepl("[.!?]$", x$citation), " ", ". "),
+        if (markdown) "*Note:* " else "Note: ", x$notes
+      ),
+      x$citation
+    )
+    x$notes <- NULL
+    colnames(x)[colnames(x) == "citation"] <- "Source (and notes)"
   }
+
+  if (markdown)
+    x[] <- lapply(x, function(v) gsub("|", "\\|", v, fixed = TRUE))
 
   x
 
