@@ -1,0 +1,188 @@
+---
+title: "Parameters and literature references"
+author: "George G. Vega Yon, Ph.D."
+date: today
+vignette: >
+  %\VignetteIndexEntry{Parameters and literature references}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+references:
+- id: guerra2017
+  type: article-journal
+  title: "The basic reproduction number (R0) of measles: a systematic review"
+  author:
+  - family: Guerra
+    given: Fiona M.
+  - literal: "others"
+  container-title: The Lancet Infectious Diseases
+  volume: 17
+  issue: 12
+  page: e420-e428
+  issued:
+    date-parts:
+    - - 2017
+  DOI: 10.1016/S1473-3099(17)30307-9
+- id: diekmann2010
+  type: article-journal
+  title: "The construction of next-generation matrices for compartmental epidemic models"
+  author:
+  - family: Diekmann
+    given: O.
+  - family: Heesterbeek
+    given: J. A. P.
+  - family: Roberts
+    given: M. G.
+  container-title: Journal of The Royal Society Interface
+  volume: 7
+  issue: 47
+  page: 873-885
+  issued:
+    date-parts:
+    - - 2010
+  DOI: 10.1098/rsif.2009.0386
+- id: jones2026
+  type: article-journal
+  title: "Measles Hospitalizations in Utah, 2025–2026"
+  author:
+  - family: Jones
+    given: Anna
+  - literal: "others"
+  container-title: NEJM Evidence
+  volume: 5
+  issue: 8
+  issued:
+    date-parts:
+    - - 2026
+  DOI: 10.1056/EVIDpha2600141
+- id: wang2026
+  type: article-journal
+  title: "Characteristics of Patients Hospitalized with Measles During an Outbreak — West Texas, January–March 2025"
+  author:
+  - family: Wang
+    given: Dennis
+  - literal: "others"
+  container-title: MMWR. Morbidity and Mortality Weekly Report
+  volume: 75
+  issue: 20
+  page: 252-257
+  issued:
+    date-parts:
+    - - 2026
+  DOI: 10.15585/mmwr.mm7520a1
+---
+
+<!-- how-to-cite -->
+::: {.callout-note}
+## How to cite
+
+If you use **measles** in published work, please cite it — run
+`citation("measles")` in R for the full entry.
+:::
+<!-- how-to-cite -->
+
+This vignette documents the parameters of the measles models in this package: their default values, where those values come from, and how far each has been verified. The same information is available as a data frame through `measles_parameters()`, which reads the file `inst/extdata/measles_parameters.csv`. That file is the canonical parameter table for our measles projects; projects that use different values should list them next to the package defaults and explain why.
+
+```{r}
+#| label: setup
+library(measles)
+params <- measles_parameters()
+```
+
+## The parameter table
+
+Each row of the table is a parameter, with its default value, units, and source. The current edition of the Utah DHHS Measles Disease Plan cited here was last updated on March 26, 2026 (footer dated February 2026).
+
+```{r}
+#| label: params-table
+#| echo: false
+#| output: asis
+cols <- c(
+  "parameter", "r_argument", "default", "units", "citation", "notes"
+)
+tab <- params[, cols]
+tab$r_argument <- ifelse(
+  nzchar(tab$r_argument), paste0("`", tab$r_argument, "`"), ""
+)
+tab$default <- ifelse(
+  nzchar(tab$default), paste0("`", tab$default, "`"), ""
+)
+tab$citation <- ifelse(
+  nzchar(params$doi_or_url),
+  paste0(tab$citation, " ([link](", params$doi_or_url, "))"),
+  tab$citation
+)
+tab[] <- lapply(tab, function(x) gsub("|", "\\|", x, fixed = TRUE))
+
+cat(
+  paste0("| ", paste(cols, collapse = " | "), " |"),
+  paste0("|", paste(rep("---", length(cols)), collapse = "|"), "|"),
+  paste0("| ", do.call(paste, c(tab, sep = " | ")), " |"),
+  sep = "\n"
+)
+```
+
+The `models` column lists the functions that take each argument. For instance, the parameters of `ModelMeaslesSchool()` are:
+
+```{r}
+#| label: school-params
+measles_parameters("ModelMeaslesSchool")[, c("r_argument", "default", "units")]
+```
+
+`InterventionMeaslesPEP()` has no default values; the table lists the values used in `vignette("school")`.
+
+## Calibrating to R0
+
+Measles is highly transmissible, with a basic reproduction number (R0) usually reported between 12 and 18 [@guerra2017]. Our models target R0 = 15, the midpoint of that range, which implies a herd-immunity threshold of $1 - 1/R_0 \approx 93\%$.
+
+Instead of estimating both the transmission probability and the contact rate, we fix the transmission probability at a high value (0.9, consistent with the Utah DHHS plan statement that 90% of susceptible contacts develop disease) and calibrate the number of contacts to match the target R0.
+
+In `ModelMeaslesSchool()`, agents are infectious during the prodromal period only (detected cases with rash are isolated), so
+
+$$
+R_0 = p_t \times c \times D_p,
+$$
+
+where $p_t$ is `transmission_rate`, $c$ is `contact_rate`, and $D_p$ is `prodromal_period`. The default contact rate solves this equation for R0 = 15:
+
+```{r}
+#| label: school-contact-rate
+15 / 0.9 / 4
+```
+
+In the mixing models, the contact matrix holds the expected number of contacts between groups. The next-generation-matrix method [@diekmann2010] gives R0 as the spectral radius of the matrix of expected secondary infections. `calibrate_mixing_model()` finds the factor that scales the contact matrix so it matches the target R0. When agents with rash are not fully isolated (`rash_reduction_contact_rate < 1` in `ModelMeaslesMixing()`), the infectious period used for calibration is $D_p + (1 - r_r) D_r$, where $D_r$ is the rash period and $r_r$ is the reduction in contacts during rash.
+
+## Hospitalization: rate vs probability
+
+The models take a daily hospitalization **rate**, not a probability. During the rash period, an agent competes between hospitalization (rate $h$) and recovery (rate $1/D_r$), so the probability of being hospitalized is
+
+$$
+P(\text{hospitalization}) = \frac{h}{h + 1/D_r}.
+$$
+
+With the defaults, $h = 0.2$ and $D_r = 3$ days, this probability is:
+
+```{r}
+#| label: hosp-prob
+h <- 0.2
+rash_period <- 3
+h / (h + 1 / rash_period)
+```
+
+To match a target probability $p$, invert the formula, $h = p \times (1/D_r) / (1 - p)$. For example, recent analyses use $p = 0.1$, which is consistent with the 8% overall (9% among the unvaccinated) reported in Utah [@jones2026]:
+
+```{r}
+#| label: hosp-rate
+p_hosp <- 0.1
+p_hosp * (1 / rash_period) / (1 - p_hosp)
+```
+
+The default of 0.2 started as a conservative value agreed with Utah DHHS. For comparison, 18.5% of patients were hospitalized during the 2025 outbreak in West Texas [@wang2026].
+
+## Inactive parameters
+
+The argument `vax_reduction_recovery_rate` of `ModelMeaslesMixing()` is not active. The C++ model registers it as "(IGNORED) Vax improved recovery", and it has no effect on the simulations. `ModelMeaslesSchool()` no longer takes it.
+
+## References
+
+::: {#refs}
+:::

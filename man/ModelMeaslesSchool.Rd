@@ -48,7 +48,8 @@ match the basic reproductive number (R0) of 15 (see details).}
 \item{days_undetected}{Average number of days undetected. Detected cases
 are moved to isolation and trigger the quarantine process.}
 
-\item{hospitalization_rate}{Probability of hospitalization.}
+\item{hospitalization_rate}{Daily rate of hospitalization (not a
+probability; see details).}
 
 \item{hospitalization_period}{Average number of days in hospital.}
 
@@ -107,6 +108,12 @@ As of version 0.10.0, the parameter \code{vax_improved_recovery} has been remove
 and is no longer used (it never had a side effect). Future versions may not
 accept it.
 }
+\section{Parameter values and sources}{
+
+The defaults and their literature sources are listed in \code{\link[=measles_parameters]{measles_parameters()}}. See
+\code{vignette("parameters", package = "measles")} for a discussion.
+}
+
 \section{Model diagram}{
 
 \figure{measlesschool.png}{Measles School Diagram}
@@ -138,7 +145,7 @@ Individual Behaviors, and the Public Health Response in the Control of
 Measles Epidemics: An Agent-Based Simulation for California." \emph{BMC
 Public Health} 15 (1): 447. \doi{10.1186/s12889-015-1766-6}.
 
-"Measles Disease Plan." 2019. Utah Department of Health and Human
+"Measles Disease Plan." 2026. Utah Department of Health and Human
 Services. \url{https://epi.utah.gov/wp-content/uploads/Measles-disease-plan.pdf}.
 }
 \seealso{

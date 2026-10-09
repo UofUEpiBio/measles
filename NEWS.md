@@ -6,6 +6,14 @@
 
 * The column `vacc_rate` of the `short_creek` dataset is now the vaccination coverage (share vaccinated), as documented. Previously it was the share immune (coverage times a vaccine efficacy of 0.97, or 0.93 under age 5), so models that also set `vax_efficacy` applied the efficacy twice. The overall coverage is 51.9% (the share immune was 50.3%). The contact matrix `short_creek_matrix` is unchanged.
 
+* The new function `measles_parameters()` returns the canonical table of model parameters, with their defaults, units, literature ranges, and sources. The table is stored in `inst/extdata/measles_parameters.csv`, and the new vignette `vignette("parameters")` discusses it, including the R0 calibration and the conversion between hospitalization rate and probability. No default values changed.
+
+* Fixed the documented default vaccine efficacy of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` (0.97, not 0.99), and clarified that `hospitalization_rate` is a daily rate, not a probability. The model constructors now link to `measles_parameters()`.
+
+* The examples of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` now use the package defaults for the disease periods, hospitalization, and isolation, instead of values that contradicted them.
+
+* The documentation of `ModelMeaslesMixing()` now flags `vax_reduction_recovery_rate` as inactive: the model registers it as "(IGNORED) Vax improved recovery", and it has no effect on the simulation.
+
 * No changes to model arguments, parameter names, or defaults.
 
 ## Bug fixes
@@ -13,6 +21,8 @@
 * Through `{epiworldR}` 0.19.0, `run_multiple()` now runs every replicate when OpenMP grants fewer threads than requested (e.g., under `OMP_THREAD_LIMIT`). Previously the replicates assigned to the missing threads were silently skipped while still being counted.
 
 ## Internal changes
+
+* Added a test that checks `inst/extdata/measles_parameters.csv` against the arguments and defaults of the model constructors, so the parameter table cannot drift from the code.
 
 * Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at commit 87b2f98. The models now look up parameters with `EPI_PAR()`/`ParamRef` (faster, cached lookups), and the school and mixing models record contacts for contact tracing through epiworld's post-sampling callback (`make_contact_tracing_post_sampling()`) instead of calling `add_contact()` inline. The contacts recorded (and the day they are recorded) are the same as before.
 

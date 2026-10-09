@@ -15,7 +15,8 @@
 #' @param rash_period Average number of rash days.
 #' @param days_undetected Average number of days undetected. Detected cases
 #' are moved to isolation and trigger the quarantine process.
-#' @param hospitalization_rate Probability of hospitalization.
+#' @param hospitalization_rate Daily rate of hospitalization (not a
+#' probability; see details).
 #' @param hospitalization_period Average number of days in hospital.
 #' @param prop_vaccinated Proportion of the population vaccinated.
 #' @param quarantine_period Number of days an agent is in quarantine.
@@ -51,6 +52,10 @@
 #'
 #' The model uses hospitalization rates instead of probabilities. To learn
 #' more about this, see the documentation in [ModelMeaslesMixing()].
+#' @section Parameter values and sources:
+#' The defaults and their literature sources are listed in [measles_parameters()]. See
+#' `vignette("parameters", package = "measles")` for a discussion.
+#'
 #' @section Model diagram:
 #' ![](measlesschool.png "Measles School Diagram")
 #'
@@ -70,7 +75,7 @@
 #' Measles Epidemics: An Agent-Based Simulation for California." *BMC
 #' Public Health* 15 (1): 447. \doi{10.1186/s12889-015-1766-6}.
 #'
-#' "Measles Disease Plan." 2019. Utah Department of Health and Human
+#' "Measles Disease Plan." 2026. Utah Department of Health and Human
 #' Services. <https://epi.utah.gov/wp-content/uploads/Measles-disease-plan.pdf>.
 #' @export
 #' @family Models

@@ -9,11 +9,13 @@
 #' @param contact_matrix A numeric square matrix with the expected number of
 #' contacts per time step between population groups.
 #' @param vax_reduction_recovery_rate Double. Vaccine reduction in recovery
-#' rate (default: 0.5).
+#' rate (default: 0.5). **Not active:** the model registers it as
+#' "(IGNORED) Vax improved recovery", and it has no effect on the simulation.
+#' Future versions may deprecate it.
 #' @param transmission_rate Numeric scalar between 0 and 1. Probability of
 #' transmission (default: 0.9).
 #' @param prop_vaccinated Double. Proportion of population that is vaccinated.
-#' @param vax_efficacy Double. Vaccine efficacy rate (default: 0.99).
+#' @param vax_efficacy Double. Vaccine efficacy rate (default: 0.97).
 #' @param quarantine_period Integer. Number of days for quarantine
 #' (default: 21).
 #' @param quarantine_willingness Double. Proportion of agents willing to
@@ -24,7 +26,8 @@
 #' @param incubation_period Double. Duration of incubation period (default: 12).
 #' @param prodromal_period Double. Duration of prodromal period (default: 4).
 #' @param rash_period Double. Duration of rash period (default: 3).
-#' @param hospitalization_rate Double. Rate of hospitalization (default: 0.2).
+#' @param hospitalization_rate Double. Daily rate of hospitalization, not a
+#' probability (default: 0.2). See the Hospitalization Probability section.
 #' @param hospitalization_period Double. Period of hospitalization (default: 7).
 #' @param days_undetected Double. Number of days an infection goes undetected
 #' (default: 2).
@@ -46,7 +49,7 @@
 #'
 #' The model includes three distinct phases of measles infection: incubation,
 #' prodromal, and rash periods. Vaccination provides protection against
-#' infection and may reduce recovery time.
+#' infection.
 #'
 #' The [initial_states] function allows the user to set the initial state of the
 #' model. In particular, the user can specify how many of the non-infected
@@ -98,6 +101,10 @@
 #' h_rate <- p_hosp * (1/rash_days) / (1 - p_hosp)
 #' ```
 #'
+#' @section Parameter values and sources:
+#' The defaults and their literature sources are listed in [measles_parameters()]. See
+#' `vignette("parameters", package = "measles")` for a discussion.
+#'
 #' @section Model diagram:
 #' ![](measlesmixing.png "Measles Mixing Diagram")
 #' @returns
@@ -122,26 +129,17 @@
 #'
 #' N <- 9e3
 #'
+#' # Disease periods, vaccine efficacy, hospitalization, and isolation use the
+#' # package defaults (see measles_parameters()). The willingness and contact
+#' # tracing values are illustrative and lower than the defaults.
 #' measles_model <- ModelMeaslesMixing(
 #'   n                        = N,
 #'   prevalence               = 1 / N,
-#'   transmission_rate        = 0.9,
-#'   vax_efficacy             = 0.97,
-#'   vax_reduction_recovery_rate = 0.8,
-#'   incubation_period        = 10,
-#'   prodromal_period         = 3,
-#'   rash_period              = 7,
 #'   contact_matrix           = cmatrix,
-#'   hospitalization_rate     = 0.1,
-#'   hospitalization_period   = 10,
-#'   days_undetected          = 2,
-#'   quarantine_period        = 14,
-#'   quarantine_willingness   = 0.9,
-#'   isolation_willingness    = 0.8,
-#'   isolation_period         = 10,
 #'   prop_vaccinated          = 0.95,
-#'   contact_tracing_success_rate = 0.8,
-#'   contact_tracing_days_window = 4
+#'   quarantine_willingness   = 0.9,
+#'   isolation_willingness    = 0.9,
+#'   contact_tracing_success_rate = 0.8
 #' )
 #'
 #' # Adding the entities to the model
