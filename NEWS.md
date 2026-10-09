@@ -16,6 +16,8 @@
 
 * Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at commit 87b2f98. The models now look up parameters with `EPI_PAR()`/`ParamRef` (faster, cached lookups), and the school and mixing models record contacts for contact tracing through epiworld's post-sampling callback (`make_contact_tracing_post_sampling()`) instead of calling `add_contact()` inline. The contacts recorded (and the day they are recorded) are the same as before.
 
+* Added a test (`inst/tinytest/test-school-contact-tracing.R`) checking that the contacts sampled in `ModelMeaslesSchool()` are still recorded for contact tracing and drive `InterventionMeaslesPEP()`: PEP is offered after a case with recorded contacts is identified, and not offered when the case had no contacts.
+
 # measles 0.4.0-0
 
 ## User visible changes
