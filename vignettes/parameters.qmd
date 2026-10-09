@@ -116,8 +116,8 @@ tab <- format(
 )
 
 cat(
-  "| Parameter (argument) | Default (units) | Source | Notes |",
-  "|---|---|---|---|",
+  "| Parameter (argument) | Default (units) | Source (and notes) |",
+  "|---|---|---|",
   paste0("| ", do.call(paste, c(tab, sep = " | ")), " |"),
   sep = "\n"
 )

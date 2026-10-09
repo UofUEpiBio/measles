@@ -79,8 +79,10 @@ measles_parameters <- function(model = NULL) {
 #' Fuses the columns of [measles_parameters()] for display: `parameter` and
 #' `r_argument` become `Parameter (argument)` (e.g., "Transmission rate
 #' (transmission_rate)"), and `default` and `units` become `Default (units)`
-#' (e.g., "0.9 (per contact)"). Each pair is fused only when both of its
-#' columns are present, so subsets of the table print as well.
+#' (e.g., "0.9 (per contact)"), and `citation` and `notes` become
+#' `Source (and notes)` (e.g., "Assumption (Note: ...)"). Each pair is fused
+#' only when both of its columns are present, so subsets of the table print
+#' as well.
 #'
 #' @param x An object of class `measles_parameters`.
 #' @param markdown Logical scalar. If `TRUE`, arguments and defaults are
@@ -106,7 +108,8 @@ format.measles_parameters <- function(x, markdown = FALSE, ...) {
     if (markdown) ifelse(nzchar(v), paste0("`", v, "`"), v) else v
   }
 
-  fuse <- function(x, main, extra, label, wrap_main, wrap_extra) {
+  fuse <- function(x, main, extra, label, wrap_main, wrap_extra,
+                   prefix = "") {
 
     if (!all(c(main, extra) %in% colnames(x)))
       return(x)
@@ -116,7 +119,7 @@ format.measles_parameters <- function(x, markdown = FALSE, ...) {
 
     x[[main]] <- ifelse(
       nzchar(x[[main]]) & nzchar(x[[extra]]),
-      paste0(main_val, " (", extra_val, ")"),
+      paste0(main_val, " (", prefix, extra_val, ")"),
       main_val
     )
     x[[extra]] <- NULL
@@ -125,23 +128,24 @@ format.measles_parameters <- function(x, markdown = FALSE, ...) {
 
   }
 
+  if (markdown && all(c("citation", "doi_or_url") %in% colnames(x))) {
+    x$citation <- ifelse(
+      nzchar(x$doi_or_url),
+      paste0(x$citation, " ([link](", x$doi_or_url, "))"),
+      x$citation
+    )
+    x$doi_or_url <- NULL
+  }
+
   x <- fuse(x, "parameter", "r_argument", "Parameter (argument)", FALSE, TRUE)
   x <- fuse(x, "default", "units", "Default (units)", TRUE, FALSE)
+  x <- fuse(
+    x, "citation", "notes", "Source (and notes)", FALSE, FALSE,
+    prefix = "Note: "
+  )
 
-  if (markdown) {
-
-    if (all(c("citation", "doi_or_url") %in% colnames(x))) {
-      x$citation <- ifelse(
-        nzchar(x$doi_or_url),
-        paste0(x$citation, " ([link](", x$doi_or_url, "))"),
-        x$citation
-      )
-      x$doi_or_url <- NULL
-    }
-
+  if (markdown)
     x[] <- lapply(x, function(v) gsub("|", "\\|", v, fixed = TRUE))
-
-  }
 
   x
 
