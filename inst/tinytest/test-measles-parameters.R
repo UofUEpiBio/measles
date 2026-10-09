@@ -66,3 +66,39 @@ for (model in c(
   }
 
 }
+
+# ------------------------------------------------------------------------------
+# Printing fuses the argument and units columns
+# ------------------------------------------------------------------------------
+expect_inherits(params, "measles_parameters")
+expect_inherits(params[, c("parameter", "default")], "measles_parameters")
+
+fmt <- format(params)
+expect_true(is.data.frame(fmt))
+expect_false(inherits(fmt, "measles_parameters"))
+expect_equal(
+  colnames(fmt)[1:4],
+  c("Parameter (argument)", "models", "Default (units)", "type")
+)
+expect_false(any(c("r_argument", "units") %in% colnames(fmt)))
+
+tr <- which(params$r_argument == "transmission_rate")
+expect_equal(fmt[tr, "Parameter (argument)"], "Transmission rate (transmission_rate)")
+expect_equal(fmt[tr, "Default (units)"], "0.9 (per contact)")
+
+# Rows without an argument show the name only
+r0 <- which(params$parameter == "R0")
+expect_equal(fmt[r0, "Parameter (argument)"], "R0")
+
+# Markdown: code, links, and escaped pipes
+md <- format(params, markdown = TRUE)
+expect_equal(md[tr, "Parameter (argument)"], "Transmission rate (`transmission_rate`)")
+expect_equal(md[tr, "Default (units)"], "`0.9` (per contact)")
+expect_false("doi_or_url" %in% colnames(md))
+expect_true(grepl("[link](https://", md[tr, "citation"], fixed = TRUE))
+
+# Pairs are fused only when both columns are present
+sub <- format(params[, c("r_argument", "default")])
+expect_equal(colnames(sub), c("r_argument", "default"))
+
+expect_stdout(print(params[, c("parameter", "r_argument")]), "Parameter \\(argument\\)")

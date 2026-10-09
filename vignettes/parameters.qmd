@@ -107,28 +107,13 @@ Each row of the table is a parameter, with its default value, units, and source.
 #| label: params-table
 #| echo: false
 #| output: asis
-tab <- data.frame(
-  parameter = ifelse(
-    nzchar(params$r_argument),
-    paste0(params$parameter, " (`", params$r_argument, "`)"),
-    params$parameter
-  ),
-  default = ifelse(
-    nzchar(params$default),
-    paste0(
-      "`", params$default, "`",
-      ifelse(nzchar(params$units), paste0(" (", params$units, ")"), "")
-    ),
-    ""
-  ),
-  citation = ifelse(
-    nzchar(params$doi_or_url),
-    paste0(params$citation, " ([link](", params$doi_or_url, "))"),
-    params$citation
-  ),
-  notes = params$notes
+tab <- format(
+  params[, c(
+    "parameter", "r_argument", "default", "units", "citation",
+    "doi_or_url", "notes"
+  )],
+  markdown = TRUE
 )
-tab[] <- lapply(tab, function(x) gsub("|", "\\|", x, fixed = TRUE))
 
 cat(
   "| Parameter (argument) | Default (units) | Source | Notes |",

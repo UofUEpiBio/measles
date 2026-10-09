@@ -12,7 +12,8 @@ measles_parameters(model = NULL)
 used by that model are returned.}
 }
 \value{
-A data frame with one row per parameter.
+A data frame of class \code{measles_parameters}, with one row per
+parameter.
 }
 \description{
 Returns the canonical table of parameters used by the measles models,
@@ -42,10 +43,15 @@ is, where its value comes from, and further notes.
 Hospitalization in the models is a daily rate, not a probability. The
 probability of hospitalization is \code{h / (h + 1 / rash_period)}. See
 \code{vignette("parameters", package = "measles")} for more details.
+
+When printed, the table shows each parameter with its R argument, in a
+column named \code{Parameter (argument)}, and each default with its units, in a
+column named \code{Default (units)}. The underlying data frame keeps the
+separate columns. See \code{\link[=format.measles_parameters]{format.measles_parameters()}}.
 }
 \examples{
 params <- measles_parameters()
-params[, c("parameter", "default", "units", "citation")]
+params[, c("parameter", "r_argument", "default", "units")]
 
 # Only the parameters of the school model
 measles_parameters("ModelMeaslesSchool")[, c("r_argument", "default")]
