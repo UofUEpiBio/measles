@@ -53,8 +53,7 @@
 #' The model uses hospitalization rates instead of probabilities. To learn
 #' more about this, see the documentation in [ModelMeaslesMixing()].
 #' @section Parameter values and sources:
-#' The defaults, their literature sources, and their verification status are
-#' listed in [measles_parameters()]. See
+#' The defaults and their literature sources are listed in [measles_parameters()]. See
 #' `vignette("parameters", package = "measles")` for a discussion.
 #'
 #' @section Model diagram:

@@ -6,7 +6,7 @@
 
 * The column `vacc_rate` of the `short_creek` dataset is now the vaccination coverage (share vaccinated), as documented. Previously it was the share immune (coverage times a vaccine efficacy of 0.97, or 0.93 under age 5), so models that also set `vax_efficacy` applied the efficacy twice. The overall coverage is 51.9% (the share immune was 50.3%). The contact matrix `short_creek_matrix` is unchanged.
 
-* The new function `measles_parameters()` returns the canonical table of model parameters, with their defaults, units, literature ranges, sources, and verification status. The table is stored in `inst/extdata/measles_parameters.csv`, and the new vignette `vignette("parameters")` discusses it, including the R0 calibration and the conversion between hospitalization rate and probability. No default values changed.
+* The new function `measles_parameters()` returns the canonical table of model parameters, with their defaults, units, literature ranges, and sources. The table is stored in `inst/extdata/measles_parameters.csv`, and the new vignette `vignette("parameters")` discusses it, including the R0 calibration and the conversion between hospitalization rate and probability. No default values changed.
 
 * Fixed the documented default vaccine efficacy of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` (0.97, not 0.99), and clarified that `hospitalization_rate` is a daily rate, not a probability. The model constructors now link to `measles_parameters()`.
 

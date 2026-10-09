@@ -16,9 +16,9 @@ A data frame with one row per parameter.
 }
 \description{
 Returns the canonical table of parameters used by the measles models,
-including their package defaults, units, literature ranges, sources, and
-verification status. This table is the single source of truth that other
-projects using the package point to.
+including their package defaults, units, literature ranges, and sources.
+This table is the single source of truth that other projects using the
+package point to.
 }
 \details{
 The table is stored in \code{inst/extdata/measles_parameters.csv} and has one row
@@ -37,10 +37,6 @@ which has no defaults, it is the value used in \code{vignette("school")}.
 \item \code{lit_low}, \code{lit_high}: Range reported in the cited source, if any.
 \item \code{description}, \code{citation}, \code{doi_or_url}, \code{notes}: What the parameter
 is, where its value comes from, and further notes.
-\item \code{status}: Verification status, coded with emoji: a check mark
-(verified against the cited source), a speaking head (team assumption
-or rationale confirmed by the authors), or a warning sign (pending).
-A row may have more than one.
 }
 
 Hospitalization in the models is a daily rate, not a probability. The
@@ -49,7 +45,7 @@ probability of hospitalization is \code{h / (h + 1 / rash_period)}. See
 }
 \examples{
 params <- measles_parameters()
-params[, c("parameter", "default", "units", "status")]
+params[, c("parameter", "default", "units", "citation")]
 
 # Only the parameters of the school model
 measles_parameters("ModelMeaslesSchool")[, c("r_argument", "default")]

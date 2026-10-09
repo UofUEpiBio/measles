@@ -90,20 +90,14 @@ params <- measles_parameters()
 
 ## The parameter table
 
-Each row of the table is a parameter. The `status` column takes one or more of the following values:
-
-- ✅ verified against the cited source.
-- 🗣️ team assumption or rationale, confirmed by the authors.
-- ⚠️ pending.
-
-The current edition of the Utah DHHS Measles Disease Plan cited here was last updated on March 26, 2026 (footer dated February 2026).
+Each row of the table is a parameter, with its default value, units, and source. The current edition of the Utah DHHS Measles Disease Plan cited here was last updated on March 26, 2026 (footer dated February 2026).
 
 ```{r}
 #| label: params-table
 #| echo: false
 #| output: asis
 cols <- c(
-  "parameter", "r_argument", "default", "units", "citation", "status", "notes"
+  "parameter", "r_argument", "default", "units", "citation", "notes"
 )
 tab <- params[, cols]
 tab$r_argument <- ifelse(

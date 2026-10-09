@@ -11,20 +11,16 @@ expect_equal(
   colnames(params),
   c(
     "parameter", "r_argument", "models", "default", "units", "type",
-    "lit_low", "lit_high", "description", "citation", "doi_or_url", "status",
-    "notes"
+    "lit_low", "lit_high", "description", "citation", "doi_or_url", "notes"
   )
 )
 expect_false(anyDuplicated(params$parameter) > 0)
 expect_true(all(params$type %in% c("probability", "rate", "days", "count")))
 expect_true(all(nzchar(params$citation)))
 
-# Every row has at least one valid status
-expect_true(all(grepl("✅|\U0001F5E3|⚠", params$status)))
-
-# Verified rows have a DOI or URL, except for inactive parameters
-verified <- grepl("✅", params$status) & params$citation != "Not active"
-expect_true(all(grepl("^https://", params$doi_or_url[verified])))
+# Links are URLs
+links <- params$doi_or_url[nzchar(params$doi_or_url)]
+expect_true(all(grepl("^https://", links)))
 
 # ------------------------------------------------------------------------------
 # Filtering by model

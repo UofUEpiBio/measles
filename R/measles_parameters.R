@@ -1,9 +1,9 @@
 #' Measles model parameters and literature references
 #'
 #' Returns the canonical table of parameters used by the measles models,
-#' including their package defaults, units, literature ranges, sources, and
-#' verification status. This table is the single source of truth that other
-#' projects using the package point to.
+#' including their package defaults, units, literature ranges, and sources.
+#' This table is the single source of truth that other projects using the
+#' package point to.
 #'
 #' @details
 #' The table is stored in `inst/extdata/measles_parameters.csv` and has one row
@@ -22,10 +22,6 @@
 #' - `lit_low`, `lit_high`: Range reported in the cited source, if any.
 #' - `description`, `citation`, `doi_or_url`, `notes`: What the parameter
 #'   is, where its value comes from, and further notes.
-#' - `status`: Verification status, coded with emoji: a check mark
-#'   (verified against the cited source), a speaking head (team assumption
-#'   or rationale confirmed by the authors), or a warning sign (pending).
-#'   A row may have more than one.
 #'
 #' Hospitalization in the models is a daily rate, not a probability. The
 #' probability of hospitalization is `h / (h + 1 / rash_period)`. See
@@ -37,7 +33,7 @@
 #' @returns A data frame with one row per parameter.
 #' @examples
 #' params <- measles_parameters()
-#' params[, c("parameter", "default", "units", "status")]
+#' params[, c("parameter", "default", "units", "citation")]
 #'
 #' # Only the parameters of the school model
 #' measles_parameters("ModelMeaslesSchool")[, c("r_argument", "default")]

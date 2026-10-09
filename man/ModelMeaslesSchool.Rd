@@ -110,8 +110,7 @@ accept it.
 }
 \section{Parameter values and sources}{
 
-The defaults, their literature sources, and their verification status are
-listed in \code{\link[=measles_parameters]{measles_parameters()}}. See
+The defaults and their literature sources are listed in \code{\link[=measles_parameters]{measles_parameters()}}. See
 \code{vignette("parameters", package = "measles")} for a discussion.
 }
 

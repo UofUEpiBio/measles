@@ -102,8 +102,7 @@
 #' ```
 #'
 #' @section Parameter values and sources:
-#' The defaults, their literature sources, and their verification status are
-#' listed in [measles_parameters()]. See
+#' The defaults and their literature sources are listed in [measles_parameters()]. See
 #' `vignette("parameters", package = "measles")` for a discussion.
 #'
 #' @section Model diagram:
