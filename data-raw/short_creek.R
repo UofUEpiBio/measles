@@ -117,7 +117,9 @@ short_creek <- data.table(
     ".+to([0-9]+).*", "\\1",
     rownames(short_creek_matrix)
   ) |> as.integer(),
-  vacc_rate = groupimm / grouppops
+  # Vaccination coverage (share vaccinated). The models apply the vaccine
+  # efficacy, so this must not be multiplied by it (groupimm).
+  vacc_rate = groupvax / grouppops
 )
 
 short_creek[age_labels == "under1", agelims := 1L]

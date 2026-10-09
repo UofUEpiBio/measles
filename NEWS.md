@@ -1,3 +1,23 @@
+# measles 0.4.1-0
+
+## User visible changes
+
+* `{measles}` now requires `{epiworldR}` (>= 0.19.0), which is distributed through R-universe (<https://uofuepibio.r-universe.dev>). The repository is listed under `Additional_repositories` in `DESCRIPTION`, so `install.packages("measles", repos = c("https://uofuepibio.r-universe.dev", "https://cloud.r-project.org"))` resolves it. The startup check now asks for `{epiworldR}` 0.19.0 as well.
+
+* The column `vacc_rate` of the `short_creek` dataset is now the vaccination coverage (share vaccinated), as documented. Previously it was the share immune (coverage times a vaccine efficacy of 0.97, or 0.93 under age 5), so models that also set `vax_efficacy` applied the efficacy twice. The overall coverage is 51.9% (the share immune was 50.3%). The contact matrix `short_creek_matrix` is unchanged.
+
+* No changes to model arguments, parameter names, or defaults.
+
+## Bug fixes
+
+* Through `{epiworldR}` 0.19.0, `run_multiple()` now runs every replicate when OpenMP grants fewer threads than requested (e.g., under `OMP_THREAD_LIMIT`). Previously the replicates assigned to the missing threads were silently skipped while still being counted.
+
+## Internal changes
+
+* Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at commit 87b2f98. The models now look up parameters with `EPI_PAR()`/`ParamRef` (faster, cached lookups), and the school and mixing models record contacts for contact tracing through epiworld's post-sampling callback (`make_contact_tracing_post_sampling()`) instead of calling `add_contact()` inline. The contacts recorded (and the day they are recorded) are the same as before.
+
+* Added a test (`inst/tinytest/test-school-contact-tracing.R`) checking that the contacts sampled in `ModelMeaslesSchool()` are still recorded for contact tracing and drive `InterventionMeaslesPEP()`: PEP is offered after a case with recorded contacts is identified, and not offered when the case had no contacts.
+
 # measles 0.4.0-0
 
 ## User visible changes

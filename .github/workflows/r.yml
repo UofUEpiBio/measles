@@ -46,6 +46,7 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+          extra-repositories: https://uofuepibio.r-universe.dev
 
       - uses: quarto-dev/quarto-actions/setup@v2.2.0
         env:

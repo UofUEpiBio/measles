@@ -10,7 +10,9 @@ A data frame with 15 rows and 4 columns:
 \item{age_labels}{character. Labels describing the age groups.}
 \item{agepops}{numeric. Population counts for each age group.}
 \item{agelims}{numeric. Age limit boundaries for each group.}
-\item{vacc_rate}{numeric. Vaccination rate for each age group.}
+\item{vacc_rate}{numeric. Vaccination coverage (share vaccinated) for
+each age group. It does not include the vaccine efficacy, which the
+models apply (\code{vax_efficacy}).}
 }
 }
 \source{
