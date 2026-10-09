@@ -8,6 +8,8 @@
 
 * The new function `measles_parameters()` returns the canonical table of model parameters, with their defaults, units, literature ranges, and sources. The table is stored in `inst/extdata/measles_parameters.csv`, and the new vignette `vignette("parameters")` discusses it, including the R0 calibration and the conversion between hospitalization rate and probability. The table prints each parameter with its argument ("Parameter (argument)") each default with its units ("Default (units)"), and each source with its notes ("Source (and notes)", with each note after "Note:"); `format(measles_parameters(), markdown = TRUE)` gives the same layout for Markdown tables, as in the vignette. The vignette's references include the Utah DHHS Measles Disease Plan. No default values changed.
 
+* Parameters chosen without a published source, such as the default hospitalization rate (0.2), the tiered quarantine lengths of `ModelMeaslesMixingRiskQuarantine()`, and the willingness and contact-tracing parameters, are now labeled simply as assumptions in `measles_parameters()`, the vignette, and the documentation.
+
 * Fixed the documented default vaccine efficacy of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` (0.97, not 0.99), and clarified that `hospitalization_rate` is a daily rate, not a probability. The model constructors now link to `measles_parameters()`.
 
 * The examples of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` now use the package defaults for the disease periods, hospitalization, and isolation, instead of values that contradicted them.
