@@ -45,9 +45,8 @@ transmission (default: 0.9).}
 \item{vax_efficacy}{Double. Vaccine efficacy rate (default: 0.97).}
 
 \item{quarantine_period_high}{Integer. Number of days for quarantine for high-risk contacts
-(default: 21). The tiered lengths (21/14/7) are experimental, based on
-our own experiments and discussions with Utah DHHS, with no published
-source.}
+(default: 21). The tiered lengths (21/14/7) are assumptions
+(experimental, with no published source).}
 
 \item{quarantine_period_medium}{Integer. Number of days for quarantine for medium-risk contacts
 (default: 14).}

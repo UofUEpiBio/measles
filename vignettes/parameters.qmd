@@ -178,7 +178,7 @@ p_hosp <- 0.1
 p_hosp * (1 / rash_period) / (1 - p_hosp)
 ```
 
-The default of 0.2 started as a conservative value agreed with Utah DHHS. For comparison, 18.5% of patients were hospitalized during the 2025 outbreak in West Texas [@wang2026].
+The default of 0.2 is an assumption, chosen as a conservative value. For comparison, 18.5% of patients were hospitalized during the 2025 outbreak in West Texas [@wang2026].
 
 ## Inactive parameters
 
