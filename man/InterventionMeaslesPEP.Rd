@@ -113,6 +113,11 @@ Each group is also timed from its own exposure, so a case identified in one
 classroom does not shorten (or extend) the window available to another.
 }
 
+\section{Parameter values and sources}{
+The function has no defaults. The values used in \code{vignette("school")},
+with their sources, are listed in \code{\link[=measles_parameters]{measles_parameters()}}.
+}
+
 \seealso{
 \link[epiworldR:global-events]{epiworldR::global-events}
 }

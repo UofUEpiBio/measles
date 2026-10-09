@@ -37,14 +37,16 @@ ModelMeaslesMixing(
 contacts per time step between population groups.}
 
 \item{vax_reduction_recovery_rate}{Double. Vaccine reduction in recovery
-rate (default: 0.5).}
+rate (default: 0.5). \strong{Not active:} the model registers it as
+"(IGNORED) Vax improved recovery", and it has no effect on the simulation.
+Future versions may deprecate it.}
 
 \item{transmission_rate}{Numeric scalar between 0 and 1. Probability of
 transmission (default: 0.9).}
 
 \item{prop_vaccinated}{Double. Proportion of population that is vaccinated.}
 
-\item{vax_efficacy}{Double. Vaccine efficacy rate (default: 0.99).}
+\item{vax_efficacy}{Double. Vaccine efficacy rate (default: 0.97).}
 
 \item{quarantine_period}{Integer. Number of days for quarantine
 (default: 21).}
@@ -63,7 +65,8 @@ quarantine (default: 1).}
 
 \item{rash_period}{Double. Duration of rash period (default: 3).}
 
-\item{hospitalization_rate}{Double. Rate of hospitalization (default: 0.2).}
+\item{hospitalization_rate}{Double. Daily rate of hospitalization, not a
+probability (default: 0.2). See the Hospitalization Probability section.}
 
 \item{hospitalization_period}{Double. Period of hospitalization (default: 7).}
 
@@ -98,7 +101,7 @@ one row and one column per entity in the model.
 
 The model includes three distinct phases of measles infection: incubation,
 prodromal, and rash periods. Vaccination provides protection against
-infection and may reduce recovery time.
+infection.
 
 The \link[epiworldR:epiworld-methods]{epiworldR::initial_states} function allows the user to set the initial state of the
 model. In particular, the user can specify how many of the non-infected
@@ -153,6 +156,13 @@ probability, the user needs to use the following:
 }\if{html}{\out{</div>}}
 }
 
+\section{Parameter values and sources}{
+
+The defaults, their literature sources, and their verification status are
+listed in \code{\link[=measles_parameters]{measles_parameters()}}. See
+\code{vignette("parameters", package = "measles")} for a discussion.
+}
+
 \section{Model diagram}{
 
 \figure{measlesmixing.png}{Measles Mixing Diagram}
@@ -175,26 +185,17 @@ cmatrix <- (c(
 
 N <- 9e3
 
+# Disease periods, vaccine efficacy, hospitalization, and isolation use the
+# package defaults (see measles_parameters()). The willingness and contact
+# tracing values are illustrative and lower than the defaults.
 measles_model <- ModelMeaslesMixing(
   n                        = N,
   prevalence               = 1 / N,
-  transmission_rate        = 0.9,
-  vax_efficacy             = 0.97,
-  vax_reduction_recovery_rate = 0.8,
-  incubation_period        = 10,
-  prodromal_period         = 3,
-  rash_period              = 7,
   contact_matrix           = cmatrix,
-  hospitalization_rate     = 0.1,
-  hospitalization_period   = 10,
-  days_undetected          = 2,
-  quarantine_period        = 14,
-  quarantine_willingness   = 0.9,
-  isolation_willingness    = 0.8,
-  isolation_period         = 10,
   prop_vaccinated          = 0.95,
-  contact_tracing_success_rate = 0.8,
-  contact_tracing_days_window = 4
+  quarantine_willingness   = 0.9,
+  isolation_willingness    = 0.9,
+  contact_tracing_success_rate = 0.8
 )
 
 # Adding the entities to the model

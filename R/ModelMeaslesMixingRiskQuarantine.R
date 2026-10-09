@@ -12,9 +12,11 @@
 #' @param transmission_rate Numeric scalar between 0 and 1. Probability of
 #' transmission (default: 0.9).
 #' @param prop_vaccinated Double. Proportion of population that is vaccinated.
-#' @param vax_efficacy Double. Vaccine efficacy rate (default: 0.99).
+#' @param vax_efficacy Double. Vaccine efficacy rate (default: 0.97).
 #' @param quarantine_period_high Integer. Number of days for quarantine for high-risk contacts
-#' (default: 21).
+#' (default: 21). The tiered lengths (21/14/7) are experimental, based on
+#' our own experiments and discussions with Utah DHHS, with no published
+#' source.
 #' @param quarantine_period_medium Integer. Number of days for quarantine for medium-risk contacts
 #' (default: 14).
 #' @param quarantine_period_low Integer. Number of days for quarantine for low-risk contacts
@@ -27,7 +29,8 @@
 #' @param incubation_period Double. Duration of incubation period (default: 12).
 #' @param prodromal_period Double. Duration of prodromal period (default: 4).
 #' @param rash_period Double. Duration of rash period (default: 3).
-#' @param hospitalization_rate Double. Rate of hospitalization (default: 0.2).
+#' @param hospitalization_rate Double. Daily rate of hospitalization, not a
+#' probability (default: 0.2). See [ModelMeaslesMixing()].
 #' @param hospitalization_period Double. Period of hospitalization (default: 7).
 #' @param days_undetected Double. Number of days rash goes undetected
 #' (default: 2).
@@ -64,6 +67,11 @@
 #'
 #' The model uses hospitalization rates instead of probabilities. To learn
 #' more about this, see the documentation in [ModelMeaslesMixing()].
+#' @section Parameter values and sources:
+#' The defaults, their literature sources, and their verification status are
+#' listed in [measles_parameters()]. See
+#' `vignette("parameters", package = "measles")` for a discussion.
+#'
 #' @section Model diagram:
 #' ![](measlesmixingriskquarantine.png "Measles Mixing Risk Quarantine Diagram")
 #' @returns
@@ -88,28 +96,18 @@
 #'
 #' N <- 9e3
 #'
+#' # Disease periods, vaccine efficacy, hospitalization, isolation, and the
+#' # quarantine tiers (21/14/7 days) use the package defaults (see
+#' # measles_parameters()). The willingness and contact tracing values are
+#' # illustrative and lower than the defaults.
 #' measles_model <- ModelMeaslesMixingRiskQuarantine(
 #'   n                        = N,
 #'   prevalence               = 1 / N,
-#'   transmission_rate        = 0.9,
-#'   vax_efficacy             = 0.97,
-#'   incubation_period        = 10,
-#'   prodromal_period         = 3,
-#'   rash_period              = 7,
 #'   contact_matrix           = cmatrix,
-#'   hospitalization_rate     = 0.1,
-#'   hospitalization_period   = 10,
-#'   days_undetected          = 2,
-#'   quarantine_period_high   = 21,
-#'   quarantine_period_medium = 14,
-#'   quarantine_period_low    = 7,
-#'   quarantine_willingness   = 0.9,
-#'   isolation_willingness    = 0.8,
-#'   isolation_period         = 10,
 #'   prop_vaccinated          = 0.95,
-#'   detection_rate_quarantine = 0.5,
-#'   contact_tracing_success_rate = 0.8,
-#'   contact_tracing_days_window = 4
+#'   quarantine_willingness   = 0.9,
+#'   isolation_willingness    = 0.9,
+#'   contact_tracing_success_rate = 0.8
 #' )
 #'
 #' # Adding the entities to the model

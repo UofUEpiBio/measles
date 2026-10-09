@@ -80,6 +80,11 @@
 #' Each group is also timed from its own exposure, so a case identified in one
 #' classroom does not shorten (or extend) the window available to another.
 #'
+#' # Parameter values and sources
+#'
+#' The function has no defaults. The values used in `vignette("school")`,
+#' with their sources, are listed in [measles_parameters()].
+#'
 #' @returns
 #' An object of class `epiworld_globalevent` representing the measles PEP
 #' intervention.

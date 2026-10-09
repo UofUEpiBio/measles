@@ -2,6 +2,14 @@
 
 ## User visible changes
 
+* The new function `measles_parameters()` returns the canonical table of model parameters, with their defaults, units, literature ranges, sources, and verification status. The table is stored in `inst/extdata/measles_parameters.csv`, and the new vignette `vignette("parameters")` discusses it, including the R0 calibration and the conversion between hospitalization rate and probability. No default values changed.
+
+* Fixed the documented default vaccine efficacy of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` (0.97, not 0.99), and clarified that `hospitalization_rate` is a daily rate, not a probability. The model constructors now link to `measles_parameters()`.
+
+* The examples of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` now use the package defaults for the disease periods, hospitalization, and isolation, instead of values that contradicted them.
+
+* The documentation of `ModelMeaslesMixing()` now flags `vax_reduction_recovery_rate` as inactive: the model registers it as "(IGNORED) Vax improved recovery", and it has no effect on the simulation.
+
 * The function `InterventionMeaslesPEP()` implements post-exposure prophylaxis featuring both MMR and IG. The process is highly configurable and can be attached to the `ModelMeaslesSchool()`. Not available yet for other models.
 
 * Fixed the PEP timelines. `mmr_window`/`ig_window` are now measured from the exposure to the day the case is identified, i.e. whether there is still time to intervene. The reference date is the *first* day the school encountered the index case on or after its infectious-onset date (rash onset minus the prodromal period); contact tracing is used only to date that first encounter, so if the contact rate is zeroed out on some days (e.g. weekends, via a global event) the first day actually in session anchors the window. When several cases are identified on the same day, the earliest of those first encounters applies. Previously the windows were compared against the index case's infectious-onset date and gated on the specific day a given classmate met the index, so realistic windows (e.g. `mmr_window = 3`) did not behave as intended.
@@ -29,6 +37,8 @@
 * `get_contact_matrix()` and `set_contact_matrix()` are now provided by `{epiworldR}` (>= 0.15.1) and work directly on the measles mixing models. The package's own copies were removed so they no longer mask the `{epiworldR}` versions.
 
 ## Internal changes
+
+* Added a test that checks `inst/extdata/measles_parameters.csv` against the arguments and defaults of the model constructors, so the parameter table cannot drift from the code.
 
 * Updated package citation metadata to include all people listed in `Authors@R`.
 
