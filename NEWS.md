@@ -6,6 +6,14 @@
 
 * The column `vacc_rate` of the `short_creek` dataset is now the vaccination coverage (share vaccinated), as documented. Previously it was the share immune (coverage times a vaccine efficacy of 0.97, or 0.93 under age 5), so models that also set `vax_efficacy` applied the efficacy twice. The overall coverage is 51.9% (the share immune was 50.3%). The contact matrix `short_creek_matrix` is unchanged.
 
+* The new function `measles_parameters()` returns the canonical table of model parameters, with their defaults, units, literature ranges, sources, and verification status. The table is stored in `inst/extdata/measles_parameters.csv`, and the new vignette `vignette("parameters")` discusses it, including the R0 calibration and the conversion between hospitalization rate and probability. No default values changed.
+
+* Fixed the documented default vaccine efficacy of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` (0.97, not 0.99), and clarified that `hospitalization_rate` is a daily rate, not a probability. The model constructors now link to `measles_parameters()`.
+
+* The examples of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` now use the package defaults for the disease periods, hospitalization, and isolation, instead of values that contradicted them.
+
+* The documentation of `ModelMeaslesMixing()` now flags `vax_reduction_recovery_rate` as inactive: the model registers it as "(IGNORED) Vax improved recovery", and it has no effect on the simulation.
+
 * No changes to model arguments, parameter names, or defaults.
 
 ## Bug fixes
@@ -14,6 +22,8 @@
 
 ## Internal changes
 
+* Added a test that checks `inst/extdata/measles_parameters.csv` against the arguments and defaults of the model constructors, so the parameter table cannot drift from the code.
+
 * Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at commit 87b2f98. The models now look up parameters with `EPI_PAR()`/`ParamRef` (faster, cached lookups), and the school and mixing models record contacts for contact tracing through epiworld's post-sampling callback (`make_contact_tracing_post_sampling()`) instead of calling `add_contact()` inline. The contacts recorded (and the day they are recorded) are the same as before.
 
 * Added a test (`inst/tinytest/test-school-contact-tracing.R`) checking that the contacts sampled in `ModelMeaslesSchool()` are still recorded for contact tracing and drive `InterventionMeaslesPEP()`: PEP is offered after a case with recorded contacts is identified, and not offered when the case had no contacts.
@@ -21,14 +31,6 @@
 # measles 0.4.0-0
 
 ## User visible changes
-
-* The new function `measles_parameters()` returns the canonical table of model parameters, with their defaults, units, literature ranges, sources, and verification status. The table is stored in `inst/extdata/measles_parameters.csv`, and the new vignette `vignette("parameters")` discusses it, including the R0 calibration and the conversion between hospitalization rate and probability. No default values changed.
-
-* Fixed the documented default vaccine efficacy of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` (0.97, not 0.99), and clarified that `hospitalization_rate` is a daily rate, not a probability. The model constructors now link to `measles_parameters()`.
-
-* The examples of `ModelMeaslesMixing()` and `ModelMeaslesMixingRiskQuarantine()` now use the package defaults for the disease periods, hospitalization, and isolation, instead of values that contradicted them.
-
-* The documentation of `ModelMeaslesMixing()` now flags `vax_reduction_recovery_rate` as inactive: the model registers it as "(IGNORED) Vax improved recovery", and it has no effect on the simulation.
 
 * The function `InterventionMeaslesPEP()` implements post-exposure prophylaxis featuring both MMR and IG. The process is highly configurable and can be attached to the `ModelMeaslesSchool()`. Not available yet for other models.
 
@@ -57,8 +59,6 @@
 * `get_contact_matrix()` and `set_contact_matrix()` are now provided by `{epiworldR}` (>= 0.15.1) and work directly on the measles mixing models. The package's own copies were removed so they no longer mask the `{epiworldR}` versions.
 
 ## Internal changes
-
-* Added a test that checks `inst/extdata/measles_parameters.csv` against the arguments and defaults of the model constructors, so the parameter table cannot drift from the code.
 
 * Updated package citation metadata to include all people listed in `Authors@R`.
 
