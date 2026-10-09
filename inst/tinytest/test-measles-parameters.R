@@ -101,14 +101,14 @@ expect_true(grepl("[link](https://", md[tr, "Source (and notes)"], fixed = TRUE)
 expect_false(any(c("citation", "notes") %in% colnames(fmt)))
 expect_equal(
   fmt[tr, "Source (and notes)"],
-  paste0(params$citation[tr], " (Note: ", params$notes[tr], ")")
+  paste0(params$citation[tr], ". Note: ", params$notes[tr])
 )
 no_note <- which(!nzchar(params$notes))[1]
 expect_equal(fmt[no_note, "Source (and notes)"], params$citation[no_note])
 
 # The link goes right after the citation, before the note
 expect_true(grepl(
-  paste0("([link](", params$doi_or_url[tr], ")) (Note: "),
+  paste0("([link](", params$doi_or_url[tr], ")). *Note:* "),
   md[tr, "Source (and notes)"], fixed = TRUE
 ))
 
