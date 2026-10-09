@@ -192,4 +192,3 @@ The argument `vax_reduction_recovery_rate` of `ModelMeaslesMixing()` is not acti
 
 ::: {#refs}
 :::
-
