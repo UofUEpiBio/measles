@@ -1,10 +1,10 @@
 Package: measles
 Type: Package
 Title: Measles Epidemiological Models
-Version: 0.4.0-0
+Version: 0.4.1-0
 Depends:
     R (>= 4.1.0),
-    epiworldR (>= 0.15.1)
+    epiworldR (>= 0.19.0)
 Authors@R: c(
   person(given="George", family="Vega Yon", role=c("aut", "cre"),
   email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")),
@@ -29,7 +29,7 @@ License: MIT + file LICENSE
 RoxygenNote: 7.3.3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-LinkingTo: cpp11, epiworldR (>= 0.15.1)
+LinkingTo: cpp11, epiworldR (>= 0.19.0)
 SystemRequirements: C++17
 Imports:
   utils,
@@ -42,5 +42,6 @@ Suggests:
 VignetteBuilder:
   quarto
 LazyData: true
+Additional_repositories: https://uofuepibio.r-universe.dev
 Remotes:
   UofUEpiBio/epiworldR

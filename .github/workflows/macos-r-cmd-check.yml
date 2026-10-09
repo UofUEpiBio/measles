@@ -35,6 +35,7 @@ jobs:
           r-version: devel
           http-user-agent: release
           use-public-rspm: true
+          extra-repositories: https://uofuepibio.r-universe.dev
 
       - name: Install dependencies on MacOS
         uses: ./.github/actions/install-macos-gettext

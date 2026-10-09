@@ -259,11 +259,11 @@ inline double ModelMeaslesMixingRiskQuarantine<TSeq>::m_get_risk_period(size_t a
     int risk_level = quarantine_risk_level[agent_id];
 
     if (risk_level == RISK_HIGH)
-        risk_period = this->par("Quarantine period high");
+        risk_period = EPI_PAR(this, "Quarantine period high");
     else if (risk_level == RISK_MEDIUM)
-        risk_period = this->par("Quarantine period medium");
+        risk_period = EPI_PAR(this, "Quarantine period medium");
     else
-        risk_period = this->par("Quarantine period low");
+        risk_period = EPI_PAR(this, "Quarantine period low");
 
     return risk_period;
 
@@ -399,6 +399,12 @@ inline size_t ModelMeaslesMixingRiskQuarantine<TSeq>::sample_infectious_agents(
         }
 
     }
+
+    // Each sampled interaction, once, if a post-sampling callback listens
+    if (this->has_post_sampling())
+        this->register_sampled_contacts(
+            sampled_agents.data(), samp_id, agent->get_id()
+        );
     
     return samp_id;
 
@@ -445,11 +451,6 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_susceptible(
             );
         #endif
 
-        // Adding the current agent to the tracked interactions
-        // In this case, the infected neighbor is the one
-        // who interacts with the susceptible agent
-        m_down->get_contact_tracing().add_contact(neighbor.get_id(), p->get_id(), m->today());
-            
         /* And it is a function of susceptibility_reduction as well */ 
         m->array_double_tmp[nviruses_tmp] =
             (1.0 - p->get_susceptibility_reduction(v, m_ref)) *
@@ -497,11 +498,11 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_prodromal(
     auto* model = model_cast<ModelMeaslesMixingRiskQuarantine<TSeq>,TSeq>(m);
 
     // Does the agent transition to rash?
-    if (m->runif() < 1.0/m->par("Prodromal period"))
+    if (m->runif() < 1.0/EPI_PAR(m, "Prodromal period"))
     {
         // Check for detection during active quarantine
         bool detect_it = (model->get_days_quarantine_triggered().size() > 0u) &&
-            (m->runif() < m->par("Detection rate quarantine"));
+            (m->runif() < EPI_PAR(m, "Detection rate quarantine"));
 
         model->day_rash_onset[p->get_id()] = m->today();
         p->change_state(*m, detect_it ? ISOLATED : RASH);
@@ -525,8 +526,8 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_rash(
     // Checking if the agent will be detected or not
     bool detected = false;
     if (
-        (m->par("Isolation period") >= 0) &&
-        (m->runif() < 1.0/m->par("Days undetected"))
+        (EPI_PAR(m, "Isolation period") >= 0) &&
+        (m->runif() < 1.0/EPI_PAR(m, "Days undetected"))
     )
     {
         model->m_add_contact_tracing(p->get_id());
@@ -535,8 +536,8 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_rash(
     }
 
     // Computing probabilities for state change
-    m->array_double_tmp[0] = 1.0/m->par("Rash period"); // Recovery
-    m->array_double_tmp[1] = m->par("Hospitalization rate"); // Hospitalization
+    m->array_double_tmp[0] = 1.0/EPI_PAR(m, "Rash period"); // Recovery
+    m->array_double_tmp[1] = EPI_PAR(m, "Hospitalization rate"); // Hospitalization
         
     auto which = m->sample_from_probs(2);
     
@@ -574,13 +575,13 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_isolated(
     int days_since = m->today() - model->day_rash_onset[p->get_id()];
 
     bool unisolate =
-        (m->par("Isolation period") <= days_since) ?
+        (EPI_PAR(m, "Isolation period") <= days_since) ?
         true: false;
 
     // Probability of staying in the rash period vs becoming
     // hospitalized
-    m->array_double_tmp[0] = 1.0/m->par("Rash period");
-    m->array_double_tmp[1] = m->par("Hospitalization rate");
+    m->array_double_tmp[0] = 1.0/EPI_PAR(m, "Rash period");
+    m->array_double_tmp[1] = EPI_PAR(m, "Hospitalization rate");
 
     // Sampling from the probabilities
     auto which = m->sample_from_probs(2);
@@ -617,7 +618,7 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_isolated_recovered(
     // if the isolation period is over.
     int days_since = m->today() - model->day_rash_onset[p->get_id()];
 
-    if (m->par("Isolation period") <= days_since)
+    if (EPI_PAR(m, "Isolation period") <= days_since)
         p->change_state(*m, RECOVERED);
 
 }
@@ -689,7 +690,7 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_quarantine_prodromal
     int days_since = m->today() - model->day_flagged[p->get_id()];
 
     // Develops rash?
-    if (m->runif() < (1.0/m->par("Prodromal period")))
+    if (m->runif() < (1.0/EPI_PAR(m, "Prodromal period")))
     {
         
         // Developing Rash automatically triggers contact tracing
@@ -733,7 +734,7 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_hospitalized(
 ) {
 
     // The agent is removed from the system
-    if (m->runif() < 1.0/m->par("Hospitalization period"))
+    if (m->runif() < 1.0/EPI_PAR(m, "Hospitalization period"))
         p->rm_virus(*m, RECOVERED);
 
 };
@@ -792,7 +793,7 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_quarantine_process(Model<TS
     #endif
 
     // Checking the risk levels
-    double param_days_prior = m->par("Contact tracing days window");
+    double param_days_prior = EPI_PAR(m, "Contact tracing days window");
     for (size_t i = 0u; i < model->agents_triggered_contact_tracing_size; ++i)
     {
 
@@ -846,7 +847,7 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_quarantine_process(Model<TS
                 continue;
 
             // Will we detect the contact?
-            if (m->runif() > m->par("Contact tracing success rate"))
+            if (m->runif() > EPI_PAR(m, "Contact tracing success rate"))
                 continue;
 
             // How many days since they contacted relative to the rash onset?
@@ -954,10 +955,10 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_quarantine_process(Model<TS
     // RISK_HIGH
     for (auto & group: groups_ids)
     {
-        for (auto & agent_i_idx: Model<TSeq>::get_entity(group))
+        for (auto & agent_i_idx: m->get_entity(group))
         {
 
-            auto & agent_i = Model<TSeq>::get_agent(agent_i_idx);
+            auto & agent_i = m->get_agent(agent_i_idx);
             auto state = agent_i.get_state();
 
             // If not in any of these states, we skip
@@ -986,7 +987,7 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_quarantine_process(Model<TS
     // in RISK_MEDIUM
     for (auto & agent_i_idx: contacted_agents)
     {
-        auto & agent_i = Model<TSeq>::get_agent(agent_i_idx);
+        auto & agent_i = m->get_agent(agent_i_idx);
 
         // If has a tool, then skip (is vaxxed)
         if (agent_i.get_n_tools() != 0u)
@@ -996,7 +997,7 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_quarantine_process(Model<TS
         // contact tracing
         if (agent_i.get_n_entities() != 0u)
         {
-            size_t group_id = agent_i.get_entity(0u, *this).get_id();
+            size_t group_id = agent_i.get_entity(0u, *m).get_id();
             if (groups_ids.find(group_id) != groups_ids.end())
                 continue;
         }
@@ -1124,6 +1125,7 @@ inline ModelMeaslesMixingRiskQuarantine<TSeq>::ModelMeaslesMixingRiskQuarantine(
 
     // Enable contact tracing for quarantine process
     this->contact_tracing_on(EPI_MAX_TRACKING);
+    this->set_post_sampling(make_contact_tracing_post_sampling<TSeq>());
 
     // Adding the empty population
     this->agents_empty_graph(n);
@@ -1171,9 +1173,9 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::reset()
     for (size_t idx = 0; idx < quarantine_willingness.size(); ++idx)
     {
         quarantine_willingness[idx] =
-            this->runif() < this->par("Quarantine willingness");
+            this->runif() < EPI_PAR(this, "Quarantine willingness");
         isolation_willingness[idx] =
-            this->runif() < this->par("Isolation willingness");
+            this->runif() < EPI_PAR(this, "Isolation willingness");
     }
 
     day_flagged.assign(this->size(), 0);
