@@ -1,3 +1,14 @@
+## The `v1-layers` branch (measles 0.5.0)
+
+`v1-layers` follows epiworldR's `v1-layers` (contact layers, epiworld 1.0.0)
+one merged phase at a time, after epiworldR's port of each phase has merged.
+There, epiworld's
+[`contact-layers.md`](https://github.com/UofUEpiBio/epiworld/blob/v1-layers/contact-layers.md)
+is the source of truth: its Section 11 (Runbook) says how to find where
+things stand and what to do next. The headers come from epiworld's
+`include/measles` (`make update`), at the commit recorded in
+`inst/include/VERSIONS`.
+
 ## Overview
 
 - This repository hosts an R package that uses cpp11 and depends on the `epiworldR` R package for running epidemiological ABMs. Most of the work lies in porting C++ code from the epiworld library and exposing it to R.

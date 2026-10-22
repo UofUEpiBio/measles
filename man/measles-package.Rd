@@ -12,6 +12,12 @@ transmission dynamics, including school settings with quarantine and
 isolation policies, mixing models with population groups, and risk-based
 quarantine strategies.
 }
+\section{How to cite}{
+
+If you use \pkg{measles} in published work, please cite it. Run
+\code{citation("measles")} in R for the full entry.
+}
+
 \seealso{
 Useful links:
 \itemize{
@@ -23,6 +29,11 @@ Useful links:
 \author{
 \strong{Maintainer}: George Vega Yon \email{g.vegayon@gmail.com} (\href{https://orcid.org/0000-0002-3171-0844}{ORCID})
 
+Authors:
+\itemize{
+  \item George Vega Yon \email{g.vegayon@gmail.com} (\href{https://orcid.org/0000-0002-3171-0844}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item Damon Toth \email{damon.toth@hsc.utah.edu} (\href{https://orcid.org/0000-0001-7393-4814}{ORCID}) [contributor]
@@ -33,7 +44,3 @@ Other contributors:
 
 }
 \keyword{internal}
-\section{How to cite}{
-  If you use \pkg{measles} in published work, please cite it. Run
-  \code{citation("measles")} in R for the full entry.
-}

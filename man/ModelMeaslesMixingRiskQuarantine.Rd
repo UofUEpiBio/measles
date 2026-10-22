@@ -88,7 +88,7 @@ the onset of symptoms for which contact tracing is effective (default: 4).}
 \value{
 \itemize{
 \item The \code{ModelMeaslesMixingRiskQuarantine} function returns a model of classes
-\link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \link{epiworld_measlesmixingriskquarantine}.
+\link[epiworldR:epiworld_model]{epiworld_model} and \link{epiworld_measlesmixingriskquarantine}.
 }
 }
 \description{
@@ -116,7 +116,7 @@ don't share entity membership
 \item \strong{Low Risk}: Other unvaccinated agents
 }
 
-The \link[epiworldR:epiworld-methods]{epiworldR::initial_states} function allows the user to set the initial state of the
+The \link[epiworldR:initial_states]{initial_states} function allows the user to set the initial state of the
 model. In particular, the user can specify how many of the non-infected
 agents have been removed at the beginning of the simulation.
 
@@ -179,13 +179,13 @@ summary(measles_model)
 \seealso{
 epiworld-methods
 
-Other Models: 
-\code{\link{ModelMeaslesMixing}()},
-\code{\link{ModelMeaslesSchool}()}
+Other Models:
+\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}},
+\code{\link[=ModelMeaslesSchool]{ModelMeaslesSchool()}}
 
-Other measles models: 
-\code{\link{ModelMeaslesMixing}()},
-\code{\link{ModelMeaslesSchool}()}
+Other measles models:
+\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}},
+\code{\link[=ModelMeaslesSchool]{ModelMeaslesSchool()}}
 }
 \concept{Models}
 \concept{measles models}

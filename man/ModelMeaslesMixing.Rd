@@ -85,7 +85,7 @@ rash period (default: 1.0, full reduction). (see details)}
 \value{
 \itemize{
 \item The \code{ModelMeaslesMixing} function returns a model of classes
-\link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \link{epiworld_measlesmixing}.
+\link[epiworldR:epiworld_model]{epiworld_model} and \link{epiworld_measlesmixing}.
 }
 }
 \description{
@@ -103,7 +103,7 @@ The model includes three distinct phases of measles infection: incubation,
 prodromal, and rash periods. Vaccination provides protection against
 infection.
 
-The \link[epiworldR:epiworld-methods]{epiworldR::initial_states} function allows the user to set the initial state of the
+The \link[epiworldR:initial_states]{initial_states} function allows the user to set the initial state of the
 model. In particular, the user can specify how many of the non-infected
 agents have been removed at the beginning of the simulation.
 }
@@ -211,13 +211,13 @@ summary(measles_model)
 \seealso{
 epiworld-methods
 
-Other Models: 
-\code{\link{ModelMeaslesMixingRiskQuarantine}()},
-\code{\link{ModelMeaslesSchool}()}
+Other Models:
+\code{\link[=ModelMeaslesMixingRiskQuarantine]{ModelMeaslesMixingRiskQuarantine()}},
+\code{\link[=ModelMeaslesSchool]{ModelMeaslesSchool()}}
 
-Other measles models: 
-\code{\link{ModelMeaslesMixingRiskQuarantine}()},
-\code{\link{ModelMeaslesSchool}()}
+Other measles models:
+\code{\link[=ModelMeaslesMixingRiskQuarantine]{ModelMeaslesMixingRiskQuarantine()}},
+\code{\link[=ModelMeaslesSchool]{ModelMeaslesSchool()}}
 }
 \concept{Models}
 \concept{measles models}

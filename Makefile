@@ -48,11 +48,12 @@ data-raw: data-raw/*.R
 clean:
 	Rscript -e 'devtools::clean_dll()'
 
-EPIWORLD_BRANCH ?= master
+EPIWORLD_BRANCH ?= v1-layers
 
 update: clean-update
 	git clone --depth=1 -b $(EPIWORLD_BRANCH) https://github.com/UofUEpiBio/epiworld tmp_epiworld && \
 	rsync -avz --delete tmp_epiworld/include/measles inst/include/. && \
+	echo "epiworld https://github.com/UofUEpiBio/epiworld $$(git -C tmp_epiworld rev-parse HEAD)" > inst/include/VERSIONS && \
 	rm -f inst/include/measles/*.mmd && \
 	rsync -avz --delete tmp_epiworld/docs/assets/img/measles*png man/figures && \
 	rm -rf tmp_epiworld

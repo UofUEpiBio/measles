@@ -66,7 +66,7 @@ see details).}
 }
 \value{
 \itemize{
-\item The \code{ModelMeaslesSchool} function returns a model of classes \link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \code{epiworld_measlesschool}.
+\item The \code{ModelMeaslesSchool} function returns a model of classes \link[epiworldR:epiworld_model]{epiworld_model} and \code{epiworld_measlesschool}.
 }
 }
 \description{
@@ -151,13 +151,13 @@ Services. \url{https://epi.utah.gov/wp-content/uploads/Measles-disease-plan.pdf}
 \seealso{
 epiworld-methods
 
-Other Models: 
-\code{\link{ModelMeaslesMixing}()},
-\code{\link{ModelMeaslesMixingRiskQuarantine}()}
+Other Models:
+\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}},
+\code{\link[=ModelMeaslesMixingRiskQuarantine]{ModelMeaslesMixingRiskQuarantine()}}
 
-Other measles models: 
-\code{\link{ModelMeaslesMixing}()},
-\code{\link{ModelMeaslesMixingRiskQuarantine}()}
+Other measles models:
+\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}},
+\code{\link[=ModelMeaslesMixingRiskQuarantine]{ModelMeaslesMixingRiskQuarantine()}}
 }
 \author{
 This model was built as a response to the US Measles outbreak in 2025.
