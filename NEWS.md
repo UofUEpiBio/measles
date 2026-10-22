@@ -1,3 +1,20 @@
+# measles 0.5.0-0 (development)
+
+Tracks epiworldR 1.0.0 (its `v1-layers` branch), where contacts come from
+contact layers. The measles models themselves move to layers in a later
+development version; until then:
+
+* `{measles}` requires `{epiworldR}` (>= 1.0.0), and its headers come from
+  epiworld's `v1-layers` (`inst/include/VERSIONS` records the commit).
+
+* epiworldR's `get_contact_matrix()` and `set_contact_matrix()` now take a
+  mixing layer, which the measles mixing models do not have yet: their contact
+  matrix is the one given to the constructor. Build a new model to use another
+  matrix.
+
+* `get_transmissions()` gains epiworldR's `layer` column (`-1` throughout,
+  since the measles models do not sample from layers yet).
+
 # measles 0.4.1-0
 
 ## User visible changes

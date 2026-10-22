@@ -3,7 +3,7 @@
 check_epiworldr_version <- function() {
 
   ev <- utils::packageVersion("epiworldR")
-  required <- package_version("0.19.0")
+  required <- package_version("1.0.0")
 
   if (ev < required) {
     packageStartupMessage(

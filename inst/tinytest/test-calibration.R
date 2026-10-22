@@ -32,28 +32,33 @@ expect_equal(r0, expected_r0)
 # Now we test it empirically by running a simulation with the calibrated
 # transmission rate (scaling factor applied to transmission_rate) and checking
 # the average reproduction number across simulations.
-m_model <- ModelMeaslesMixing(
-  n = 3000,
-  prevalence = 1 / 3000,
-  transmission_rate = 0.2 * calib_val,
-  vax_efficacy = 0.97,
-  contact_matrix = cmat,
-  hospitalization_rate = 0.05,
-  hospitalization_period = 7,
-  days_undetected = 2,
-  prop_vaccinated = 0
-)
+make_model <- function(contact_matrix) {
+  m <- ModelMeaslesMixing(
+    n = 3000,
+    prevalence = 1 / 3000,
+    transmission_rate = 0.2 * calib_val,
+    vax_efficacy = 0.97,
+    contact_matrix = contact_matrix,
+    hospitalization_rate = 0.05,
+    hospitalization_period = 7,
+    days_undetected = 2,
+    prop_vaccinated = 0
+  )
 
-add_entities_from_dataframe(
-  model = m_model,
-  entities = data.frame(
-    id = as.character(1:3),
-    size = as.integer(c(200, 100, 2700))
-  ),
-  col_name = "id",
-  col_number = "size",
-  as_proportion = FALSE
-)
+  add_entities_from_dataframe(
+    model = m,
+    entities = data.frame(
+      id = as.character(1:3),
+      size = as.integer(c(200, 100, 2700))
+    ),
+    col_name = "id",
+    col_number = "size",
+    as_proportion = FALSE
+  )
+  m
+}
+
+m_model <- make_model(cmat)
 
 run_multiple(
   m_model,
@@ -77,16 +82,14 @@ expect_equal(mean(ans$rt), r0, tol = 0.5)
 # with rash can be infectious but with reduced
 # contact rates
 
+# Homogenizing so it is easier to check the calibration empirically (until
+# the measles models move to layers, the contact matrix is set when the model
+# is built)
+m_model <- make_model(cmat * 0 + 4)
+
 set_param(m_model, "Rash reduction contact rate", .8)
 set_param(m_model, "Days undetected", -1) # Deactivating
 set_param(m_model, "Quarantine period", -1) # Deactivating
-
-# Homogenizing so it is easier to check
-# the calibration empirically
-epiworldR::set_contact_matrix(
-  m_model, 
-  cmat * 0 + 4
-)
 
 run_multiple(
   m_model,
