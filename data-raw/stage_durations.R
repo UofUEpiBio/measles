@@ -11,9 +11,11 @@
 # standard deviation (natural scale), rounded to whole days with a minimum of
 # one (inst/include/measles/stages.hpp); stage_pmf() reproduces that.
 #
-# The Hagelloch data are read from the `surveillance` package (GPL-2), not
-# copied into this repository. Only aggregate results are written, to
-# data-raw/stage_durations.csv.
+# The only data used are the days from prodrome onset to rash onset in the
+# Hagelloch outbreak, stored in data-raw/hagelloch_prodromal_days.csv (one
+# column, sorted, no other fields). The file is extracted from the
+# `surveillance` package the first time the script runs. The results are
+# written to data-raw/stage_durations.csv.
 #
 # Usage (from the package root): Rscript data-raw/stage_durations.R
 # Date: 2026-10-30
@@ -65,9 +67,17 @@ add(
 # interval censored: a count of k days is a duration in (k - 0.5, k + 0.5].
 # Zero-day intervals (2 of 188) are left out of the fits, as the model's
 # minimum is one day.
-data("hagelloch", package = "surveillance")
-prodromal <- as.numeric(hagelloch.df$ERU - hagelloch.df$PRO)
-prodromal <- prodromal[!is.na(prodromal)]
+hagelloch_file <- "data-raw/hagelloch_prodromal_days.csv"
+if (!file.exists(hagelloch_file)) {
+  data("hagelloch", package = "surveillance")
+  prodromal_days <- as.numeric(hagelloch.df$ERU - hagelloch.df$PRO)
+  utils::write.csv(
+    data.frame(prodromal_days = sort(prodromal_days[!is.na(prodromal_days)])),
+    hagelloch_file,
+    row.names = FALSE
+  )
+}
+prodromal <- utils::read.csv(hagelloch_file)$prodromal_days
 
 add("prodromal_period_sd", "Cases (n)", length(prodromal))
 add("prodromal_period_sd", "Mean (days)", mean(prodromal))

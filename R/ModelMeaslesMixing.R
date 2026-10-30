@@ -99,19 +99,36 @@
 #' and standard deviation (`incubation_period_sd`, `prodromal_period_sd`,
 #' `rash_period_sd`), both in days. The draw is rounded to whole days, with a
 #' minimum of one. A standard deviation of zero gives a fixed duration.
+#'
 #' Before version 0.4.1-0, every stage was left with a daily probability
-#' (1 / mean), so its duration was geometric: about 7% of agents with a mean
-#' incubation period of 12 days were still latent after 30 days, longer than
-#' a 21-day quarantine. With the defaults, no agent is.
+#' (1 / mean), so its duration was geometric (memoryless). Measles stage
+#' durations are not: they are concentrated around their mean, and the
+#' geometric puts too much weight on short and long stays. With a mean
+#' incubation period of 12 days, 16% of agents were still latent after 21
+#' days, longer than a quarantine; with the lognormal default, 0.2% are.
+#'
+#' The evidence for each stage (see [measles_parameters()] and
+#' `vignette("parameters")`):
+#'
+#' - **Incubation:** incubation periods of infectious diseases are well
+#'   described by lognormal distributions (Sartwell, 1950), and the pooled
+#'   measles estimate of Lessler et al. (2009) is a lognormal (median 12.5
+#'   days, dispersion 1.23), which gives the default standard deviation.
+#' - **Prodromal:** in the 1861 Hagelloch outbreak (188 cases), the days from
+#'   prodrome to rash onset are fitted equally well by a lognormal and a gamma
+#'   (mean 4.0, sd 1.7), and much worse by an exponential (geometric). No
+#'   published study fits a distribution to this period, as far as we know.
+#' - **Rash:** no data describe the distribution of the infectious part of
+#'   the rash; the lognormal and its standard deviation are assumptions.
+#'
+#' Compartmental models of measles describe the latent and infectious periods
+#' with gamma (Erlang) distributions instead, for the same reason (Conlan et
+#' al., 2010). With the means and standard deviations used here, a lognormal
+#' and a gamma differ little.
 #'
 #' Moving to quarantine or isolation does not change the stage: an agent
 #' moved from Latent to Quarantined Latent keeps the day its latent period
 #' ends, and so does an agent moved from Rash to Isolated.
-#'
-#' The default standard deviations come from the literature (see
-#' [measles_parameters()]): the incubation period from the lognormal fit of
-#' Lessler et al. (2009), and the prodromal period from the 1861 Hagelloch
-#' outbreak. The standard deviation of the rash period is an assumption.
 #'
 #' @section Hospitalization Probability:
 #' Instead of hospitalization probability, the model uses hospitalization rate:
