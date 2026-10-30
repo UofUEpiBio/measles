@@ -8,7 +8,6 @@
 ModelMeaslesMixingRiskQuarantine(
   n,
   prevalence,
-  contact_matrix,
   transmission_rate = 0.9,
   prop_vaccinated,
   vax_efficacy = 0.97,
@@ -33,9 +32,6 @@ ModelMeaslesMixingRiskQuarantine(
 \item{n}{Number of individuals in the population.}
 
 \item{prevalence}{Double. Initial proportion of individuals with the virus.}
-
-\item{contact_matrix}{A numeric square matrix with the expected number of
-contacts per time step between population groups.}
 
 \item{transmission_rate}{Numeric scalar between 0 and 1. Probability of
 transmission (default: 0.9).}
@@ -88,7 +84,7 @@ the onset of symptoms for which contact tracing is effective (default: 4).}
 \value{
 \itemize{
 \item The \code{ModelMeaslesMixingRiskQuarantine} function returns a model of classes
-\link[epiworldR:epiworld_model]{epiworld_model} and \link{epiworld_measlesmixingriskquarantine}.
+\link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \link{epiworld_measlesmixingriskquarantine}.
 }
 }
 \description{
@@ -98,10 +94,11 @@ includes vaccination, quarantine with three risk levels (high, medium, low), iso
 and contact tracing mechanisms.
 }
 \details{
-The \code{contact_matrix} is a square matrix of contact rates between entities.
-Entry \verb{[i, j]} gives the expected number of contacts that an agent in entity
-\code{i} has with agents in entity \code{j} during a time step. The matrix should have
-one row and one column per entity in the model.
+The contacts come from the model's mixing layer, which the user adds, as for
+\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}: a \code{\link[epiworldR:mixing-layers]{epiworldR::layer_mixing()}} with the groups of the
+agents and a contact matrix (entry \verb{[i, j]} is the expected number of
+contacts that an agent in group \code{i} has with agents in group \code{j} during a
+time step).
 
 The model includes three distinct phases of measles infection: latent
 (incubation), prodromal, and rash periods. Vaccination provides protection against
@@ -110,13 +107,13 @@ transmission.
 Risk-based quarantine strategies assign different quarantine durations based on
 exposure risk:
 \itemize{
-\item \strong{High Risk}: Unvaccinated agents who share entity membership with the case
+\item \strong{High Risk}: Unvaccinated agents in the same group as the case
 \item \strong{Medium Risk}: Unvaccinated agents who contacted an infected individual but
-don't share entity membership
+are not in its group
 \item \strong{Low Risk}: Other unvaccinated agents
 }
 
-The \link[epiworldR:initial_states]{initial_states} function allows the user to set the initial state of the
+The \link[epiworldR:epiworld-methods]{epiworldR::initial_states} function allows the user to set the initial state of the
 model. In particular, the user can specify how many of the non-infected
 agents have been removed at the beginning of the simulation.
 
@@ -136,12 +133,6 @@ The defaults and their literature sources are listed in \code{\link[=measles_par
 
 \examples{
 
-# Start off creating three entities.
-# Individuals will be distributed randomly between the three.
-e1 <- entity("Population 1", 3e3, as_proportion = FALSE)
-e2 <- entity("Population 2", 3e3, as_proportion = FALSE)
-e3 <- entity("Population 3", 3e3, as_proportion = FALSE)
-
 # Contact matrix including within- and between-group contact rates
 cmatrix <- c(
   c(0.9, 0.05, 0.05),
@@ -158,18 +149,22 @@ N <- 9e3
 measles_model <- ModelMeaslesMixingRiskQuarantine(
   n                        = N,
   prevalence               = 1 / N,
-  contact_matrix           = cmatrix,
   prop_vaccinated          = 0.95,
   quarantine_willingness   = 0.9,
   isolation_willingness    = 0.9,
   contact_tracing_success_rate = 0.8
 )
 
-# Adding the entities to the model
-measles_model |>
-  add_entity(e1) |>
-  add_entity(e2) |>
-  add_entity(e3)
+# Three groups of 3,000, drawn at random at every run, mixing by the
+# contact matrix
+add_layer(
+  measles_model,
+  layer_mixing(
+    "mixing",
+    groups         = grouping_random(c(3e3, 3e3, 3e3)),
+    contact_matrix = cmatrix
+  )
+)
 
 set.seed(331)
 run(measles_model, ndays = 100)
@@ -179,13 +174,13 @@ summary(measles_model)
 \seealso{
 epiworld-methods
 
-Other Models:
-\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}},
-\code{\link[=ModelMeaslesSchool]{ModelMeaslesSchool()}}
+Other Models: 
+\code{\link{ModelMeaslesMixing}()},
+\code{\link{ModelMeaslesSchool}()}
 
-Other measles models:
-\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}},
-\code{\link[=ModelMeaslesSchool]{ModelMeaslesSchool()}}
+Other measles models: 
+\code{\link{ModelMeaslesMixing}()},
+\code{\link{ModelMeaslesSchool}()}
 }
 \concept{Models}
 \concept{measles models}

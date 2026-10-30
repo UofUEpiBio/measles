@@ -6,8 +6,6 @@
 #'
 #' @param n Number of individuals in the population.
 #' @param prevalence Double. Initial proportion of individuals with the virus.
-#' @param contact_matrix A numeric square matrix with the expected number of
-#' contacts per time step between population groups.
 #' @param vax_reduction_recovery_rate Double. Vaccine reduction in recovery
 #' rate (default: 0.5). **Not active:** the model registers it as
 #' "(IGNORED) Vax improved recovery", and it has no effect on the simulation.
@@ -42,10 +40,15 @@
 #' @family measles models
 #' @concept measles-models
 #' @details
-#' The `contact_matrix` is a square matrix of contact rates between entities.
-#' Entry `[i, j]` gives the expected number of contacts that an agent in entity
-#' `i` has with agents in entity `j` during a time step. The matrix should have
-#' one row and one column per entity in the model.
+#' The contacts come from the model's mixing layer, which the user adds with
+#' [epiworldR::add_layer()] and [epiworldR::layer_mixing()]: the groups of the
+#' agents (fixed, or drawn at every run with [epiworldR::grouping_random()])
+#' and a contact matrix, a square matrix whose entry `[i, j]` gives the
+#' expected number of contacts that an agent in group `i` has with agents in
+#' group `j` during a time step (one row and one column per group). The model
+#' samples its contacts from that layer with its own sampler and has no other
+#' layers; running it without one is an error. Its contacts are logged in the
+#' layer (see [epiworldR::get_tracing()]), which the quarantine process reads.
 #'
 #' The model includes three distinct phases of measles infection: incubation,
 #' prodromal, and rash periods. Vaccination provides protection against
@@ -62,7 +65,7 @@
 #' allow agents with Rash to still contact other agents, albeit at a reduced
 #' rate. For example, if the user sets `rash_reduction_contact_rate` to 0.8,
 #' agents in the rash period will have 20% of the contact rates specified in
-#' the `contact_matrix` instead of 0%.
+#' the contact matrix instead of 0%.
 #'
 #' The basic reproduction number (R0) of the model can be computed as
 #'
@@ -73,7 +76,7 @@
 #' }
 #'
 #' Where \eqn{p_t} is the `transmission_rate`, \eqn{c} is the average number of
-#' contacts per time step (given by the `contact_matrix`), \eqn{D_p} is
+#' contacts per time step (given by the contact matrix), \eqn{D_p} is
 #' the duration of the prodromal period, \eqn{D_r} is the duration of the rash
 #' period, and \eqn{r_r} is the `rash_reduction_contact_rate`. Therefore, when
 #' calibrating the model, the effective infectious period should be considered
@@ -114,12 +117,6 @@
 #'
 #' @examples
 #'
-#' # Start off creating three entities.
-#' # Individuals will be distributed randomly between the three.
-#' e1 <- entity("Population 1", 3e3, as_proportion = FALSE)
-#' e2 <- entity("Population 2", 3e3, as_proportion = FALSE)
-#' e3 <- entity("Population 3", 3e3, as_proportion = FALSE)
-#'
 #' # Contact matrix including within- and between-group contact rates
 #' cmatrix <- (c(
 #'   c(0.9, 0.05, 0.05),
@@ -135,18 +132,22 @@
 #' measles_model <- ModelMeaslesMixing(
 #'   n                        = N,
 #'   prevalence               = 1 / N,
-#'   contact_matrix           = cmatrix,
 #'   prop_vaccinated          = 0.95,
 #'   quarantine_willingness   = 0.9,
 #'   isolation_willingness    = 0.9,
 #'   contact_tracing_success_rate = 0.8
 #' )
 #'
-#' # Adding the entities to the model
-#' measles_model |>
-#'   add_entity(e1) |>
-#'   add_entity(e2) |>
-#'   add_entity(e3)
+#' # Three groups of 3,000, drawn at random at every run, mixing by the
+#' # contact matrix
+#' add_layer(
+#'   measles_model,
+#'   layer_mixing(
+#'     "mixing",
+#'     groups         = grouping_random(c(3e3, 3e3, 3e3)),
+#'     contact_matrix = cmatrix
+#'   )
+#' )
 #'
 #' set.seed(331)
 #' run(measles_model, ndays = 100)
@@ -156,7 +157,6 @@
 ModelMeaslesMixing <- function(
   n,
   prevalence,
-  contact_matrix,
   vax_reduction_recovery_rate = .5,
   transmission_rate = .9,
   prop_vaccinated,
@@ -184,7 +184,6 @@ ModelMeaslesMixing <- function(
   stopifnot_double(incubation_period)
   stopifnot_double(prodromal_period)
   stopifnot_double(rash_period)
-  stopifany_na(contact_matrix)
   stopifnot_double(hospitalization_rate)
   stopifnot_double(hospitalization_period)
   stopifnot_double(days_undetected)
@@ -207,7 +206,6 @@ ModelMeaslesMixing <- function(
       incubation_period = incubation_period,
       prodromal_period = prodromal_period,
       rash_period = rash_period,
-      contact_matrix = as.vector(contact_matrix),
       hospitalization_rate = hospitalization_rate,
       hospitalization_period = hospitalization_period,
       days_undetected = days_undetected,

@@ -124,7 +124,6 @@ measles_model <- ModelMeaslesMixing(
   prevalence                   = 1 / N,
   transmission_rate            = 0.2 * scaling_factor,
   vax_efficacy                 = 0.97,
-  contact_matrix               = short_creek_matrix,
   prop_vaccinated              = 0.0, # This is modified later
   # Quarantine and isolation parameters
   days_undetected              = 2,
@@ -142,27 +141,28 @@ measles_model <- ModelMeaslesMixing(
 )
 ```
 
-Now, since this is a mixing model, we are required to specify the entities. To do so, we can either use the functions `entity()` and `add_entity()`, or use the wrapper `add_entities_from_dataframe()` as follows:
+Now, since this is a mixing model, we add its mixing layer: the group of each agent (here the age groups and schools, with the sizes in `short_creek`, as consecutive blocks of agents) and the contact matrix between them:
 
 
 ```{r}
-#| label: distribute-virus
-# Adding the entities to the model
-add_entities_from_dataframe(
-  model = measles_model,
-  entities = short_creek,
-  col_name = "age_labels",
-  col_number = "agepops",
-  as_proportion = FALSE
+#| label: add-layer
+add_layer(
+  measles_model,
+  layer_mixing(
+    "mixing",
+    groups         = rep(seq_along(short_creek$agepops) - 1L, short_creek$agepops),
+    contact_matrix = short_creek_matrix
+  )
 )
 ```
 
-We can also specify the vaccination rates. There are multiple ways in which we can do that. The default behavior of the model is, at each run, randomly sample `prop_vaccinated` percent of the population and assign the vaccine. Thus, the number of vaccinated individuals will be constant across simulations. Nonetheless, since the schools and age groups have different vaccination rates, it is better to use the `distribute_tool_to_entities()` function. Like the `add_entities_from_dataframe()` function, the `distribute_tool_to_entities()` function simplifies the process:
+We can also specify the vaccination rates. There are multiple ways in which we can do that. The default behavior of the model is, at each run, randomly sample `prop_vaccinated` percent of the population and assign the vaccine. Thus, the number of vaccinated individuals will be constant across simulations. Nonetheless, since the schools and age groups have different vaccination rates, it is better to use the `distribute_tool_to_groups()` function, which vaccinates a share of each group of the mixing layer:
 
 ```{r}
 #| label: distribute-tool
 # Creating the distribution function
-dist_fun <- distribute_tool_to_entities(
+dist_fun <- distribute_tool_to_groups(
+  layer = "mixing",
   prevalence = short_creek$vacc_rate,
   as_proportion = TRUE
 )

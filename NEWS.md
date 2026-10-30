@@ -1,19 +1,54 @@
 # measles 0.5.0-0 (development)
 
 Tracks epiworldR 1.0.0 (its `v1-layers` branch), where contacts come from
-contact layers. The measles models themselves move to layers in a later
-development version; until then:
+contact layers.
 
 * `{measles}` requires `{epiworldR}` (>= 1.0.0), and its headers come from
   epiworld's `v1-layers` (`inst/include/VERSIONS` records the commit).
 
-* epiworldR's `get_contact_matrix()` and `set_contact_matrix()` now take a
-  mixing layer, which the measles mixing models do not have yet: their contact
-  matrix is the one given to the constructor. Build a new model to use another
-  matrix.
+* **Breaking:** `ModelMeaslesMixing()` and
+  `ModelMeaslesMixingRiskQuarantine()` take their groups and contact matrix
+  from a mixing layer, which you add instead of entities, and lose their
+  `contact_matrix` argument:
 
-* `get_transmissions()` gains epiworldR's `layer` column (`-1` throughout,
-  since the measles models do not sample from layers yet).
+  ```r
+  model <- ModelMeaslesMixing(n = 9000, prevalence = 1 / 9000, prop_vaccinated = .95)
+  add_layer(
+    model,
+    layer_mixing(
+      "mixing",
+      groups         = grouping_random(c(3000, 3000, 3000)),
+      contact_matrix = cmatrix
+    )
+  )
+  ```
+
+  `grouping_random()` draws what `entity(name, size, as_proportion = FALSE)`
+  did; fixed groups (e.g., `rep(0:2, sizes)`, what
+  `add_entities_from_dataframe()` did) go in `groups` as well. Running a mixing
+  model without its layer, or with other layers, is an error. The contacts are
+  logged in the layer, which the quarantine process reads; since the layer
+  holds the contact matrix, epiworldR's `get_contact_matrix()` and
+  `set_contact_matrix()` on `get_layer(model, "mixing")` read and change it,
+  and `set_contact_rate()` on the layer scales it by a model parameter.
+
+* Vaccination by group uses epiworldR's `distribute_tool_to_groups("mixing",
+  rates)` instead of `distribute_tool_to_entities()` (see the Short Creek
+  vignette).
+
+* `ModelMeaslesSchool()` does not change; it now logs its contacts in its own
+  layer, `"school"`.
+
+* `get_transmissions()`'s `layer` column stays `-1` for the measles models:
+  their own samplers do not record the layer of a contact.
+
+* In `measles_parameters()`, the contact matrix is no longer an argument of
+  the mixing models (it is the mixing layer's).
+
+* `ModelMeaslesMixing()`: detected initial cases now leave isolation once the
+  isolation period is over (before, those who recovered in isolation stayed in
+  "Isolated Recovered" for good). Results for a given seed change when that
+  happens.
 
 # measles 0.4.1-0
 

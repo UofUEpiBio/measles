@@ -73,7 +73,6 @@ SEXP ModelMeaslesMixing_cpp(
     double incubation_period,
     double prodromal_period,
     double rash_period,
-    std::vector< double > contact_matrix,
     double hospitalization_rate,
     double hospitalization_period,
     // Policy parameters
@@ -99,7 +98,6 @@ SEXP ModelMeaslesMixing_cpp(
           incubation_period,
           prodromal_period,
           rash_period,
-          contact_matrix,
           hospitalization_rate,
           hospitalization_period,
           days_undetected,
@@ -127,7 +125,6 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
     double incubation_period,
     double prodromal_period,
     double rash_period,
-    std::vector< double > contact_matrix,
     double hospitalization_rate,
     double hospitalization_period,
     // Policy parameters
@@ -154,7 +151,6 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
           incubation_period,
           prodromal_period,
           rash_period,
-          contact_matrix,
           hospitalization_rate,
           hospitalization_period,
           days_undetected,

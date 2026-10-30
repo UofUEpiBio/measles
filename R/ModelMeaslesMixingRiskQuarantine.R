@@ -7,8 +7,6 @@
 #'
 #' @param n Number of individuals in the population.
 #' @param prevalence Double. Initial proportion of individuals with the virus.
-#' @param contact_matrix A numeric square matrix with the expected number of
-#' contacts per time step between population groups.
 #' @param transmission_rate Numeric scalar between 0 and 1. Probability of
 #' transmission (default: 0.9).
 #' @param prop_vaccinated Double. Proportion of population that is vaccinated.
@@ -44,10 +42,11 @@
 #' @family measles models
 #' @concept measles-models
 #' @details
-#' The `contact_matrix` is a square matrix of contact rates between entities.
-#' Entry `[i, j]` gives the expected number of contacts that an agent in entity
-#' `i` has with agents in entity `j` during a time step. The matrix should have
-#' one row and one column per entity in the model.
+#' The contacts come from the model's mixing layer, which the user adds, as for
+#' [ModelMeaslesMixing()]: a [epiworldR::layer_mixing()] with the groups of the
+#' agents and a contact matrix (entry `[i, j]` is the expected number of
+#' contacts that an agent in group `i` has with agents in group `j` during a
+#' time step).
 #'
 #' The model includes three distinct phases of measles infection: latent
 #' (incubation), prodromal, and rash periods. Vaccination provides protection against
@@ -55,9 +54,9 @@
 #'
 #' Risk-based quarantine strategies assign different quarantine durations based on
 #' exposure risk:
-#' - **High Risk**: Unvaccinated agents who share entity membership with the case
+#' - **High Risk**: Unvaccinated agents in the same group as the case
 #' - **Medium Risk**: Unvaccinated agents who contacted an infected individual but
-#'   don't share entity membership
+#'   are not in its group
 #' - **Low Risk**: Other unvaccinated agents
 #'
 #' The [initial_states] function allows the user to set the initial state of the
@@ -79,12 +78,6 @@
 #'
 #' @examples
 #'
-#' # Start off creating three entities.
-#' # Individuals will be distributed randomly between the three.
-#' e1 <- entity("Population 1", 3e3, as_proportion = FALSE)
-#' e2 <- entity("Population 2", 3e3, as_proportion = FALSE)
-#' e3 <- entity("Population 3", 3e3, as_proportion = FALSE)
-#'
 #' # Contact matrix including within- and between-group contact rates
 #' cmatrix <- c(
 #'   c(0.9, 0.05, 0.05),
@@ -101,18 +94,22 @@
 #' measles_model <- ModelMeaslesMixingRiskQuarantine(
 #'   n                        = N,
 #'   prevalence               = 1 / N,
-#'   contact_matrix           = cmatrix,
 #'   prop_vaccinated          = 0.95,
 #'   quarantine_willingness   = 0.9,
 #'   isolation_willingness    = 0.9,
 #'   contact_tracing_success_rate = 0.8
 #' )
 #'
-#' # Adding the entities to the model
-#' measles_model |>
-#'   add_entity(e1) |>
-#'   add_entity(e2) |>
-#'   add_entity(e3)
+#' # Three groups of 3,000, drawn at random at every run, mixing by the
+#' # contact matrix
+#' add_layer(
+#'   measles_model,
+#'   layer_mixing(
+#'     "mixing",
+#'     groups         = grouping_random(c(3e3, 3e3, 3e3)),
+#'     contact_matrix = cmatrix
+#'   )
+#' )
 #'
 #' set.seed(331)
 #' run(measles_model, ndays = 100)
@@ -122,7 +119,6 @@
 ModelMeaslesMixingRiskQuarantine <- function(
   n,
   prevalence,
-  contact_matrix,
   transmission_rate = .9,
   prop_vaccinated,
   vax_efficacy = .97,
@@ -150,7 +146,6 @@ ModelMeaslesMixingRiskQuarantine <- function(
   stopifnot_double(incubation_period)
   stopifnot_double(prodromal_period)
   stopifnot_double(rash_period)
-  stopifany_na(contact_matrix)
   stopifnot_double(hospitalization_rate)
   stopifnot_double(hospitalization_period)
   stopifnot_double(days_undetected)
@@ -174,7 +169,6 @@ ModelMeaslesMixingRiskQuarantine <- function(
       incubation_period = incubation_period,
       prodromal_period = prodromal_period,
       rash_period = rash_period,
-      contact_matrix = as.vector(contact_matrix),
       hospitalization_rate = hospitalization_rate,
       hospitalization_period = hospitalization_period,
       days_undetected = days_undetected,
