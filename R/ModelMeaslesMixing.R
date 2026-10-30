@@ -145,10 +145,11 @@
 #'
 #' which, for a fixed rash period (`rash_period_sd = 0`), is
 #' \eqn{1 - (1 - h)^D}. To match a desired hospitalization probability
-#' `p_hosp` with a rash period of `rash_days` days, use approximately
+#' `p_hosp`, use [hospitalization_rate()], which solves the equation for the
+#' drawn rash period:
 #'
 #' ```r
-#' h_rate <- 1 - (1 - p_hosp)^(1 / rash_days)
+#' h_rate <- hospitalization_rate(p_hosp, rash_period, rash_period_sd)
 #' ```
 #'
 #' @section Parameter values and sources:

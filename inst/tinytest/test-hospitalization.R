@@ -3,22 +3,27 @@ set.seed(312)
 p_hosp <- 0.1
 rash_days <- 3
 
-# Adjusting hospitalization rate for testing purposes.
 # p_hosp is the *target* probability that an infected individual is ever
 # hospitalized over the course of their rash, whereas ModelMeaslesSchool
 # expects a daily hospitalization_rate: each day with rash, an agent is
-# hospitalized with that probability. With a fixed rash period of rash_days
-# days (rash_period_sd = 0), the probability of hospitalization is
-# 1 - (1 - hosp_rate)^rash_days, so the rate below makes the simulated
-# proportion of hospitalized cases (ans$hosp / ans$outbreak_size) close to
+# hospitalized with that probability. hospitalization_rate() finds the rate
+# for the drawn (lognormal) rash period, so the simulated proportion of
+# hospitalized cases (ans$hosp / ans$outbreak_size) should be close to
 # p_hosp, as checked by the test at the end of this file.
-hosp_rate <- 1 - (1 - p_hosp)^(1 / rash_days)
+hosp_rate <- hospitalization_rate(p_hosp, rash_days, rash_period_sd = 1)
+
+# For a fixed rash period, it is 1 - (1 - p_hosp)^(1 / rash_days)
+expect_equal(
+  hospitalization_rate(p_hosp, rash_days, rash_period_sd = 0),
+  1 - (1 - p_hosp)^(1 / rash_days),
+  tolerance = 1e-8
+)
 
 m_model <- ModelMeaslesSchool(
   n = 500L,
   prevalence = 1,
   rash_period = rash_days,
-  rash_period_sd = 0,
+  rash_period_sd = 1,
   hospitalization_rate = hosp_rate,
   prop_vaccinated = 0.5,
   quarantine_period = -1

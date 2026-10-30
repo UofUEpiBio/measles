@@ -177,7 +177,8 @@ Other Models:
 
 Other measles models: 
 \code{\link{ModelMeaslesMixing}()},
-\code{\link{ModelMeaslesMixingRiskQuarantine}()}
+\code{\link{ModelMeaslesMixingRiskQuarantine}()},
+\code{\link{hospitalization_rate}()}
 }
 \author{
 This model was built as a response to the US Measles outbreak in 2025.

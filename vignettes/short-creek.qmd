@@ -70,23 +70,22 @@ One important thing to note is that the data in `short_creek` must coincide with
 
 ## Creating the model
 
-The measles models have many parameters. One that is of particular importance is the hospitalization rate. The hospitalization rate is not a probability, so, to match a 10% hospitalization probability, we need to do some calculations. The hospitalization probability is given by the following formula:
+The measles models have many parameters. One that is of particular importance is the hospitalization rate. The hospitalization rate is not a probability: each day with rash, an agent is hospitalized with probability $h$, and otherwise it recovers when its rash period $D$ ends, so the probability of hospitalization is
 
 $$
-P(\text{hospitalization}) = \frac{\text{hospitalization}_\text{rate}}{\text{hospitalization}_\text{rate} + \text{recovery}_\text{rate}}
+P(\text{hospitalization}) = 1 - E\left[(1 - h)^D\right].
 $$
 
-Where the $\text{recovery}_\text{rate}$ is given by the rash period (1/duration of it, three days in this simulation). Programatically, we can do the following:
+The rash period is drawn for each agent (lognormal, with mean 3 days and standard deviation 1 by default), so the expectation has no closed form. The function `hospitalization_rate()` solves the equation for a target probability, here 10%:
 
 ```{r}
 #| label: identify-hosp-rate
 N <- sum(short_creek$agepops)
 
-# Finding hospitalization rate for a 10% hospitalization probability. Each
-# day with rash (3 days on average), an agent is hospitalized with
-# probability h_rate, so P(hosp) = 1 - (1 - h_rate)^3
-#   => h_rate = 1 - (1 - P(hosp))^(1/3)
-h_rate <- 1 - (1 - 0.1)^(1 / 3)
+# Daily hospitalization rate giving a 10% hospitalization probability with
+# the default rash period (mean 3 days, standard deviation 1)
+h_rate <- hospitalization_rate(0.1, rash_period = 3, rash_period_sd = 1)
+h_rate
 ```
 
 For calibration, we can make use of the function `calibrate_mixing_model()`, which will give us the needed scaling factor to apply to the transmission probability (or contact matrix) to get the desired R0. In this case, we will use an R0 of 12, which is consistent with the literature on measles.

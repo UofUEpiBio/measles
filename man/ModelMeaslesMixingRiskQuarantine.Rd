@@ -209,7 +209,8 @@ Other Models:
 
 Other measles models: 
 \code{\link{ModelMeaslesMixing}()},
-\code{\link{ModelMeaslesSchool}()}
+\code{\link{ModelMeaslesSchool}()},
+\code{\link{hospitalization_rate}()}
 }
 \concept{Models}
 \concept{measles models}

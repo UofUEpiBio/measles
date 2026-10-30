@@ -209,9 +209,10 @@ P(hospitalization) = 1 - E[(1 - h)^D],
 
 which, for a fixed rash period (\code{rash_period_sd = 0}), is
 \eqn{1 - (1 - h)^D}. To match a desired hospitalization probability
-\code{p_hosp} with a rash period of \code{rash_days} days, use approximately
+\code{p_hosp}, use \code{\link[=hospitalization_rate]{hospitalization_rate()}}, which solves the equation for the
+drawn rash period:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{h_rate <- 1 - (1 - p_hosp)^(1 / rash_days)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{h_rate <- hospitalization_rate(p_hosp, rash_period, rash_period_sd)
 }\if{html}{\out{</div>}}
 }
 
@@ -276,7 +277,8 @@ Other Models:
 
 Other measles models: 
 \code{\link{ModelMeaslesMixingRiskQuarantine}()},
-\code{\link{ModelMeaslesSchool}()}
+\code{\link{ModelMeaslesSchool}()},
+\code{\link{hospitalization_rate}()}
 }
 \concept{Models}
 \concept{measles models}

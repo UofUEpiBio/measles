@@ -273,12 +273,14 @@ p_days <- diff(c(0, plnorm(days + 0.5, log(rash_period) - s2 / 2, sqrt(s2))))
 1 - sum(p_days * (1 - h)^days)
 ```
 
-Before version 0.4.1-0, when the rash period was geometric and the default rate was 0.2, it was $h / (h + 1/D_r) = 0.375$. To match a target probability $p$ with a rash period of $D_r$ days, use $h = 1 - (1 - p)^{1/D_r}$ (exact for a fixed rash period). For example, recent analyses use $p = 0.1$, which is consistent with the 8% overall (9% among the unvaccinated) reported in Utah [@jones2026]:
+Before version 0.4.1-0, when the rash period was geometric and the default rate was 0.2, it was $h / (h + 1/D_r) = 0.375$. To match a target probability $p$, `hospitalization_rate()` solves the equation for the drawn rash period; for a fixed rash period of $D$ days, the solution is $h = 1 - (1 - p)^{1/D}$. For example, recent analyses use $p = 0.1$, which is consistent with the 8% overall (9% among the unvaccinated) reported in Utah [@jones2026]:
 
 ```{r}
 #| label: hosp-rate
-p_hosp <- 0.1
-1 - (1 - p_hosp)^(1 / rash_period)
+hospitalization_rate(0.1, rash_period = 3, rash_period_sd = 1)
+
+# With a fixed 3-day rash period
+hospitalization_rate(0.1, rash_period = 3, rash_period_sd = 0)
 ```
 
 The default rate, 0.035, gives a probability of about 10%, which matches recent data: about 10% of the confirmed cases in the United States in 2026 [@cdc2026], and 8% in Utah [@jones2026]. Before version 0.4.1-0, the default was 0.2, an assumption chosen as a conservative value. For comparison, 18.5% of patients were hospitalized during the 2025 outbreak in West Texas [@wang2026].

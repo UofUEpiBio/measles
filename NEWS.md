@@ -4,6 +4,8 @@
 
 * **Stage durations are no longer geometric.** The incubation (latent), prodromal, and rash stages of `ModelMeaslesSchool()`, `ModelMeaslesMixing()`, and `ModelMeaslesMixingRiskQuarantine()` now last a lognormal number of days, drawn when the agent enters the stage, with the given mean (`incubation_period`, `prodromal_period`, `rash_period`) and the new arguments `incubation_period_sd` (default 2.5), `prodromal_period_sd` (1.7), and `rash_period_sd` (1.0). A standard deviation of zero gives a fixed duration. Previously, each stage was left with a daily probability of one over its mean, so long stays were too common: with a mean incubation of 12 days, 16% of cases were still latent after 21 days (0.2% now). Quarantine and isolation do not change a stage: an agent moved from Latent to Quarantined Latent keeps the day its latent period ends. The default standard deviations come from Lessler et al. (2009) and the 1861 Hagelloch outbreak; see `vignette("parameters")` and `measles_parameters()`. Simulation results change.
 
+* The new function `hospitalization_rate()` finds the daily hospitalization rate that gives a target probability of hospitalization, for the drawn rash period (e.g., `hospitalization_rate(0.1)` is 0.0347).
+
 * Each day with rash, an agent is now hospitalized with probability `hospitalization_rate`, and otherwise recovers when its rash period ends, so the probability of hospitalization is `1 - E[(1 - h)^D]`. **The default `hospitalization_rate` is now 0.035** (it was 0.2), which gives about 10% of cases hospitalized, as in recent data (CDC, 2026; Jones et al. 2026 in Utah). The previous default gave 37.5%. The documentation, the parameter table, and the vignettes show the new conversion between rate and probability.
 
 * `{measles}` now requires `{epiworldR}` (>= 0.19.0), which is distributed through R-universe (<https://uofuepibio.r-universe.dev>). The repository is listed under `Additional_repositories` in `DESCRIPTION`, so `install.packages("measles", repos = c("https://uofuepibio.r-universe.dev", "https://cloud.r-project.org"))` resolves it. The startup check now asks for `{epiworldR}` 0.19.0 as well.
@@ -22,11 +24,15 @@
 
 ## Bug fixes
 
+* In the mixing models, the probability of contacting each infectious agent of a group (contacts per day over the group's agents available for contact) could exceed 1 when most of a small group was quarantined or isolated. It is now capped at 1. Before, `std::binomial_distribution` received an invalid probability, which aborted builds with `_GLIBCXX_ASSERTIONS` (on by default in GCC 15 unoptimized builds, such as the coverage job) and was undefined behavior otherwise.
+
+* `ModelMeaslesSchool()` no longer draws a number of contacts when nobody is infectious (an invalid Poisson draw with mean 0 under the same builds). Results do not change.
+
 * Through `{epiworldR}` 0.19.0, `run_multiple()` now runs every replicate when OpenMP grants fewer threads than requested (e.g., under `OMP_THREAD_LIMIT`). Previously the replicates assigned to the missing threads were silently skipped while still being counted.
 
 ## Internal changes
 
-* Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at bd2d536 (UofUEpiBio/epiworld#348, based on master at e15ea2e), which adds the stage durations (`stages.hpp`) and includes UofUEpiBio/epiworld#338 (initial cases of `ModelMeaslesMixing()` leave isolation).
+* Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at d492315 (UofUEpiBio/epiworld#348, based on master at e15ea2e), which adds the stage durations (`stages.hpp`) and includes UofUEpiBio/epiworld#338 (initial cases of `ModelMeaslesMixing()` leave isolation).
 
 * Added `inst/tinytest/test-stage-durations.R`, which checks fixed and lognormal stage durations end to end.
 

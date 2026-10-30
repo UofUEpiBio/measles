@@ -42,7 +42,8 @@ is, where its value comes from, and further notes.
 
 Hospitalization in the models is a daily rate, not a probability. The
 probability of hospitalization is \code{1 - E[(1 - h)^D]}, with \code{D} the rash
-period (\code{1 - (1 - h)^D} for a fixed rash period). See
+period (\code{1 - (1 - h)^D} for a fixed rash period); \code{\link[=hospitalization_rate]{hospitalization_rate()}}
+finds the rate for a target probability. See
 \code{vignette("parameters", package = "measles")} for more details.
 
 When printed, the table shows each parameter with its R argument, in a

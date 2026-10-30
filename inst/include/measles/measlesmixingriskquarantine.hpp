@@ -366,10 +366,14 @@ inline size_t ModelMeaslesMixingRiskQuarantine<TSeq>::sample_infectious_agents(
         if (group_size == 0u)
             continue;
 
-        // How many from this entity?
+        // How many from this entity? The probability is capped at 1, since
+        // the contacts can outnumber the agents available for contact
         int nsamples = this->rbinom(
             group_size,
-            adjusted_contact_rate[g] * this->get_contact_rate(agent_group_id, g, false)
+            std::min(
+                1.0,
+                adjusted_contact_rate[g] * this->get_contact_rate(agent_group_id, g, false)
+            )
         );
 
         if (nsamples == 0)
@@ -482,7 +486,6 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_susceptible(
         return;
 
     p->set_virus(*m, *m->array_virus_tmp[which], LATENT);
-    m_down->start_latent(p, m);
 
     return;
 
@@ -499,7 +502,6 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_latent(
     if (model->stage_over(p, m))
     {
         p->change_state(*m, PRODROMAL);
-        model->start_prodromal(p, m);
     }
 
 }
@@ -520,7 +522,6 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_prodromal(
 
         model->day_rash_onset[p->get_id()] = m->today();
         p->change_state(*m, detect_it ? ISOLATED : RASH);
-        model->start_rash(p, m);
 
         if (detect_it)
             model->m_add_contact_tracing(p->get_id());
@@ -664,7 +665,6 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_quarantine_latent(
             (quarantine_period <= days_since) ?
             PRODROMAL : QUARANTINED_PRODROMAL
         );
-        model->start_prodromal(p, m);
         
 
     }
@@ -698,7 +698,6 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::_update_quarantine_prodromal
         
         model->day_rash_onset[p->get_id()] = m->today();
         p->change_state(*m, ISOLATED);
-        model->start_rash(p, m);
         
     }
     else if (quarantine_period <= days_since)

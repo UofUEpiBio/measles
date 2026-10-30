@@ -324,16 +324,18 @@ inline std::unique_ptr<Model<TSeq>> ModelMeaslesSchool<TSeq>::clone_ptr()
 
 LOCAL_UPDATE_FUN(_update_susceptible) {
 
-    // How many contacts to draw
-    int ndraw = m->rbinom();
-
-    if (ndraw == 0)
-        return;
-
+    // Nobody to contact (checked first: the contact distribution has no
+    // agents to draw from)
     auto* model = model_cast<ModelMeaslesSchool<TSeq>,TSeq>(m);
     size_t n_infectious = model->infectious.size();
 
     if (n_infectious == 0)
+        return;
+
+    // How many contacts to draw
+    int ndraw = m->rbinom();
+
+    if (ndraw == 0)
         return;
 
     // Drawing from the set
@@ -398,7 +400,6 @@ LOCAL_UPDATE_FUN(_update_susceptible) {
         return;
 
     p->set_virus(*m, *m->array_virus_tmp[which]);
-    model->start_latent(p, m);
 
     return;
 
@@ -410,7 +411,6 @@ LOCAL_UPDATE_FUN(_update_latent) {
     if (model->stage_over(p, m))
     {
         p->change_state(*m, ModelMeaslesSchool<TSeq>::PRODROMAL);
-        model->start_prodromal(p, m);
     }
 
     return;
@@ -424,7 +424,6 @@ LOCAL_UPDATE_FUN(_update_prodromal) {
     {
         model->day_rash_onset[p->get_id()] = m->today();
         p->change_state(*m, ModelMeaslesSchool<TSeq>::RASH);
-        model->start_rash(p, m);
     }
 
     return;
@@ -530,7 +529,6 @@ LOCAL_UPDATE_FUN(_update_q_latent) {
         // the prodromal period. Otherwise, they are moved to the
         // quarantined prodromal period.
         p->change_state(*m, unquarantine ? PRODROMAL : QUARANTINED_PRODROMAL);
-        model->start_prodromal(p, m);
 
     }
     else if (unquarantine)
@@ -570,7 +568,6 @@ LOCAL_UPDATE_FUN(_update_q_prodromal) {
     {
         model->day_rash_onset[p->get_id()] = m->today();
         p->change_state(*m, ISOLATED);
-        model->start_rash(p, m);
     }
     else
     {
