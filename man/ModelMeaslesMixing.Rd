@@ -20,12 +20,15 @@ ModelMeaslesMixing(
   incubation_period = 12,
   prodromal_period = 4,
   rash_period = 3,
-  hospitalization_rate = 0.2,
+  hospitalization_rate = 0.035,
   hospitalization_period = 7,
   days_undetected = 2,
   contact_tracing_success_rate = 1,
   contact_tracing_days_window = 4,
-  rash_reduction_contact_rate = 1
+  rash_reduction_contact_rate = 1,
+  incubation_period_sd = 2.5,
+  prodromal_period_sd = 1.7,
+  rash_period_sd = 1
 )
 }
 \arguments{
@@ -59,14 +62,18 @@ quarantine (default: 1).}
 
 \item{isolation_period}{Integer. Number of days for isolation (default: 4).}
 
-\item{incubation_period}{Double. Duration of incubation period (default: 12).}
+\item{incubation_period}{Double. Mean duration of the incubation period in
+days (default: 12).}
 
-\item{prodromal_period}{Double. Duration of prodromal period (default: 4).}
+\item{prodromal_period}{Double. Mean duration of the prodromal period in
+days (default: 4).}
 
-\item{rash_period}{Double. Duration of rash period (default: 3).}
+\item{rash_period}{Double. Mean duration of the rash period in days
+(default: 3).}
 
 \item{hospitalization_rate}{Double. Daily rate of hospitalization, not a
-probability (default: 0.2). See the Hospitalization Probability section.}
+probability (default: 0.035, about 10\% of cases hospitalized). See the
+Hospitalization Probability section.}
 
 \item{hospitalization_period}{Double. Period of hospitalization (default: 7).}
 
@@ -81,6 +88,15 @@ that will be considered for contact tracing (default: 4).}
 
 \item{rash_reduction_contact_rate}{Double. Reduction in contact rate during
 rash period (default: 1.0, full reduction). (see details)}
+
+\item{incubation_period_sd}{Double. Standard deviation of the incubation
+period in days (default: 2.5). See the Stage Durations section.}
+
+\item{prodromal_period_sd}{Double. Standard deviation of the prodromal
+period in days (default: 1.7).}
+
+\item{rash_period_sd}{Double. Standard deviation of the rash period in days
+(default: 1.0).}
 }
 \value{
 \itemize{
@@ -127,32 +143,57 @@ R0 = p_t c (D_p + (1-r_r) D_r)
 
 Where \eqn{p_t} is the \code{transmission_rate}, \eqn{c} is the average number of
 contacts per time step (given by the \code{contact_matrix}), \eqn{D_p} is
-the duration of the prodromal period, \eqn{D_r} is the duration of the rash
-period, and \eqn{r_r} is the \code{rash_reduction_contact_rate}. Therefore, when
+the mean duration of the prodromal period, \eqn{D_r} is the mean number of
+days with rash before recovery or hospitalization (shorter than the rash
+period when hospitalization is likely), and \eqn{r_r} is the
+\code{rash_reduction_contact_rate}. Therefore, when
 calibrating the model, the effective infectious period should be considered
 as the sum of the prodromal period and the rash period scaled by
 \code{(1 - rash_reduction_contact_rate)}.
 }
 
+\section{Stage Durations}{
+
+The latent (incubation), prodromal, and rash stages last a number of days
+drawn when the agent enters the stage, from a lognormal distribution with
+the stage's mean (\code{incubation_period}, \code{prodromal_period}, \code{rash_period})
+and standard deviation (\code{incubation_period_sd}, \code{prodromal_period_sd},
+\code{rash_period_sd}), both in days. The draw is rounded to whole days, with a
+minimum of one. A standard deviation of zero gives a fixed duration.
+Before version 0.4.1-0, every stage was left with a daily probability
+(1 / mean), so its duration was geometric: about 7\% of agents with a mean
+incubation period of 12 days were still latent after 30 days, longer than
+a 21-day quarantine. With the defaults, no agent is.
+
+Moving to quarantine or isolation does not change the stage: an agent
+moved from Latent to Quarantined Latent keeps the day its latent period
+ends, and so does an agent moved from Rash to Isolated.
+
+The default standard deviations come from the literature (see
+\code{\link[=measles_parameters]{measles_parameters()}}): the incubation period from the lognormal fit of
+Lessler et al. (2009), and the prodromal period from the 1861 Hagelloch
+outbreak. The standard deviation of the rash period is an assumption.
+}
+
 \section{Hospitalization Probability}{
 
-Instead of hospitalization probability, the model uses hospitalization rate.
-The following equation describes the hospitalization probability as a
-function of the hospitalization rate and recovery rate (from rash):
+Instead of hospitalization probability, the model uses hospitalization rate:
+each day with rash (in the Rash or Isolated states), an agent is
+hospitalized with probability \eqn{h} (\code{hospitalization_rate}); otherwise,
+it recovers when its rash period \eqn{D} ends. The probability of
+hospitalization is
 
 \deqn{
-P(\text{hospitalization}) =
- \frac{
-   \text{hospitalization}_\text{rate}}{
-   \text{hospitalization}_\text{rate} + \text{recovery}_\text{rate}
-}
+P(\text{hospitalization}) = 1 - E\left[(1 - h)^D\right],
+}{
+P(hospitalization) = 1 - E[(1 - h)^D],
 }
 
-Where the \eqn{\text{recovery}_\text{rate}} is given by the rash period
-(1/duration of it). In other words, to match a desired hospitalization
-probability, the user needs to use the following:
+which, for a fixed rash period (\code{rash_period_sd = 0}), is
+\eqn{1 - (1 - h)^D}. To match a desired hospitalization probability
+\code{p_hosp} with a rash period of \code{rash_days} days, use approximately
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{h_rate <- p_hosp * (1/rash_days) / (1 - p_hosp)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{h_rate <- 1 - (1 - p_hosp)^(1 / rash_days)
 }\if{html}{\out{</div>}}
 }
 

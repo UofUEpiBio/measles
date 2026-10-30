@@ -82,13 +82,11 @@ Where the $\text{recovery}_\text{rate}$ is given by the rash period (1/duration 
 #| label: identify-hosp-rate
 N <- sum(short_creek$agepops)
 
-# Finding hospitalization rate for
-# a 10% hospitalization probability
-# P(hosp) = hosp_r / (hosp_r + rec_r)
-#   => hosp_r = P(hosp) (hosp_r + rec_r)
-#             = P(hosp) * hosp_r + P(hosp) * rec_r
-#   => hosp_r = P(hosp) * rec_r / (1 - P(hosp))
-h_rate <- 0.1 * (1 / 3) / (1 - 0.1)
+# Finding hospitalization rate for a 10% hospitalization probability. Each
+# day with rash (3 days on average), an agent is hospitalized with
+# probability h_rate, so P(hosp) = 1 - (1 - h_rate)^3
+#   => h_rate = 1 - (1 - P(hosp))^(1/3)
+h_rate <- 1 - (1 - 0.1)^(1 / 3)
 ```
 
 For calibration, we can make use of the function `calibrate_mixing_model()`, which will give us the needed scaling factor to apply to the transmission probability (or contact matrix) to get the desired R0. In this case, we will use an R0 of 12, which is consistent with the literature on measles.

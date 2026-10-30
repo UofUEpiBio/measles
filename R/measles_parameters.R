@@ -24,7 +24,8 @@
 #'   is, where its value comes from, and further notes.
 #'
 #' Hospitalization in the models is a daily rate, not a probability. The
-#' probability of hospitalization is `h / (h + 1 / rash_period)`. See
+#' probability of hospitalization is `1 - E[(1 - h)^D]`, with `D` the rash
+#' period (`1 - (1 - h)^D` for a fixed rash period). See
 #' `vignette("parameters", package = "measles")` for more details.
 #'
 #' When printed, the table shows each parameter with its R argument, in a
