@@ -219,6 +219,8 @@ The default standard deviations come from:
 - **Prodromal period:** the days from prodrome onset to rash onset in the 188 cases of the 1861 measles outbreak in Hagelloch, Germany (distributed with the R package `surveillance`, @meyer2017). They have a mean of 3.95 days and a standard deviation of 1.74. Interval-censored fits of a lognormal (mean 4.0, sd 1.7) and a gamma (mean 4.0, sd 1.6) fit equally well (AIC 695.7 and 695.0), while an exponential (geometric) duration fits much worse (AIC 887.7).
 - **Rash period:** an assumption (1 day). The model tracks only the infectious part of the rash, which ends about 4 days after rash onset [@utahdhhs2026], so it varies little.
 
+The script `data-raw/stage_durations.R` in the package's source repository reproduces these numbers (and the default hospitalization rate below); it reads the Hagelloch data from the `surveillance` package and writes its results to `data-raw/stage_durations.csv`.
+
 ## Hospitalization: rate vs probability
 
 The models take a daily hospitalization **rate**, not a probability. Each day with rash, an agent is hospitalized with probability $h$; otherwise, it recovers when its rash period $D$ ends. So the probability of being hospitalized is

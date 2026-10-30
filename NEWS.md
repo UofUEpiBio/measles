@@ -30,6 +30,8 @@
 
 * Added `inst/tinytest/test-stage-durations.R`, which checks fixed and lognormal stage durations end to end.
 
+* Added `data-raw/stage_durations.R`, which derives the default standard deviations of the stage durations (including the fit to the Hagelloch outbreak, read from the `surveillance` package) and the default hospitalization rate. Its results are in `data-raw/stage_durations.csv`, and the parameter table points to it.
+
 * Added a test that checks `inst/extdata/measles_parameters.csv` against the arguments and defaults of the model constructors, so the parameter table cannot drift from the code.
 
 * Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at commit 87b2f98. The models now look up parameters with `EPI_PAR()`/`ParamRef` (faster, cached lookups), and the school and mixing models record contacts for contact tracing through epiworld's post-sampling callback (`make_contact_tracing_post_sampling()`) instead of calling `add_contact()` inline. The contacts recorded (and the day they are recorded) are the same as before.
