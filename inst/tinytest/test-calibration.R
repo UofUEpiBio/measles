@@ -38,22 +38,20 @@ make_model <- function(contact_matrix) {
     prevalence = 1 / 3000,
     transmission_rate = 0.2 * calib_val,
     vax_efficacy = 0.97,
-    contact_matrix = contact_matrix,
     hospitalization_rate = 0.05,
     hospitalization_period = 7,
     days_undetected = 2,
     prop_vaccinated = 0
   )
 
-  add_entities_from_dataframe(
-    model = m,
-    entities = data.frame(
-      id = as.character(1:3),
-      size = as.integer(c(200, 100, 2700))
-    ),
-    col_name = "id",
-    col_number = "size",
-    as_proportion = FALSE
+  # Groups of 200, 100 and 2,700 consecutive agents
+  add_layer(
+    m,
+    layer_mixing(
+      "mixing",
+      groups         = rep(0:2, c(200, 100, 2700)),
+      contact_matrix = contact_matrix
+    )
   )
   m
 }
@@ -82,9 +80,7 @@ expect_equal(mean(ans$rt), r0, tol = 0.5)
 # with rash can be infectious but with reduced
 # contact rates
 
-# Homogenizing so it is easier to check the calibration empirically (until
-# the measles models move to layers, the contact matrix is set when the model
-# is built)
+# Homogenizing so it is easier to check the calibration empirically
 m_model <- make_model(cmat * 0 + 4)
 
 set_param(m_model, "Rash reduction contact rate", .8)

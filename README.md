@@ -19,18 +19,18 @@
 ``` r
 citation(package="measles")
 #> To cite measles in publications use:
-#> 
+#>
 #>   Vega Yon G, Toth D, Wagoner J, Banks O (2026). _measles: Measles
 #>   Epidemiological Models_. doi:10.32614/CRAN.package.measles
 #>   <https://doi.org/10.32614/CRAN.package.measles>, R package version
-#>   0.4.0-0, <https://github.com/UofUEpiBio/measles>.
-#> 
+#>   0.5.0-0, <https://github.com/UofUEpiBio/measles>.
+#>
 #> Please also cite the underlying epiworldR framework:
-#> 
+#>
 #>   Meyer D, Vega Yon GG (2023). epiworldR: Fast Agent-Based Epi Models.
 #>   Journal of Open Source Software, 8(90), 5781.
 #>   https://doi.org/10.21105/joss.05781
-#> 
+#>
 #> To see these entries in BibTeX format, use 'print(<citation>,
 #> bibtex=TRUE)', 'toBibtex(.)', or set
 #> 'options(citation.bibtex.max=999)'.
@@ -150,7 +150,7 @@ summary(model_school)
 #> ________________________________________________________________________________
 #> ________________________________________________________________________________
 #> SIMULATION STUDY
-#> 
+#>
 #> Name of the model   : (none)
 #> Population size     : 500
 #> Agents' data        : (none)
@@ -158,21 +158,22 @@ summary(model_school)
 #> Days (duration)     : 200 (of 200)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 1.00ms
-#> Total elapsed t     : 180.00ms (400 runs)
-#> Last run speed      : 63.94 million agents x day / second
-#> Average run speed   : 221.14 million agents x day / second
-#> Rewiring            : off
+#> Total elapsed t     : 117.00ms (400 runs)
+#> Last run speed      : 78.93 million agents x day / second
+#> Average run speed   : 339.19 million agents x day / second
+#> Contact layers      : 1
+#>   - school
 #> Last seed used      : 1264933217
-#> 
+#>
 #> Global events:
 #>  - Quarantine process (runs daily)
-#> 
+#>
 #> Virus(es):
 #>  - Measles
-#> 
+#>
 #> Tool(s):
 #>  - MMR
-#> 
+#>
 #> Model parameters:
 #>  - (IGNORED) Vax improved recovery : 0.0e+00
 #>  - Contact rate                    : 2.7778
@@ -188,9 +189,9 @@ summary(model_school)
 #>  - Transmission rate               : 0.9000
 #>  - Vaccination rate                : 0.7000
 #>  - Vax efficacy                    : 0.9700
-#> 
+#>
 #> Distribution of the population at time 200:
-#>   - ( 0) Susceptible             : 499 -> 350
+#>   - ( 0) Susceptible             : 499 -> 343
 #>   - ( 1) Latent                  :   1 -> 0
 #>   - ( 2) Prodromal               :   0 -> 0
 #>   - ( 3) Rash                    :   0 -> 0
@@ -201,15 +202,15 @@ summary(model_school)
 #>   - ( 8) Quarantined Prodromal   :   0 -> 0
 #>   - ( 9) Quarantined Recovered   :   0 -> 0
 #>   - (10) Hospitalized            :   0 -> 0
-#>   - (11) Recovered               :   0 -> 150
-#> 
+#>   - (11) Recovered               :   0 -> 157
+#>
 #> Transition Probabilities:
 #>  - Susceptible              1.00  0.00     -     -     -     -     -     -     -     -     -     -
 #>  - Latent                      -  0.92  0.08     -     -     -     -     -     -     -     -     -
-#>  - Prodromal                   -     -  0.73  0.14  0.13     -     -     -     -     -     -     -
-#>  - Rash                        -     -     -  0.23  0.21     -     -     -     -     -  0.21  0.35
-#>  - Isolated                    -     -     -  0.03  0.46  0.26     -     -     -     -  0.21  0.04
-#>  - Isolated Recovered          -     -     -     -     -  0.57     -     -     -     -     -  0.43
+#>  - Prodromal                   -     -  0.74  0.14  0.13     -     -     -     -     -     -     -
+#>  - Rash                        -     -     -  0.24  0.23     -     -     -     -     -  0.20  0.34
+#>  - Isolated                    -     -     -  0.02  0.44  0.26     -     -     -     -  0.26  0.02
+#>  - Isolated Recovered          -     -     -     -     -  0.52     -     -     -     -     -  0.48
 #>  - Quarantined Latent          -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Quarantined Susceptible     -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Quarantined Prodromal       -     -     -     -     -     -     -     -     -     -     -     -
@@ -241,36 +242,34 @@ table(ans) |>
 | 4             |                     0.010 |
 | 6             |                     0.002 |
 | 7             |                     0.002 |
-| 136           |                     0.002 |
 | 137           |                     0.002 |
-| 139           |                     0.005 |
+| 139           |                     0.002 |
 | 140           |                     0.002 |
-| 141           |                     0.002 |
 | 142           |                     0.007 |
-| 143           |                     0.007 |
-| 144           |                     0.020 |
-| 145           |                     0.002 |
+| 143           |                     0.005 |
+| 144           |                     0.013 |
+| 145           |                     0.007 |
 | 146           |                     0.015 |
-| 147           |                     0.025 |
-| 148           |                     0.010 |
-| 149           |                     0.032 |
-| 150           |                     0.040 |
-| 151           |                     0.050 |
-| 152           |                     0.048 |
-| 153           |                     0.050 |
-| 154           |                     0.062 |
-| 155           |                     0.045 |
-| 156           |                     0.070 |
-| 157           |                     0.050 |
-| 158           |                     0.065 |
+| 147           |                     0.022 |
+| 148           |                     0.013 |
+| 149           |                     0.028 |
+| 150           |                     0.045 |
+| 151           |                     0.048 |
+| 152           |                     0.058 |
+| 153           |                     0.055 |
+| 154           |                     0.050 |
+| 155           |                     0.052 |
+| 156           |                     0.075 |
+| 157           |                     0.048 |
+| 158           |                     0.062 |
 | 159           |                     0.045 |
-| 160           |                     0.022 |
-| 161           |                     0.020 |
+| 160           |                     0.035 |
+| 161           |                     0.013 |
 | 162           |                     0.007 |
-| 163           |                     0.015 |
-| 164           |                     0.002 |
-| 165           |                     0.010 |
-| 166           |                     0.007 |
+| 163           |                     0.018 |
+| 164           |                     0.005 |
+| 165           |                     0.007 |
+| 166           |                     0.005 |
 
 Distribution of outbreak sizes across 400 simulations
 
@@ -280,11 +279,6 @@ The mixing models allow you to simulate measles spread across different
 population groups:
 
 ``` r
-# Define three populations
-e1 <- entity("Population 1", 3000, as_proportion = FALSE)
-e2 <- entity("Population 2", 3000, as_proportion = FALSE)
-e3 <- entity("Population 3", 3000, as_proportion = FALSE)
-
 # Define contact matrix (expected contacts per group and time step)
 contact_matrix <- matrix(c(
   0.9, 0.05, 0.05,
@@ -299,16 +293,20 @@ measles_model <- ModelMeaslesMixing(
   transmission_rate = 0.9,
   vax_efficacy = 0.97,
   prop_vaccinated = 0.95,
-  contact_matrix = contact_matrix,
   quarantine_period = 14,
   isolation_period = 10
 )
 
-# Add entities and run
-measles_model |>
-  add_entity(e1) |>
-  add_entity(e2) |>
-  add_entity(e3)
+# Three populations of 3,000, drawn at random at every run, mixing by the
+# contact matrix
+add_layer(
+  measles_model,
+  layer_mixing(
+    "mixing",
+    groups         = grouping_random(c(3000, 3000, 3000)),
+    contact_matrix = contact_matrix
+  )
+)
 
 run_multiple(
   measles_model, ndays = 100, seed = 331,
@@ -325,29 +323,30 @@ summary(measles_model)
 #> ________________________________________________________________________________
 #> ________________________________________________________________________________
 #> SIMULATION STUDY
-#> 
+#>
 #> Name of the model   : Measles with Mixing and Quarantine
 #> Population size     : 9000
 #> Agents' data        : (none)
-#> Number of entities  : 3
+#> Number of entities  : 0
 #> Days (duration)     : 100 (of 100)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 0.00s
-#> Total elapsed t     : 1.00s (400 runs)
-#> Last run speed      : 46.30 million agents x day / second
-#> Average run speed   : 225.80 million agents x day / second
-#> Rewiring            : off
+#> Total elapsed t     : 3.00s (400 runs)
+#> Last run speed      : 36.09 million agents x day / second
+#> Average run speed   : 108.51 million agents x day / second
+#> Contact layers      : 1
+#>   - mixing
 #> Last seed used      : 1428497254
-#> 
+#>
 #> Global events:
 #>  - Quarantine process (runs daily)
-#> 
+#>
 #> Virus(es):
 #>  - Measles
-#> 
+#>
 #> Tool(s):
 #>  - MMR
-#> 
+#>
 #> Model parameters:
 #>  - (IGNORED) Vax improved recovery : 0.5000
 #>  - Contact tracing days window     : 4.0000
@@ -366,33 +365,33 @@ summary(measles_model)
 #>  - Transmission rate               : 0.9000
 #>  - Vaccination rate                : 0.9500
 #>  - Vax efficacy                    : 0.9700
-#> 
+#>
 #> Distribution of the population at time 100:
-#>   - ( 0) Susceptible             : 8999 -> 8365
-#>   - ( 1) Latent                  :    1 -> 99
-#>   - ( 2) Prodromal               :    0 -> 39
-#>   - ( 3) Rash                    :    0 -> 14
-#>   - ( 4) Isolated                :    0 -> 13
-#>   - ( 5) Isolated Recovered      :    0 -> 47
-#>   - ( 6) Quarantined Latent      :    0 -> 22
-#>   - ( 7) Quarantined Susceptible :    0 -> 5
-#>   - ( 8) Quarantined Prodromal   :    0 -> 10
+#>   - ( 0) Susceptible             : 8999 -> 8998
+#>   - ( 1) Latent                  :    1 -> 0
+#>   - ( 2) Prodromal               :    0 -> 0
+#>   - ( 3) Rash                    :    0 -> 0
+#>   - ( 4) Isolated                :    0 -> 0
+#>   - ( 5) Isolated Recovered      :    0 -> 0
+#>   - ( 6) Quarantined Latent      :    0 -> 0
+#>   - ( 7) Quarantined Susceptible :    0 -> 0
+#>   - ( 8) Quarantined Prodromal   :    0 -> 0
 #>   - ( 9) Quarantined Recovered   :    0 -> 0
-#>   - (10) Hospitalized            :    0 -> 38
-#>   - (11) Recovered               :    0 -> 348
-#> 
+#>   - (10) Hospitalized            :    0 -> 0
+#>   - (11) Recovered               :    0 -> 2
+#>
 #> Transition Probabilities:
-#>  - Susceptible              1.00  0.00     -     -     -     -  0.00  0.00     -     -     -     -
-#>  - Latent                      -  0.89  0.08     -     -     -  0.03     -  0.00     -     -     -
-#>  - Prodromal                   -     -  0.75  0.24  0.00     -     -     -  0.01     -     -     -
-#>  - Rash                        -     -     -  0.23  0.24  0.15     -     -     -     -  0.19  0.19
-#>  - Isolated                    -     -     -     -  0.48  0.31     -     -     -     -  0.21     -
-#>  - Isolated Recovered          -     -     -     -     -  0.89     -     -     -     -     -  0.11
-#>  - Quarantined Latent          -  0.03  0.00     -     -     -  0.90     -  0.07     -     -     -
-#>  - Quarantined Susceptible  0.06     -     -     -     -     -     -  0.94     -     -     -     -
-#>  - Quarantined Prodromal       -     -  0.04     -  0.22     -     -     -  0.73     -     -     -
+#>  - Susceptible              1.00  0.00     -     -     -     -     -     -     -     -     -     -
+#>  - Latent                      -  0.83  0.17     -     -     -     -     -     -     -     -     -
+#>  - Prodromal                   -     -  0.33  0.67     -     -     -     -     -     -     -     -
+#>  - Rash                        -     -     -  0.33  0.67     -     -     -     -     -     -     -
+#>  - Isolated                    -     -     -     -  0.50  0.25     -     -     -     -  0.25     -
+#>  - Isolated Recovered          -     -     -     -     -  0.86     -     -     -     -     -  0.14
+#>  - Quarantined Latent          -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined Susceptible     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined Prodromal       -     -     -     -     -     -     -     -     -     -     -     -
 #>  - Quarantined Recovered       -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Hospitalized                -     -     -     -     -     -     -     -     -     -  0.86  0.14
+#>  - Hospitalized                -     -     -     -     -     -     -     -     -     -     -  1.00
 #>  - Recovered                   -     -     -     -     -     -     -     -     -     -     -  1.00
 ```
 

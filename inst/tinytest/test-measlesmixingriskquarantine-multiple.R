@@ -16,10 +16,6 @@ N <- 600
 
 model_factory <- function(durations, nsims = 100) {
 
-  e1 <- entity("Population 1", 200, FALSE)
-  e2 <- entity("Population 2", 200, FALSE)
-  e3 <- entity("Population 3", 200, FALSE)
-
   measles_model <- measles::ModelMeaslesMixingRiskQuarantine(
     n                          = N,
     prevalence                 = 1 / N,
@@ -28,7 +24,6 @@ model_factory <- function(durations, nsims = 100) {
     incubation_period          = 10,
     prodromal_period           = 3,
     rash_period                = 7,
-    contact_matrix             = cmatrix,
     hospitalization_rate       = 0.1,
     hospitalization_period     = 10,
     days_undetected            = 2,
@@ -44,11 +39,15 @@ model_factory <- function(durations, nsims = 100) {
     contact_tracing_days_window = 4
   )
 
-  # Adding the entities 
-  measles_model |>
-    add_entity(e1) |>
-    add_entity(e2) |>
-    add_entity(e3)
+  # Three groups of 200, drawn at random at every run
+  add_layer(
+    measles_model,
+    layer_mixing(
+      "mixing",
+      groups         = grouping_random(c(200, 200, 200)),
+      contact_matrix = cmatrix
+    )
+  )
 
   run_multiple(
     measles_model, ndays = 60, nsims = nsims, seed = 221,

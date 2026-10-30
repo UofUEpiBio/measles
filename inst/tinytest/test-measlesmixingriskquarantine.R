@@ -1,8 +1,4 @@
 # Test just this file: tinytest::run_test_file("inst/tinytest/test-measlesmixingriskquarantine.R")
-e1 <- entity("Population 1", 3e3, FALSE)
-e2 <- entity("Population 2", 3e3, FALSE)
-e3 <- entity("Population 3", 3e3, FALSE)
-
 # Contact matrix with within-group contact rates of 15
 cmatrix <- c(
   c(1, 0, 0),
@@ -20,7 +16,6 @@ measles_model <- measles::ModelMeaslesMixingRiskQuarantine(
   incubation_period          = 10,
   prodromal_period           = 3,
   rash_period                = 7,
-  contact_matrix             = cmatrix,
   hospitalization_rate       = 0.1,
   hospitalization_period     = 10,
   days_undetected            = 2,
@@ -36,43 +31,34 @@ measles_model <- measles::ModelMeaslesMixingRiskQuarantine(
   contact_tracing_days_window = 4
 )
 
-# Adding the entities 
-measles_model |>
-  add_entity(e1) |>
-  add_entity(e2) |>
-  add_entity(e3)
+# Three groups of 3,000, drawn at random at every run
+add_layer(
+  measles_model,
+  layer_mixing(
+    "mixing",
+    groups         = grouping_random(c(3e3, 3e3, 3e3)),
+    contact_matrix = cmatrix
+  )
+)
 
 run(measles_model, ndays = 100, seed = 1233)
 summary(measles_model)
 
 library(data.table)
 
-agents_entities <- lapply(get_entities(measles_model), \(e) {
-  entity_get_agents(e)
-}) |> rbindlist()
-
 transmissions <- get_transmissions(measles_model) |>
   data.table()
 
-# We only need the date and the source
-transmissions <- subset(
-  transmissions,
-  select = c("date", "target")
-)
+# The group of each case, from the mixing layer
+mixing <- get_layer(measles_model, "mixing")
+transmissions[, group := vapply(target, get_group, integer(1), layer = mixing)]
 
-# Attaching the entity to the source
-transmissions <- merge(
-  transmissions,
-  agents_entities,
-  by.x = "target", by.y = "agent"
-)
+# Aggregating by date x group (counts)
+transmissions <- transmissions[, .N, by = .(date, group)]
 
-# Aggregating by date x entity (counts)
-transmissions <- transmissions[, .N, by = .(date, entity)]
+transmissions[, sum(N), by = .(group)]
 
-transmissions[, sum(N), by = .(entity)]
-
-transmissions[, table(entity)]
+transmissions[, table(group)]
 
 # Check functions fail with invalid inputs -------------------------------------
 # Factory function for creating models with good default values
@@ -84,7 +70,6 @@ model_factory <- function(
   incubation_period = 10,
   prodromal_period = 3,
   rash_period = 7,
-  contact_matrix = cmatrix,
   hospitalization_rate = 0.1,
   hospitalization_period = 10,
   days_undetected = 2,
@@ -107,7 +92,6 @@ model_factory <- function(
     incubation_period = incubation_period,
     prodromal_period = prodromal_period,
     rash_period = rash_period,
-    contact_matrix = contact_matrix,
     hospitalization_rate = hospitalization_rate,
     hospitalization_period = hospitalization_period,
     days_undetected = days_undetected,
@@ -131,7 +115,6 @@ bad_int_input <- "not an integer"
 expected_error_msg_na <- "must not be NA"
 expected_error_msg_int <- "must be an integer"
 expected_error_msg_double <- "must be a double"
-expected_error_msg_any_na <- "must not contain NA values"
 
 # Test with default values (should work)
 expect_silent(model_factory())
@@ -144,7 +127,7 @@ expect_error(model_factory(vax_efficacy = bad_numeric_input), expected_error_msg
 expect_error(model_factory(incubation_period = bad_numeric_input), expected_error_msg_double)
 expect_error(model_factory(prodromal_period = bad_numeric_input), expected_error_msg_double)
 expect_error(model_factory(rash_period = bad_numeric_input), expected_error_msg_double)
-expect_error(model_factory(contact_matrix = c(1, 0, NA)), expected_error_msg_any_na)
+expect_error(run(model_factory(), ndays = 1, seed = 1), "mixing layer")
 expect_error(model_factory(hospitalization_rate = bad_numeric_input), expected_error_msg_double)
 expect_error(model_factory(hospitalization_period = bad_numeric_input), expected_error_msg_double)
 expect_error(model_factory(days_undetected = NA), expected_error_msg_na)

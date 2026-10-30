@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 ```{r}
-citation(package="measles")
+citation(package = "measles")
 ```
 
 
@@ -140,11 +140,6 @@ The mixing models allow you to simulate measles spread across different populati
 
 ```{r}
 #| label: mixing-example
-# Define three populations
-e1 <- entity("Population 1", 3000, as_proportion = FALSE)
-e2 <- entity("Population 2", 3000, as_proportion = FALSE)
-e3 <- entity("Population 3", 3000, as_proportion = FALSE)
-
 # Define contact matrix (expected contacts per group and time step)
 contact_matrix <- matrix(c(
   0.9, 0.05, 0.05,
@@ -159,16 +154,20 @@ measles_model <- ModelMeaslesMixing(
   transmission_rate = 0.9,
   vax_efficacy = 0.97,
   prop_vaccinated = 0.95,
-  contact_matrix = contact_matrix,
   quarantine_period = 14,
   isolation_period = 10
 )
 
-# Add entities and run
-measles_model |>
-  add_entity(e1) |>
-  add_entity(e2) |>
-  add_entity(e3)
+# Three populations of 3,000, drawn at random at every run, mixing by the
+# contact matrix
+add_layer(
+  measles_model,
+  layer_mixing(
+    "mixing",
+    groups         = grouping_random(c(3000, 3000, 3000)),
+    contact_matrix = contact_matrix
+  )
+)
 
 run_multiple(
   measles_model, ndays = 100, seed = 331,

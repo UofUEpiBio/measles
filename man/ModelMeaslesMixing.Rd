@@ -8,7 +8,6 @@
 ModelMeaslesMixing(
   n,
   prevalence,
-  contact_matrix,
   vax_reduction_recovery_rate = 0.5,
   transmission_rate = 0.9,
   prop_vaccinated,
@@ -32,9 +31,6 @@ ModelMeaslesMixing(
 \item{n}{Number of individuals in the population.}
 
 \item{prevalence}{Double. Initial proportion of individuals with the virus.}
-
-\item{contact_matrix}{A numeric square matrix with the expected number of
-contacts per time step between population groups.}
 
 \item{vax_reduction_recovery_rate}{Double. Vaccine reduction in recovery
 rate (default: 0.5). \strong{Not active:} the model registers it as
@@ -85,7 +81,7 @@ rash period (default: 1.0, full reduction). (see details)}
 \value{
 \itemize{
 \item The \code{ModelMeaslesMixing} function returns a model of classes
-\link[epiworldR:epiworld_model]{epiworld_model} and \link{epiworld_measlesmixing}.
+\link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \link{epiworld_measlesmixing}.
 }
 }
 \description{
@@ -94,16 +90,21 @@ between different population groups. The model includes vaccination,
 quarantine, isolation, and contact tracing mechanisms.
 }
 \details{
-The \code{contact_matrix} is a square matrix of contact rates between entities.
-Entry \verb{[i, j]} gives the expected number of contacts that an agent in entity
-\code{i} has with agents in entity \code{j} during a time step. The matrix should have
-one row and one column per entity in the model.
+The contacts come from the model's mixing layer, which the user adds with
+\code{\link[epiworldR:contact-layers]{epiworldR::add_layer()}} and \code{\link[epiworldR:mixing-layers]{epiworldR::layer_mixing()}}: the groups of the
+agents (fixed, or drawn at every run with \code{\link[epiworldR:mixing-layers]{epiworldR::grouping_random()}})
+and a contact matrix, a square matrix whose entry \verb{[i, j]} gives the
+expected number of contacts that an agent in group \code{i} has with agents in
+group \code{j} during a time step (one row and one column per group). The model
+samples its contacts from that layer with its own sampler and has no other
+layers; running it without one is an error. Its contacts are logged in the
+layer (see \code{\link[epiworldR:contact-layers]{epiworldR::get_tracing()}}), which the quarantine process reads.
 
 The model includes three distinct phases of measles infection: incubation,
 prodromal, and rash periods. Vaccination provides protection against
 infection.
 
-The \link[epiworldR:initial_states]{initial_states} function allows the user to set the initial state of the
+The \link[epiworldR:epiworld-methods]{epiworldR::initial_states} function allows the user to set the initial state of the
 model. In particular, the user can specify how many of the non-infected
 agents have been removed at the beginning of the simulation.
 }
@@ -115,7 +116,7 @@ set the \code{rash_reduction_contact_rate} parameter to a value between 0 and 1 
 allow agents with Rash to still contact other agents, albeit at a reduced
 rate. For example, if the user sets \code{rash_reduction_contact_rate} to 0.8,
 agents in the rash period will have 20\% of the contact rates specified in
-the \code{contact_matrix} instead of 0\%.
+the contact matrix instead of 0\%.
 
 The basic reproduction number (R0) of the model can be computed as
 
@@ -126,7 +127,7 @@ R0 = p_t c (D_p + (1-r_r) D_r)
 }
 
 Where \eqn{p_t} is the \code{transmission_rate}, \eqn{c} is the average number of
-contacts per time step (given by the \code{contact_matrix}), \eqn{D_p} is
+contacts per time step (given by the contact matrix), \eqn{D_p} is
 the duration of the prodromal period, \eqn{D_r} is the duration of the rash
 period, and \eqn{r_r} is the \code{rash_reduction_contact_rate}. Therefore, when
 calibrating the model, the effective infectious period should be considered
@@ -169,12 +170,6 @@ The defaults and their literature sources are listed in \code{\link[=measles_par
 
 \examples{
 
-# Start off creating three entities.
-# Individuals will be distributed randomly between the three.
-e1 <- entity("Population 1", 3e3, as_proportion = FALSE)
-e2 <- entity("Population 2", 3e3, as_proportion = FALSE)
-e3 <- entity("Population 3", 3e3, as_proportion = FALSE)
-
 # Contact matrix including within- and between-group contact rates
 cmatrix <- (c(
   c(0.9, 0.05, 0.05),
@@ -190,18 +185,22 @@ N <- 9e3
 measles_model <- ModelMeaslesMixing(
   n                        = N,
   prevalence               = 1 / N,
-  contact_matrix           = cmatrix,
   prop_vaccinated          = 0.95,
   quarantine_willingness   = 0.9,
   isolation_willingness    = 0.9,
   contact_tracing_success_rate = 0.8
 )
 
-# Adding the entities to the model
-measles_model |>
-  add_entity(e1) |>
-  add_entity(e2) |>
-  add_entity(e3)
+# Three groups of 3,000, drawn at random at every run, mixing by the
+# contact matrix
+add_layer(
+  measles_model,
+  layer_mixing(
+    "mixing",
+    groups         = grouping_random(c(3e3, 3e3, 3e3)),
+    contact_matrix = cmatrix
+  )
+)
 
 set.seed(331)
 run(measles_model, ndays = 100)
@@ -211,13 +210,13 @@ summary(measles_model)
 \seealso{
 epiworld-methods
 
-Other Models:
-\code{\link[=ModelMeaslesMixingRiskQuarantine]{ModelMeaslesMixingRiskQuarantine()}},
-\code{\link[=ModelMeaslesSchool]{ModelMeaslesSchool()}}
+Other Models: 
+\code{\link{ModelMeaslesMixingRiskQuarantine}()},
+\code{\link{ModelMeaslesSchool}()}
 
-Other measles models:
-\code{\link[=ModelMeaslesMixingRiskQuarantine]{ModelMeaslesMixingRiskQuarantine()}},
-\code{\link[=ModelMeaslesSchool]{ModelMeaslesSchool()}}
+Other measles models: 
+\code{\link{ModelMeaslesMixingRiskQuarantine}()},
+\code{\link{ModelMeaslesSchool}()}
 }
 \concept{Models}
 \concept{measles models}
