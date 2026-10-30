@@ -26,7 +26,7 @@
 
 ## Internal changes
 
-* Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at 86f7e4a (UofUEpiBio/epiworld#348, based on master at e15ea2e), which adds the stage durations (`stages.hpp`) and includes UofUEpiBio/epiworld#338 (initial cases of `ModelMeaslesMixing()` leave isolation).
+* Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at bd2d536 (UofUEpiBio/epiworld#348, based on master at e15ea2e), which adds the stage durations (`stages.hpp`) and includes UofUEpiBio/epiworld#338 (initial cases of `ModelMeaslesMixing()` leave isolation).
 
 * Added `inst/tinytest/test-stage-durations.R`, which checks fixed and lognormal stage durations end to end.
 
