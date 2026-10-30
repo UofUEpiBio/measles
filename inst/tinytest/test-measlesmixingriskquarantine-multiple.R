@@ -67,7 +67,10 @@ model_factory <- function(durations, nsims = 100) {
     ][, sum(counts), by = "sim_num"]$V1
 }
 
-nsims <- 50
+# Quarantining only medium-risk contacts lowers the outbreak size by about
+# 15%, so the comparisons need enough simulations not to depend on the
+# random stream (50 were not enough on macOS)
+nsims <- 400
 ans_base <- model_factory(c(21L, 21L, 21L), nsims = nsims) |> mean()
 ans_none <- model_factory(c(0L, 0L, 0L), nsims = nsims) |> mean()
 ans_high <- model_factory(c(21L, 0L, 0L), nsims = nsims) |> mean()

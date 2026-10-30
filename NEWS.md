@@ -30,6 +30,8 @@
 
 * Added `inst/tinytest/test-stage-durations.R`, which checks fixed and lognormal stage durations end to end.
 
+* `inst/tinytest/test-measlesmixingriskquarantine-multiple.R` compares quarantine strategies over 400 simulations instead of 50, so the comparisons do not depend on the platform's random stream.
+
 * Added `data-raw/stage_durations.R`, which derives the default standard deviations of the stage durations (including the fit to the Hagelloch outbreak) and the default hospitalization rate. Its data, the days from prodrome to rash onset of the 188 Hagelloch cases extracted from the `surveillance` package, are in `data-raw/hagelloch_prodromal_days.csv`, and its results in `data-raw/stage_durations.csv`. The parameter table points to it.
 
 * Added a test that checks `inst/extdata/measles_parameters.csv` against the arguments and defaults of the model constructors, so the parameter table cannot drift from the code.
