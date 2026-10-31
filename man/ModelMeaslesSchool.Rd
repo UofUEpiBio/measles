@@ -16,12 +16,15 @@ ModelMeaslesSchool(
   prodromal_period = 4,
   rash_period = 3,
   days_undetected = 2,
-  hospitalization_rate = 0.2,
+  hospitalization_rate = 0.035,
   hospitalization_period = 7,
   prop_vaccinated = 1 - 1/15,
   quarantine_period = 21,
   quarantine_willingness = 1,
   isolation_period = 4,
+  incubation_period_sd = 2.5,
+  prodromal_period_sd = 1.7,
+  rash_period_sd = 1,
   ...
 )
 
@@ -39,11 +42,11 @@ match the basic reproductive number (R0) of 15 (see details).}
 
 \item{vax_efficacy}{Probability of vaccine efficacy.}
 
-\item{incubation_period}{Average number of incubation days.}
+\item{incubation_period}{Mean number of incubation days.}
 
-\item{prodromal_period}{Average number of prodromal days.}
+\item{prodromal_period}{Mean number of prodromal days.}
 
-\item{rash_period}{Average number of rash days.}
+\item{rash_period}{Mean number of rash days.}
 
 \item{days_undetected}{Average number of days undetected. Detected cases
 are moved to isolation and trigger the quarantine process.}
@@ -61,6 +64,15 @@ probability; see details).}
 see details).}
 
 \item{isolation_period}{Number of days an agent is in isolation.}
+
+\item{incubation_period_sd}{Double. Standard deviation of the incubation
+period in days (default: 2.5). See the Stage Durations section.}
+
+\item{prodromal_period_sd}{Double. Standard deviation of the prodromal
+period in days (default: 1.7).}
+
+\item{rash_period_sd}{Double. Standard deviation of the rash period in days
+(default: 1.0).}
 
 \item{...}{Further arguments (not used).}
 }
@@ -108,6 +120,14 @@ As of version 0.10.0, the parameter \code{vax_improved_recovery} has been remove
 and is no longer used (it never had a side effect). Future versions may not
 accept it.
 }
+\section{Stage Durations}{
+
+The incubation, prodromal, and rash stages last a lognormal number of days
+drawn when the agent enters them, with the given means and standard
+deviations. Quarantine and isolation do not change them. See the Stage
+Durations section of \code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}.
+}
+
 \section{Parameter values and sources}{
 
 The defaults and their literature sources are listed in \code{\link[=measles_parameters]{measles_parameters()}}. See
@@ -157,7 +177,8 @@ Other Models:
 
 Other measles models: 
 \code{\link{ModelMeaslesMixing}()},
-\code{\link{ModelMeaslesMixingRiskQuarantine}()}
+\code{\link{ModelMeaslesMixingRiskQuarantine}()},
+\code{\link{hospitalization_rate}()}
 }
 \author{
 This model was built as a response to the US Measles outbreak in 2025.

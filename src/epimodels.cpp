@@ -33,8 +33,10 @@ SEXP ModelMeaslesSchool_cpp(
   double prop_vaccinated,
   int quarantine_period,
   double quarantine_willingness,
-  int isolation_period
-
+  int isolation_period,
+  double incubation_period_sd,
+  double prodromal_period_sd,
+  double rash_period_sd
 ) {
 
   // Creating a pointer to a ModelMeaslesSchool model
@@ -55,7 +57,10 @@ SEXP ModelMeaslesSchool_cpp(
           prop_vaccinated,
           quarantine_period,
           quarantine_willingness,
-          isolation_period
+          isolation_period,
+          incubation_period_sd,
+          prodromal_period_sd,
+          rash_period_sd
       )
   );
 
@@ -83,9 +88,12 @@ SEXP ModelMeaslesMixing_cpp(
     double isolation_willingness,
     int isolation_period,
     double prop_vaccinated,
-    double contact_tracing_success_rate = 1.0,
-    unsigned int contact_tracing_days_window = 4u,
-    double rash_reduction_contact_rate = 1.0
+    double contact_tracing_success_rate,
+    unsigned int contact_tracing_days_window,
+    double rash_reduction_contact_rate,
+    double incubation_period_sd,
+    double prodromal_period_sd,
+    double rash_period_sd
 ) {
 
   // Creating a pointer to a ModelMeaslesMixing model
@@ -110,7 +118,10 @@ SEXP ModelMeaslesMixing_cpp(
           prop_vaccinated,
           contact_tracing_success_rate,
           contact_tracing_days_window,
-          rash_reduction_contact_rate
+          rash_reduction_contact_rate,
+          incubation_period_sd,
+          prodromal_period_sd,
+          rash_period_sd
       )
   );
 
@@ -140,8 +151,11 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
     int isolation_period,
     double prop_vaccinated,
     double detection_rate_quarantine,
-    double contact_tracing_success_rate = 1.0,
-    unsigned int contact_tracing_days_window = 4u
+    double contact_tracing_success_rate,
+    unsigned int contact_tracing_days_window,
+    double incubation_period_sd,
+    double prodromal_period_sd,
+    double rash_period_sd
 ) {
 
   // Creating a pointer to a ModelMeaslesMixingRiskQuarantine model
@@ -167,7 +181,10 @@ SEXP ModelMeaslesMixingRiskQuarantine_cpp(
           prop_vaccinated,
           detection_rate_quarantine,
           contact_tracing_success_rate,
-          contact_tracing_days_window
+          contact_tracing_days_window,
+          incubation_period_sd,
+          prodromal_period_sd,
+          rash_period_sd
       )
   );
 

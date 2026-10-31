@@ -2,6 +2,12 @@
 
 ## User visible changes
 
+* **Stage durations are no longer geometric.** The incubation (latent), prodromal, and rash stages of `ModelMeaslesSchool()`, `ModelMeaslesMixing()`, and `ModelMeaslesMixingRiskQuarantine()` now last a lognormal number of days, drawn when the agent enters the stage, with the given mean (`incubation_period`, `prodromal_period`, `rash_period`) and the new arguments `incubation_period_sd` (default 2.5), `prodromal_period_sd` (1.7), and `rash_period_sd` (1.0). A standard deviation of zero gives a fixed duration. Previously, each stage was left with a daily probability of one over its mean, so long stays were too common: with a mean incubation of 12 days, 16% of cases were still latent after 21 days (0.2% now). Quarantine and isolation do not change a stage: an agent moved from Latent to Quarantined Latent keeps the day its latent period ends. The default standard deviations come from Lessler et al. (2009) and the 1861 Hagelloch outbreak; see `vignette("parameters")` and `measles_parameters()`. Simulation results change.
+
+* The new function `hospitalization_rate()` finds the daily hospitalization rate that gives a target probability of hospitalization, for the drawn rash period (e.g., `hospitalization_rate(0.1)` is 0.0347).
+
+* Each day with rash, an agent is now hospitalized with probability `hospitalization_rate`, and otherwise recovers when its rash period ends, so the probability of hospitalization is `1 - E[(1 - h)^D]`. **The default `hospitalization_rate` is now 0.035** (it was 0.2), which gives about 10% of cases hospitalized, as in recent data (CDC, 2026; Jones et al. 2026 in Utah). The previous default gave 37.5%. The documentation, the parameter table, and the vignettes show the new conversion between rate and probability.
+
 * `{measles}` now requires `{epiworldR}` (>= 0.19.0), which is distributed through R-universe (<https://uofuepibio.r-universe.dev>). The repository is listed under `Additional_repositories` in `DESCRIPTION`, so `install.packages("measles", repos = c("https://uofuepibio.r-universe.dev", "https://cloud.r-project.org"))` resolves it. The startup check now asks for `{epiworldR}` 0.19.0 as well.
 
 * The column `vacc_rate` of the `short_creek` dataset is now the vaccination coverage (share vaccinated), as documented. Previously it was the share immune (coverage times a vaccine efficacy of 0.97, or 0.93 under age 5), so models that also set `vax_efficacy` applied the efficacy twice. The overall coverage is 51.9% (the share immune was 50.3%). The contact matrix `short_creek_matrix` is unchanged.
@@ -16,13 +22,23 @@
 
 * The documentation of `ModelMeaslesMixing()` now flags `vax_reduction_recovery_rate` as inactive: the model registers it as "(IGNORED) Vax improved recovery", and it has no effect on the simulation.
 
-* No changes to model arguments, parameter names, or defaults.
-
 ## Bug fixes
+
+* In the mixing models, the probability of contacting each infectious agent of a group (contacts per day over the group's agents available for contact) could exceed 1 when most of a small group was quarantined or isolated. It is now capped at 1. Before, `std::binomial_distribution` received an invalid probability, which aborted builds with `_GLIBCXX_ASSERTIONS` (on by default in GCC 15 unoptimized builds, such as the coverage job) and was undefined behavior otherwise.
+
+* `ModelMeaslesSchool()` no longer draws a number of contacts when nobody is infectious (an invalid Poisson draw with mean 0 under the same builds). Results do not change.
 
 * Through `{epiworldR}` 0.19.0, `run_multiple()` now runs every replicate when OpenMP grants fewer threads than requested (e.g., under `OMP_THREAD_LIMIT`). Previously the replicates assigned to the missing threads were silently skipped while still being counted.
 
 ## Internal changes
+
+* Synced the measles C++ headers (`inst/include/measles`) with `UofUEpiBio/epiworld` at d492315 (UofUEpiBio/epiworld#348, based on master at e15ea2e), which adds the stage durations (`stages.hpp`) and includes UofUEpiBio/epiworld#338 (initial cases of `ModelMeaslesMixing()` leave isolation).
+
+* Added `inst/tinytest/test-stage-durations.R`, which checks fixed and lognormal stage durations end to end.
+
+* `inst/tinytest/test-measlesmixingriskquarantine-multiple.R` compares quarantine strategies over 400 simulations instead of 50, so the comparisons do not depend on the platform's random stream.
+
+* Added `data-raw/stage_durations.R`, which derives the default standard deviations of the stage durations (including the fit to the Hagelloch outbreak) and the default hospitalization rate. Its data, the days from prodrome to rash onset of the 188 Hagelloch cases extracted from the `surveillance` package, are in `data-raw/hagelloch_prodromal_days.csv`, and its results in `data-raw/stage_durations.csv`. The parameter table points to it.
 
 * Added a test that checks `inst/extdata/measles_parameters.csv` against the arguments and defaults of the model constructors, so the parameter table cannot drift from the code.
 

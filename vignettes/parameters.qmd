@@ -69,6 +69,78 @@ references:
     date-parts:
     - - 2026
   DOI: 10.15585/mmwr.mm7520a1
+- id: lessler2009
+  type: article-journal
+  title: "Incubation periods of acute respiratory viral infections: a systematic review"
+  author:
+  - family: Lessler
+    given: Justin
+  - literal: "others"
+  container-title: The Lancet Infectious Diseases
+  volume: 9
+  issue: 5
+  page: 291-300
+  issued:
+    date-parts:
+    - - 2009
+  DOI: 10.1016/S1473-3099(09)70069-6
+- id: meyer2017
+  type: article-journal
+  title: "Spatio-temporal analysis of epidemic phenomena using the R package surveillance"
+  author:
+  - family: Meyer
+    given: Sebastian
+  - family: Held
+    given: Leonhard
+  - family: Höhle
+    given: Michael
+  container-title: Journal of Statistical Software
+  volume: 77
+  issue: 11
+  issued:
+    date-parts:
+    - - 2017
+  DOI: 10.18637/jss.v077.i11
+- id: cdc2026
+  type: webpage
+  title: "Measles Cases and Outbreaks"
+  author:
+  - literal: "Centers for Disease Control and Prevention"
+  issued:
+    date-parts:
+    - - 2026
+      - 10
+      - 22
+  URL: https://www.cdc.gov/measles/data-research/
+- id: sartwell1950
+  type: article-journal
+  title: "The distribution of incubation periods of infectious disease"
+  author:
+  - family: Sartwell
+    given: Philip E.
+  container-title: American Journal of Hygiene
+  volume: 51
+  issue: 3
+  page: 310-318
+  issued:
+    date-parts:
+    - - 1950
+  DOI: 10.1093/oxfordjournals.aje.a119397
+- id: conlan2010
+  type: article-journal
+  title: "Resolving the impact of waiting time distributions on the persistence of measles"
+  author:
+  - family: Conlan
+    given: Andrew J. K.
+  - literal: "others"
+  container-title: Journal of The Royal Society Interface
+  volume: 7
+  issue: 45
+  page: 623-640
+  issued:
+    date-parts:
+    - - 2010
+  DOI: 10.1098/rsif.2009.0284
 - id: utahdhhs2026
   type: report
   title: "Measles Disease Plan"
@@ -151,34 +223,67 @@ where $p_t$ is `transmission_rate`, $c$ is `contact_rate`, and $D_p$ is `prodrom
 15 / 0.9 / 4
 ```
 
-In the mixing models, the contact matrix holds the expected number of contacts between groups. The next-generation-matrix method [@diekmann2010] gives R0 as the spectral radius of the matrix of expected secondary infections. `calibrate_mixing_model()` finds the factor that scales the contact matrix so it matches the target R0. When agents with rash are not fully isolated (`rash_reduction_contact_rate < 1` in `ModelMeaslesMixing()`), the infectious period used for calibration is $D_p + (1 - r_r) D_r$, where $D_r$ is the rash period and $r_r$ is the reduction in contacts during rash.
+In the mixing models, the contact matrix holds the expected number of contacts between groups. The next-generation-matrix method [@diekmann2010] gives R0 as the spectral radius of the matrix of expected secondary infections. `calibrate_mixing_model()` finds the factor that scales the contact matrix so it matches the target R0. When agents with rash are not fully isolated (`rash_reduction_contact_rate < 1` in `ModelMeaslesMixing()`), the infectious period used for calibration is $D_p + (1 - r_r) D_r$, where $D_r$ is the mean number of days with rash before recovery or hospitalization (see below) and $r_r$ is the reduction in contacts during rash.
+
+## Stage durations
+
+The incubation (latent), prodromal, and rash stages last a number of days drawn when the agent enters the stage, from a lognormal distribution with the stage's mean and standard deviation in days (`incubation_period` and `incubation_period_sd`, and so on). The draw is rounded to whole days, with a minimum of one; a standard deviation of zero gives a fixed duration. Quarantine and isolation do not change a stage: an agent moved from Latent to Quarantined Latent keeps the day its latent period ends.
+
+Before version 0.4.1-0, each stage was left with a daily probability of one over its mean, so its duration was geometric (memoryless). Measles stage durations are not memoryless: they are concentrated around their mean, and the geometric puts too much weight on short and long stays: with a mean incubation period of 12 days, 16% of the cases were still latent after 21 days, the length of a quarantine. With the lognormal and its default standard deviation, 0.2% are:
+
+```{r}
+#| label: latent-tail
+mean_latent <- 12
+sd_latent <- 2.5
+s2 <- log(1 + sd_latent^2 / mean_latent^2)
+c(
+  geometric = (1 - 1 / mean_latent)^21,
+  lognormal = plnorm(21.5, log(mean_latent) - s2 / 2, sqrt(s2), lower.tail = FALSE)
+)
+```
+
+The evidence for the lognormal, and the source of each default standard deviation, differ by stage:
+
+- **Incubation period:** incubation periods of infectious diseases are well described by lognormal distributions [@sartwell1950]. The pooled measles estimate of @lessler2009, from exposure to the first symptoms, is a lognormal with median 12.5 days and dispersion 1.23: a coefficient of variation of 0.21, or 2.5 days at the default mean of 12 days.
+- **Prodromal period:** we know of no published fit of a distribution to this period, so we fitted one to the days from prodrome onset to rash onset in the 188 cases of the 1861 measles outbreak in Hagelloch, Germany (distributed with the R package `surveillance`, @meyer2017). They have a mean of 3.95 days and a standard deviation of 1.74. Interval-censored fits of a lognormal (mean 4.0, sd 1.7) and a gamma (mean 4.0, sd 1.6) fit equally well (AIC 695.7 and 695.0), while an exponential (geometric) duration fits much worse (AIC 887.7). The data support a concentrated, right-skewed distribution; they do not single out the lognormal.
+- **Rash period:** no data describe the distribution of the infectious part of the rash, which ends about 4 days after rash onset [@utahdhhs2026]. The lognormal, for consistency with the other stages, and its standard deviation of 1 day are assumptions.
+
+Compartmental models of measles reach the same conclusion with gamma (Erlang) distributions, splitting the latent and infectious periods into stages, because household data show these periods tightly distributed around their means [@conlan2010]. With the means and standard deviations used here, a lognormal and a gamma differ little.
+
+The script `data-raw/stage_durations.R` in the package's source repository reproduces these numbers (and the default hospitalization rate below); its data (the days from prodrome to rash onset of the Hagelloch cases, from the `surveillance` package) are in `data-raw/hagelloch_prodromal_days.csv`, and its results in `data-raw/stage_durations.csv`.
 
 ## Hospitalization: rate vs probability
 
-The models take a daily hospitalization **rate**, not a probability. During the rash period, an agent competes between hospitalization (rate $h$) and recovery (rate $1/D_r$), so the probability of being hospitalized is
+The models take a daily hospitalization **rate**, not a probability. Each day with rash, an agent is hospitalized with probability $h$; otherwise, it recovers when its rash period $D$ ends. So the probability of being hospitalized is
 
 $$
-P(\text{hospitalization}) = \frac{h}{h + 1/D_r}.
+P(\text{hospitalization}) = 1 - E\left[(1 - h)^D\right],
 $$
 
-With the defaults, $h = 0.2$ and $D_r = 3$ days, this probability is:
+which is $1 - (1 - h)^D$ for a fixed rash period. With the defaults, $h = 0.035$ and a rash period of mean 3 days and standard deviation 1, this probability is:
 
 ```{r}
 #| label: hosp-prob
-h <- 0.2
+h <- 0.035
 rash_period <- 3
-h / (h + 1 / rash_period)
+rash_period_sd <- 1
+s2 <- log(1 + rash_period_sd^2 / rash_period^2)
+days <- 1:100
+p_days <- diff(c(0, plnorm(days + 0.5, log(rash_period) - s2 / 2, sqrt(s2))))
+1 - sum(p_days * (1 - h)^days)
 ```
 
-To match a target probability $p$, invert the formula, $h = p \times (1/D_r) / (1 - p)$. For example, recent analyses use $p = 0.1$, which is consistent with the 8% overall (9% among the unvaccinated) reported in Utah [@jones2026]:
+Before version 0.4.1-0, when the rash period was geometric and the default rate was 0.2, it was $h / (h + 1/D_r) = 0.375$. To match a target probability $p$, `hospitalization_rate()` solves the equation for the drawn rash period; for a fixed rash period of $D$ days, the solution is $h = 1 - (1 - p)^{1/D}$. For example, recent analyses use $p = 0.1$, which is consistent with the 8% overall (9% among the unvaccinated) reported in Utah [@jones2026]:
 
 ```{r}
 #| label: hosp-rate
-p_hosp <- 0.1
-p_hosp * (1 / rash_period) / (1 - p_hosp)
+hospitalization_rate(0.1, rash_period = 3, rash_period_sd = 1)
+
+# With a fixed 3-day rash period
+hospitalization_rate(0.1, rash_period = 3, rash_period_sd = 0)
 ```
 
-The default of 0.2 is an assumption, chosen as a conservative value. For comparison, 18.5% of patients were hospitalized during the 2025 outbreak in West Texas [@wang2026].
+The default rate, 0.035, gives a probability of about 10%, which matches recent data: about 10% of the confirmed cases in the United States in 2026 [@cdc2026], and 8% in Utah [@jones2026]. Before version 0.4.1-0, the default was 0.2, an assumption chosen as a conservative value. For comparison, 18.5% of patients were hospitalized during the 2025 outbreak in West Texas [@wang2026].
 
 ## Inactive parameters
 

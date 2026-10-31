@@ -21,12 +21,15 @@ ModelMeaslesMixingRiskQuarantine(
   incubation_period = 12,
   prodromal_period = 4,
   rash_period = 3,
-  hospitalization_rate = 0.2,
+  hospitalization_rate = 0.035,
   hospitalization_period = 7,
   days_undetected = 2,
   detection_rate_quarantine = 0.5,
   contact_tracing_success_rate = 1,
-  contact_tracing_days_window = 4
+  contact_tracing_days_window = 4,
+  incubation_period_sd = 2.5,
+  prodromal_period_sd = 1.7,
+  rash_period_sd = 1
 )
 }
 \arguments{
@@ -62,14 +65,18 @@ quarantine (default: 1).}
 
 \item{isolation_period}{Integer. Number of days for isolation (default: 4).}
 
-\item{incubation_period}{Double. Duration of incubation period (default: 12).}
+\item{incubation_period}{Double. Mean duration of the incubation period in
+days (default: 12).}
 
-\item{prodromal_period}{Double. Duration of prodromal period (default: 4).}
+\item{prodromal_period}{Double. Mean duration of the prodromal period in
+days (default: 4).}
 
-\item{rash_period}{Double. Duration of rash period (default: 3).}
+\item{rash_period}{Double. Mean duration of the rash period in days
+(default: 3).}
 
 \item{hospitalization_rate}{Double. Daily rate of hospitalization, not a
-probability (default: 0.2). See \code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}.}
+probability (default: 0.035, about 10\% of cases hospitalized). See
+\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}.}
 
 \item{hospitalization_period}{Double. Period of hospitalization (default: 7).}
 
@@ -84,6 +91,15 @@ contact tracing (default: 1.0).}
 
 \item{contact_tracing_days_window}{Integer. Number of days before and after
 the onset of symptoms for which contact tracing is effective (default: 4).}
+
+\item{incubation_period_sd}{Double. Standard deviation of the incubation
+period in days (default: 2.5). See the Stage Durations section.}
+
+\item{prodromal_period_sd}{Double. Standard deviation of the prodromal
+period in days (default: 1.7).}
+
+\item{rash_period_sd}{Double. Standard deviation of the rash period in days
+(default: 1.0).}
 }
 \value{
 \itemize{
@@ -123,6 +139,14 @@ agents have been removed at the beginning of the simulation.
 The model uses hospitalization rates instead of probabilities. To learn
 more about this, see the documentation in \code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}.
 }
+\section{Stage Durations}{
+
+The incubation, prodromal, and rash stages last a lognormal number of days
+drawn when the agent enters them, with the given means and standard
+deviations. Quarantine and isolation do not change them. See the Stage
+Durations section of \code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}.
+}
+
 \section{Parameter values and sources}{
 
 The defaults and their literature sources are listed in \code{\link[=measles_parameters]{measles_parameters()}}. See
@@ -185,7 +209,8 @@ Other Models:
 
 Other measles models: 
 \code{\link{ModelMeaslesMixing}()},
-\code{\link{ModelMeaslesSchool}()}
+\code{\link{ModelMeaslesSchool}()},
+\code{\link{hospitalization_rate}()}
 }
 \concept{Models}
 \concept{measles models}

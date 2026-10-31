@@ -23,11 +23,15 @@
 #' @param isolation_willingness Double. Proportion of agents willing to isolate
 #' (default: 1).
 #' @param isolation_period Integer. Number of days for isolation (default: 4).
-#' @param incubation_period Double. Duration of incubation period (default: 12).
-#' @param prodromal_period Double. Duration of prodromal period (default: 4).
-#' @param rash_period Double. Duration of rash period (default: 3).
+#' @param incubation_period Double. Mean duration of the incubation period in
+#' days (default: 12).
+#' @param prodromal_period Double. Mean duration of the prodromal period in
+#' days (default: 4).
+#' @param rash_period Double. Mean duration of the rash period in days
+#' (default: 3).
 #' @param hospitalization_rate Double. Daily rate of hospitalization, not a
-#' probability (default: 0.2). See the Hospitalization Probability section.
+#' probability (default: 0.035, about 10% of cases hospitalized). See the
+#' Hospitalization Probability section.
 #' @param hospitalization_period Double. Period of hospitalization (default: 7).
 #' @param days_undetected Double. Number of days an infection goes undetected
 #' (default: 2).
@@ -37,6 +41,12 @@
 #' that will be considered for contact tracing (default: 4).
 #' @param rash_reduction_contact_rate Double. Reduction in contact rate during
 #' rash period (default: 1.0, full reduction). (see details)
+#' @param incubation_period_sd Double. Standard deviation of the incubation
+#' period in days (default: 2.5). See the Stage Durations section.
+#' @param prodromal_period_sd Double. Standard deviation of the prodromal
+#' period in days (default: 1.7).
+#' @param rash_period_sd Double. Standard deviation of the rash period in days
+#' (default: 1.0).
 #' @export
 #' @family Models
 #' @family measles models
@@ -74,31 +84,72 @@
 #'
 #' Where \eqn{p_t} is the `transmission_rate`, \eqn{c} is the average number of
 #' contacts per time step (given by the `contact_matrix`), \eqn{D_p} is
-#' the duration of the prodromal period, \eqn{D_r} is the duration of the rash
-#' period, and \eqn{r_r} is the `rash_reduction_contact_rate`. Therefore, when
+#' the mean duration of the prodromal period, \eqn{D_r} is the mean number of
+#' days with rash before recovery or hospitalization (shorter than the rash
+#' period when hospitalization is likely), and \eqn{r_r} is the
+#' `rash_reduction_contact_rate`. Therefore, when
 #' calibrating the model, the effective infectious period should be considered
 #' as the sum of the prodromal period and the rash period scaled by
 #' `(1 - rash_reduction_contact_rate)`.
 #'
+#' @section Stage Durations:
+#' The latent (incubation), prodromal, and rash stages last a number of days
+#' drawn when the agent enters the stage, from a lognormal distribution with
+#' the stage's mean (`incubation_period`, `prodromal_period`, `rash_period`)
+#' and standard deviation (`incubation_period_sd`, `prodromal_period_sd`,
+#' `rash_period_sd`), both in days. The draw is rounded to whole days, with a
+#' minimum of one. A standard deviation of zero gives a fixed duration.
+#'
+#' Before version 0.4.1-0, every stage was left with a daily probability
+#' (1 / mean), so its duration was geometric (memoryless). Measles stage
+#' durations are not: they are concentrated around their mean, and the
+#' geometric puts too much weight on short and long stays. With a mean
+#' incubation period of 12 days, 16% of agents were still latent after 21
+#' days, longer than a quarantine; with the lognormal default, 0.2% are.
+#'
+#' The evidence for each stage (see [measles_parameters()] and
+#' `vignette("parameters")`):
+#'
+#' - **Incubation:** incubation periods of infectious diseases are well
+#'   described by lognormal distributions (Sartwell, 1950), and the pooled
+#'   measles estimate of Lessler et al. (2009) is a lognormal (median 12.5
+#'   days, dispersion 1.23), which gives the default standard deviation.
+#' - **Prodromal:** in the 1861 Hagelloch outbreak (188 cases), the days from
+#'   prodrome to rash onset are fitted equally well by a lognormal and a gamma
+#'   (mean 4.0, sd 1.7), and much worse by an exponential (geometric). No
+#'   published study fits a distribution to this period, as far as we know.
+#' - **Rash:** no data describe the distribution of the infectious part of
+#'   the rash; the lognormal and its standard deviation are assumptions.
+#'
+#' Compartmental models of measles describe the latent and infectious periods
+#' with gamma (Erlang) distributions instead, for the same reason (Conlan et
+#' al., 2010). With the means and standard deviations used here, a lognormal
+#' and a gamma differ little.
+#'
+#' Moving to quarantine or isolation does not change the stage: an agent
+#' moved from Latent to Quarantined Latent keeps the day its latent period
+#' ends, and so does an agent moved from Rash to Isolated.
+#'
 #' @section Hospitalization Probability:
-#' Instead of hospitalization probability, the model uses hospitalization rate.
-#' The following equation describes the hospitalization probability as a
-#' function of the hospitalization rate and recovery rate (from rash):
+#' Instead of hospitalization probability, the model uses hospitalization rate:
+#' each day with rash (in the Rash or Isolated states), an agent is
+#' hospitalized with probability \eqn{h} (`hospitalization_rate`); otherwise,
+#' it recovers when its rash period \eqn{D} ends. The probability of
+#' hospitalization is
 #'
 #' \deqn{
-#' P(\text{hospitalization}) =
-#'  \frac{
-#'    \text{hospitalization}_\text{rate}}{
-#'    \text{hospitalization}_\text{rate} + \text{recovery}_\text{rate}
-#' }
+#' P(\text{hospitalization}) = 1 - E\left[(1 - h)^D\right],
+#' }{
+#' P(hospitalization) = 1 - E[(1 - h)^D],
 #' }
 #'
-#' Where the \eqn{\text{recovery}_\text{rate}} is given by the rash period
-#' (1/duration of it). In other words, to match a desired hospitalization
-#' probability, the user needs to use the following:
+#' which, for a fixed rash period (`rash_period_sd = 0`), is
+#' \eqn{1 - (1 - h)^D}. To match a desired hospitalization probability
+#' `p_hosp`, use [hospitalization_rate()], which solves the equation for the
+#' drawn rash period:
 #'
 #' ```r
-#' h_rate <- p_hosp * (1/rash_days) / (1 - p_hosp)
+#' h_rate <- hospitalization_rate(p_hosp, rash_period, rash_period_sd)
 #' ```
 #'
 #' @section Parameter values and sources:
@@ -168,12 +219,15 @@ ModelMeaslesMixing <- function(
   incubation_period = 12,
   prodromal_period = 4,
   rash_period = 3,
-  hospitalization_rate = 0.2,
+  hospitalization_rate = 0.035,
   hospitalization_period = 7,
   days_undetected = 2,
   contact_tracing_success_rate = 1.0,
   contact_tracing_days_window = 4,
-  rash_reduction_contact_rate = 1.0
+  rash_reduction_contact_rate = 1.0,
+  incubation_period_sd = 2.5,
+  prodromal_period_sd = 1.7,
+  rash_period_sd = 1.0
 ) {
   # Check input parameters
   stopifnot_int(n)
@@ -196,6 +250,9 @@ ModelMeaslesMixing <- function(
   stopifnot_double(contact_tracing_success_rate, lb = 0, ub = 1)
   stopifnot_int(contact_tracing_days_window, lb = 0)
   stopifnot_double(rash_reduction_contact_rate, lb = 0, ub = 1)
+  stopifnot_double(incubation_period_sd, lb = 0)
+  stopifnot_double(prodromal_period_sd, lb = 0)
+  stopifnot_double(rash_period_sd, lb = 0)
 
   structure(
     ModelMeaslesMixing_cpp(
@@ -218,7 +275,10 @@ ModelMeaslesMixing <- function(
       prop_vaccinated = prop_vaccinated,
       contact_tracing_success_rate = contact_tracing_success_rate,
       contact_tracing_days_window = contact_tracing_days_window,
-      rash_reduction_contact_rate = rash_reduction_contact_rate
+      rash_reduction_contact_rate = rash_reduction_contact_rate,
+      incubation_period_sd = incubation_period_sd,
+      prodromal_period_sd = prodromal_period_sd,
+      rash_period_sd = rash_period_sd
     ),
     class = c("epiworld_measlesmixing", "epiworld_model")
   )

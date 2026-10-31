@@ -25,11 +25,15 @@
 #' @param isolation_willingness Double. Proportion of agents willing to isolate
 #' (default: 1).
 #' @param isolation_period Integer. Number of days for isolation (default: 4).
-#' @param incubation_period Double. Duration of incubation period (default: 12).
-#' @param prodromal_period Double. Duration of prodromal period (default: 4).
-#' @param rash_period Double. Duration of rash period (default: 3).
+#' @param incubation_period Double. Mean duration of the incubation period in
+#' days (default: 12).
+#' @param prodromal_period Double. Mean duration of the prodromal period in
+#' days (default: 4).
+#' @param rash_period Double. Mean duration of the rash period in days
+#' (default: 3).
 #' @param hospitalization_rate Double. Daily rate of hospitalization, not a
-#' probability (default: 0.2). See [ModelMeaslesMixing()].
+#' probability (default: 0.035, about 10% of cases hospitalized). See
+#' [ModelMeaslesMixing()].
 #' @param hospitalization_period Double. Period of hospitalization (default: 7).
 #' @param days_undetected Double. Number of days rash goes undetected
 #' (default: 2).
@@ -39,6 +43,7 @@
 #' contact tracing (default: 1.0).
 #' @param contact_tracing_days_window Integer. Number of days before and after
 #' the onset of symptoms for which contact tracing is effective (default: 4).
+#' @inheritParams ModelMeaslesMixing
 #' @export
 #' @family Models
 #' @family measles models
@@ -66,6 +71,12 @@
 #'
 #' The model uses hospitalization rates instead of probabilities. To learn
 #' more about this, see the documentation in [ModelMeaslesMixing()].
+#' @section Stage Durations:
+#' The incubation, prodromal, and rash stages last a lognormal number of days
+#' drawn when the agent enters them, with the given means and standard
+#' deviations. Quarantine and isolation do not change them. See the Stage
+#' Durations section of [ModelMeaslesMixing()].
+#'
 #' @section Parameter values and sources:
 #' The defaults and their literature sources are listed in [measles_parameters()]. See
 #' `vignette("parameters", package = "measles")` for a discussion.
@@ -135,12 +146,15 @@ ModelMeaslesMixingRiskQuarantine <- function(
   incubation_period = 12,
   prodromal_period = 4,
   rash_period = 3,
-  hospitalization_rate = 0.2,
+  hospitalization_rate = 0.035,
   hospitalization_period = 7,
   days_undetected = 2,
   detection_rate_quarantine = 0.5,
   contact_tracing_success_rate = 1.0,
-  contact_tracing_days_window = 4
+  contact_tracing_days_window = 4,
+  incubation_period_sd = 2.5,
+  prodromal_period_sd = 1.7,
+  rash_period_sd = 1.0
 ) {
   # Check input parameters
   stopifnot_int(n, lb = 0)
@@ -164,6 +178,9 @@ ModelMeaslesMixingRiskQuarantine <- function(
   stopifnot_double(detection_rate_quarantine, lb = 0, ub = 1)
   stopifnot_double(contact_tracing_success_rate, lb = 0, ub = 1)
   stopifnot_int(contact_tracing_days_window, lb = 0)
+  stopifnot_double(incubation_period_sd, lb = 0)
+  stopifnot_double(prodromal_period_sd, lb = 0)
+  stopifnot_double(rash_period_sd, lb = 0)
 
   structure(
     ModelMeaslesMixingRiskQuarantine_cpp(
@@ -187,7 +204,10 @@ ModelMeaslesMixingRiskQuarantine <- function(
       prop_vaccinated = prop_vaccinated,
       detection_rate_quarantine = detection_rate_quarantine,
       contact_tracing_success_rate = contact_tracing_success_rate,
-      contact_tracing_days_window = contact_tracing_days_window
+      contact_tracing_days_window = contact_tracing_days_window,
+      incubation_period_sd = incubation_period_sd,
+      prodromal_period_sd = prodromal_period_sd,
+      rash_period_sd = rash_period_sd
     ),
     class = c("epiworld_measlesmixingriskquarantine", "epiworld_model")
   )
