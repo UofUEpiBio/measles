@@ -10,9 +10,9 @@
 #' match the basic reproductive number (R0) of 15 (see details).
 #' @param transmission_rate Probability of transmission.
 #' @param vax_efficacy Probability of vaccine efficacy.
-#' @param incubation_period Average number of incubation days.
-#' @param prodromal_period Average number of prodromal days.
-#' @param rash_period Average number of rash days.
+#' @param incubation_period Mean number of incubation days.
+#' @param prodromal_period Mean number of prodromal days.
+#' @param rash_period Mean number of rash days.
 #' @param days_undetected Average number of days undetected. Detected cases
 #' are moved to isolation and trigger the quarantine process.
 #' @param hospitalization_rate Daily rate of hospitalization (not a
@@ -24,6 +24,7 @@
 #' see details).
 #' @param isolation_period Number of days an agent is in isolation.
 #' @param ... Further arguments (not used).
+#' @inheritParams ModelMeaslesMixing
 #' @details
 #' This model can be described as a SLIHR model with isolation and quarantine.
 #' The infectious state is divided into prodromal and rash phases. Furthermore,
@@ -52,6 +53,12 @@
 #'
 #' The model uses hospitalization rates instead of probabilities. To learn
 #' more about this, see the documentation in [ModelMeaslesMixing()].
+#' @section Stage Durations:
+#' The incubation, prodromal, and rash stages last a lognormal number of days
+#' drawn when the agent enters them, with the given means and standard
+#' deviations. Quarantine and isolation do not change them. See the Stage
+#' Durations section of [ModelMeaslesMixing()].
+#'
 #' @section Parameter values and sources:
 #' The defaults and their literature sources are listed in [measles_parameters()]. See
 #' `vignette("parameters", package = "measles")` for a discussion.
@@ -113,12 +120,15 @@ ModelMeaslesSchool <- function(
   prodromal_period = 4,
   rash_period = 3,
   days_undetected = 2,
-  hospitalization_rate = .2,
+  hospitalization_rate = 0.035,
   hospitalization_period = 7,
   prop_vaccinated = 1 - 1 / 15,
   quarantine_period = 21,
   quarantine_willingness = 1,
   isolation_period = 4,
+  incubation_period_sd = 2.5,
+  prodromal_period_sd = 1.7,
+  rash_period_sd = 1.0,
   ...
 ) {
   # Check input parameters
@@ -138,6 +148,9 @@ ModelMeaslesSchool <- function(
   stopifnot_int(quarantine_period, lb = -1)
   stopifnot_double(quarantine_willingness, lb = 0, ub = 1)
   stopifnot_int(isolation_period, lb = -1)
+  stopifnot_double(incubation_period_sd, lb = 0)
+  stopifnot_double(prodromal_period_sd, lb = 0)
+  stopifnot_double(rash_period_sd, lb = 0)
 
 
   if ("vax_improved_recovery" %in% names(list(...)))
@@ -165,7 +178,10 @@ ModelMeaslesSchool <- function(
       prop_vaccinated,
       quarantine_period,
       quarantine_willingness,
-      isolation_period
+      isolation_period,
+      incubation_period_sd,
+      prodromal_period_sd,
+      rash_period_sd
     ),
     class = c("epiworld_measlesschool", "epiworld_model")
   )
