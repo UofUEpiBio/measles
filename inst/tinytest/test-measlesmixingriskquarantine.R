@@ -36,7 +36,7 @@ add_layer(
   measles_model,
   layer_mixing(
     "mixing",
-    groups         = grouping_random(c(3e3, 3e3, 3e3)),
+    groups         = assign_counts(c(3e3, 3e3, 3e3)),
     contact_matrix = cmatrix
   )
 )

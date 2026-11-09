@@ -22,7 +22,7 @@ add_layer(
   model,
   layer_mixing(
     "mixing",
-    groups         = grouping_random(n),
+    groups         = assign_counts(n),
     contact_matrix = matrix(1)
   )
 )
@@ -31,7 +31,8 @@ run(model, ndays = 20, seed = 123)
 
 tr <- get_hist_transition_matrix(model)
 moves <- function(from, to) {
-  x <- tr[tr$state_from == from & tr$state_to == to & tr$counts > 0, ]
+  x <- tr[tr$stage_from == from & tr$stage_to == to & tr$counts > 0, ]
+  x <- aggregate(counts ~ date, data = x, FUN = sum)
   stats::setNames(x$counts, x$date)
 }
 
@@ -60,7 +61,7 @@ verbose_off(model_school)
 run(model_school, ndays = 60, seed = 331)
 
 tr <- get_hist_transition_matrix(model_school)
-latent <- tr[tr$state_from == "Latent" & tr$state_to == "Prodromal", ]
+latent <- tr[tr$stage_from == "Latent" & tr$stage_to == "Prodromal", ]
 expect_equal(sum(latent$counts), 2000)
 expect_true(sum(latent$counts[latent$date > 21]) / 2000 < 0.01)
 expect_true(abs(weighted.mean(latent$date, latent$counts) - 12) < 0.2)

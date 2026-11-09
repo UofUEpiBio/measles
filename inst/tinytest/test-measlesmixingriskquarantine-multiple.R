@@ -44,7 +44,7 @@ model_factory <- function(durations, nsims = 100) {
     measles_model,
     layer_mixing(
       "mixing",
-      groups         = grouping_random(c(200, 200, 200)),
+      groups         = assign_counts(c(200, 200, 200)),
       contact_matrix = cmatrix
     )
   )
@@ -53,17 +53,17 @@ model_factory <- function(durations, nsims = 100) {
     measles_model, ndays = 60, nsims = nsims, seed = 221,
     saver = make_saver("total_hist"),
     nthreads = 2
-    )
+  )
 
   res <- run_multiple_get_results(
     measles_model, freader = data.table::fread,
     nthreads = 1
-    )$total_hist
+  )$total_hist
 
   res[
     (date == get_ndays(measles_model)) &
-    !(state %in% c("Susceptible", "Quarantined Susceptible"))
-    ][, sum(counts), by = "sim_num"]$V1
+      stage != "Susceptible"
+  ][, sum(counts), by = "sim_num"]$V1
 }
 
 # Quarantining only medium-risk contacts lowers the outbreak size by about
@@ -86,4 +86,3 @@ expect_true(ans_none > ans_low)
 expect_true(ans_base < ans_high)
 expect_true(ans_base < ans_mid)
 expect_true(ans_base < ans_low)
-

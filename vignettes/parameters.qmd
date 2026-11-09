@@ -227,7 +227,7 @@ In the mixing models, the contact matrix holds the expected number of contacts b
 
 ## Stage durations
 
-The incubation (latent), prodromal, and rash stages last a number of days drawn when the agent enters the stage, from a lognormal distribution with the stage's mean and standard deviation in days (`incubation_period` and `incubation_period_sd`, and so on). The draw is rounded to whole days, with a minimum of one; a standard deviation of zero gives a fixed duration. Quarantine and isolation do not change a stage: an agent moved from Latent to Quarantined Latent keeps the day its latent period ends.
+The incubation (latent), prodromal, and rash stages last a number of days drawn when the agent enters the stage, from a lognormal distribution with the stage's mean and standard deviation in days (`incubation_period` and `incubation_period_sd`, and so on). The draw is rounded to whole days, with a minimum of one; a standard deviation of zero gives a fixed duration. Quarantine and isolation are statuses, not stages, so they do not change the stage: a latent agent moved to quarantine keeps the day its latent period ends.
 
 Before version 0.4.1-0, each stage was left with a daily probability of one over its mean, so its duration was geometric (memoryless). Measles stage durations are not memoryless: they are concentrated around their mean, and the geometric puts too much weight on short and long stays: with a mean incubation period of 12 days, 16% of the cases were still latent after 21 days, the length of a quarantine. With the lognormal and its default standard deviation, 0.2% are:
 

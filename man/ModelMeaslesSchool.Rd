@@ -78,7 +78,7 @@ period in days (default: 1.7).}
 }
 \value{
 \itemize{
-\item The \code{ModelMeaslesSchool} function returns a model of classes \link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \code{epiworld_measlesschool}.
+\item The \code{ModelMeaslesSchool} function returns a model of classes \link[epiworldR:epiworld_model]{epiworld_model} and \code{epiworld_measlesschool}.
 }
 }
 \description{
@@ -88,9 +88,11 @@ detected cases and optional quarantine of unvaccinated individuals.
 }
 \details{
 This model can be described as a SLIHR model with isolation and quarantine.
-The infectious state is divided into prodromal and rash phases. Furthermore,
-the quarantine state includes latent, susceptible, prodromal, and recovered
-states.
+The infectious period is divided into the Prodromal and Rash stages. Each
+agent also has a status (Free, Quarantined, Isolated, Hospitalized), so a
+quarantined agent may be susceptible, latent, prodromal or recovered; the
+outputs keep the two apart (the \code{status} and \code{stage} columns of
+\code{\link[epiworldR:get_hist_total]{epiworldR::get_hist_total()}}).
 
 The model is a perfect mixing model, meaning that all agents are in contact
 with each other. The model is designed to simulate the spread of Measles

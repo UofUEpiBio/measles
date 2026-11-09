@@ -64,9 +64,14 @@
 #'   are not in its group
 #' - **Low Risk**: Other unvaccinated agents
 #'
-#' The [initial_states] function allows the user to set the initial state of the
-#' model. In particular, the user can specify how many of the non-infected
-#' agents have been removed at the beginning of the simulation.
+#' Each agent has a stage of the disease (Susceptible, Latent, Prodromal, Rash,
+#' Severe, Recovered; [epiworldR::get_stages()]) and a status, where it is
+#' (Free, Quarantined, Isolated, Hospitalized; [epiworldR::get_statuses()]);
+#' the outputs keep the two apart (e.g., the `status` and `stage` columns of
+#' [epiworldR::get_hist_total()]). [epiworldR::set_initial()] places agents in
+#' stages without the virus at the start of each run, e.g.,
+#' `set_initial(model, assign_shares(c(Recovered = 0.1)))` starts 10% of the
+#' agents recovered.
 #'
 #' The model uses hospitalization rates instead of probabilities. To learn
 #' more about this, see the documentation in [ModelMeaslesMixing()].
@@ -117,7 +122,7 @@
 #'   measles_model,
 #'   layer_mixing(
 #'     "mixing",
-#'     groups         = grouping_random(c(3e3, 3e3, 3e3)),
+#'     groups         = assign_counts(c(3e3, 3e3, 3e3)),
 #'     contact_matrix = cmatrix
 #'   )
 #' )
@@ -177,8 +182,9 @@ ModelMeaslesMixingRiskQuarantine <- function(
   stopifnot_double(prodromal_period_sd, lb = 0)
   stopifnot_double(rash_period_sd, lb = 0)
 
-  structure(
-    ModelMeaslesMixingRiskQuarantine_cpp(
+  new_measles_model(
+    "MeaslesMixingRiskQuarantine",
+    list(
       n = n,
       prevalence = prevalence,
       transmission_rate = transmission_rate,
@@ -202,8 +208,7 @@ ModelMeaslesMixingRiskQuarantine <- function(
       incubation_period_sd = incubation_period_sd,
       prodromal_period_sd = prodromal_period_sd,
       rash_period_sd = rash_period_sd
-    ),
-    class = c("epiworld_measlesmixingriskquarantine", "epiworld_model")
+    )
   )
 
 }

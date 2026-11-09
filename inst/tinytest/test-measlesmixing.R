@@ -34,13 +34,38 @@ add_layer(
   measles_model,
   layer_mixing(
     "mixing",
-    groups         = grouping_random(c(3e3, 3e3, 3e3)),
+    groups         = assign_counts(c(3e3, 3e3, 3e3)),
     contact_matrix = cmatrix
   )
 )
 
 run(measles_model, ndays = 100, seed = 1233)
 summary(measles_model)
+
+# The stages (the disease) and the statuses (where agents are) are apart
+expect_equal(
+  get_stages(measles_model),
+  c("Susceptible", "Latent", "Prodromal", "Rash", "Severe", "Recovered")
+)
+expect_equal(
+  get_statuses(measles_model),
+  c("Free", "Quarantined", "Isolated", "Hospitalized")
+)
+
+# Every agent is somewhere every day, and quarantine happened
+totals <- get_hist_total(measles_model)
+expect_true(all(tapply(totals$counts, totals$date, sum) == N))
+expect_true(
+  any(totals$status == "Quarantined" & totals$counts > 0)
+)
+
+# Agents placed in a stage at the start (here, a fifth recovered) stay there:
+# they are not infected
+set_initial(measles_model, assign_shares(c(Recovered = 0.2)))
+run(measles_model, ndays = 30, seed = 1233)
+totals <- get_hist_total(measles_model)
+recovered_0 <- sum(totals$counts[totals$date == 0 & totals$stage == "Recovered"])
+expect_equal(recovered_0, floor(0.2 * (N - 1)))
 
 library(data.table)
 

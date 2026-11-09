@@ -35,7 +35,7 @@ run_multiple(
   nsims = 1000,
   saver = make_saver(
     "transition", "outbreak_size", "transmission", "hospitalizations"
-    ),
+  ),
   nthreads = 2,
   seed = 1123
 )
@@ -56,17 +56,18 @@ mean_o_s <- ans_outbreak_size[date == max(date)][,
 
 expect_equal(mean_o_s_transmission$N, mean_o_s$outbreak_size)
 
+# Hospitalized agents are those that went from Rash to Severe (in any status)
 to_hosp <- ans_transition[
-  (from %in% c("Rash", "Isolated")) &
-  (to %in% c("Hospitalized", "Detected Hospitalized"))][, .(hosp = sum(counts)), by = .(sim_num)]
+  (from_stage == "Rash") & (to_stage == "Severe")][,
+  .(hosp = sum(counts)), by = .(sim_num)]
 
 to_hosp <- merge(
   to_hosp,
   data.table(sim_num = 1L:nrow(mean_o_s)),
   all = TRUE
-  )
+)
 
-to_hosp[, hosp:= fcoalesce(hosp, 0L)]
+to_hosp[, hosp := fcoalesce(hosp, 0L)]
 
 ans <- merge(mean_o_s, to_hosp)
 
@@ -74,9 +75,9 @@ if (interactive()) {
   message(
     "Mean outbreak size      : ", round(mean(ans$outbreak_size), 2), "\n",
     "Mean hospitalizations   : ", round(mean(ans$hosp), 2), "\n",
-    "Proportion hospitalized : ", round(mean(ans$hosp/ans$outbreak_size), 2), "\n",
+    "Proportion hospitalized : ", round(mean(ans$hosp / ans$outbreak_size), 2), "\n",
     "Quantiles [.025, 0.5, .975]  : [", paste(
-      ans[, quantile(hosp/outbreak_size, probs = c(.025, 0.5, .975))] |>
+      ans[, quantile(hosp / outbreak_size, probs = c(.025, 0.5, .975))] |>
         round(2),
       collapse = "; "
     ), "]"
@@ -89,15 +90,15 @@ if (interactive()) {
 # test robust to Monte Carlo variability while still detecting substantial
 # deviations from the intended hospitalization rate.
 expect_true(
-  abs(mean(ans$hosp/ans$outbreak_size) - p_hosp) < .1
+  abs(mean(ans$hosp / ans$outbreak_size) - p_hosp) < .1
 )
 
-# Comparing the hospitalizations we retrieved from the 
+# Comparing the hospitalizations we retrieved from the
 # "hospitalizations" saver vs that from the transition matrix
 # (should be the same)
 
 # Computing from the data
-mean_hosp <- ans_hospitalizations[, .(real_hosp=sum(count)), by = .(sim_num)]
+mean_hosp <- ans_hospitalizations[, .(real_hosp = sum(count)), by = .(sim_num)]
 
 ans <- merge(ans, mean_hosp, by = "sim_num")
 expect_true(ans[, all(hosp == real_hosp)])

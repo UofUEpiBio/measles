@@ -14,6 +14,7 @@ run_school_pep <- function(contact_rate, seed) {
     n               = 200,
     prevalence      = 1,
     contact_rate    = contact_rate,
+    days_undetected = 1,
     prop_vaccinated = 0
   )
 
@@ -31,9 +32,8 @@ run_school_pep <- function(contact_rate, seed) {
       ig_willingness            = 0,
       mmr_window                = 365,
       ig_window                 = 0,
-      target_states             = c(6L, 7L, 8L),
-      states_if_pep_effective   = c(11L, 0L, 11L),
-      states_if_pep_ineffective = c(1L, 0L, 2L)
+      target_stages             = c("Susceptible", "Latent", "Prodromal"),
+      target_statuses           = "Quarantined"
     )
   )
 
@@ -48,12 +48,11 @@ run_school_pep <- function(contact_rate, seed) {
     0
   }
 
-  # Was any case identified (moved to isolation or hospitalized)?
-  trans <- get_hist_transition_matrix(model)
+  # Was any case identified (isolated or hospitalized)? With one day
+  # undetected, a case is detected on the first day of its rash
+  trans <- get_hist_transitions(model)
   identified <- any(
-    trans$state_to %in% c("Isolated", "Hospitalized") &
-      trans$state_from != trans$state_to &
-      trans$counts > 0
+    trans$transition %in% c("Isolated", "Admitted") & trans$counts > 0
   )
 
   list(n_pep = n_pep, identified = identified)
@@ -61,7 +60,6 @@ run_school_pep <- function(contact_rate, seed) {
 }
 
 for (seed in c(1, 2, 3)) {
-
   # With contacts, the index case is recorded meeting the school, so PEP is
   # offered once it is identified
   with_contacts <- run_school_pep(contact_rate = 4, seed = seed)
@@ -75,3 +73,41 @@ for (seed in c(1, 2, 3)) {
   expect_equal(no_contacts$n_pep, 0, info = paste("seed", seed))
 
 }
+
+# The stages and statuses of the agents offered PEP are named by their labels,
+# and the arguments of measles 0.4 say what replaced them
+pep <- function(...) {
+  InterventionMeaslesPEP(
+    name              = "PEP",
+    mmr_efficacy      = 1,
+    ig_efficacy       = 1,
+    ig_half_life_mean = 30,
+    ig_half_life_sd   = 1,
+    mmr_willingness   = 1,
+    ig_willingness    = 0,
+    mmr_window        = 365,
+    ig_window         = 0,
+    ...
+  )
+}
+
+expect_error(
+  pep(target_stages = "Exposed", target_statuses = character(0)),
+  "no stage \"Exposed\""
+)
+expect_error(
+  pep(target_stages = 1:2, target_statuses = character(0)),
+  "named by their labels"
+)
+expect_error(
+  pep(target_stages = "Latent", target_statuses = "Quarantined Latent"),
+  "no status"
+)
+expect_error(
+  pep(
+    target_states             = 6:8,
+    states_if_pep_effective   = c(11L, 0L, 11L),
+    states_if_pep_ineffective = c(1L, 0L, 2L)
+  ),
+  "target_stages"
+)

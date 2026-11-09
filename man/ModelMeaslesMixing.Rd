@@ -97,7 +97,7 @@ period in days (default: 1.7).}
 \value{
 \itemize{
 \item The \code{ModelMeaslesMixing} function returns a model of classes
-\link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \link{epiworld_measlesmixing}.
+\link[epiworldR:epiworld_model]{epiworld_model} and \link{epiworld_measlesmixing}.
 }
 }
 \description{
@@ -107,22 +107,28 @@ quarantine, isolation, and contact tracing mechanisms.
 }
 \details{
 The contacts come from the model's mixing layer, which the user adds with
-\code{\link[epiworldR:contact-layers]{epiworldR::add_layer()}} and \code{\link[epiworldR:mixing-layers]{epiworldR::layer_mixing()}}: the groups of the
-agents (fixed, or drawn at every run with \code{\link[epiworldR:mixing-layers]{epiworldR::grouping_random()}})
+\code{\link[epiworldR:add_layer]{epiworldR::add_layer()}} and \code{\link[epiworldR:layer_mixing]{epiworldR::layer_mixing()}}: the groups of the
+agents (fixed, or drawn at every run with a placement such as
+\code{\link[epiworldR:assign_counts]{epiworldR::assign_counts()}})
 and a contact matrix, a square matrix whose entry \verb{[i, j]} gives the
 expected number of contacts that an agent in group \code{i} has with agents in
 group \code{j} during a time step (one row and one column per group). The model
 samples its contacts from that layer with its own sampler and has no other
 layers; running it without one is an error. Its contacts are logged in the
-layer (see \code{\link[epiworldR:contact-layers]{epiworldR::get_tracing()}}), which the quarantine process reads.
+layer (see \code{\link[epiworldR:get_tracing]{epiworldR::get_tracing()}}), which the quarantine process reads.
 
 The model includes three distinct phases of measles infection: incubation,
 prodromal, and rash periods. Vaccination provides protection against
 infection.
 
-The \link[epiworldR:epiworld-methods]{epiworldR::initial_states} function allows the user to set the initial state of the
-model. In particular, the user can specify how many of the non-infected
-agents have been removed at the beginning of the simulation.
+Each agent has a stage of the disease (Susceptible, Latent, Prodromal, Rash,
+Severe, Recovered; \code{\link[epiworldR:get_stages]{epiworldR::get_stages()}}) and a status, where it is
+(Free, Quarantined, Isolated, Hospitalized; \code{\link[epiworldR:get_statuses]{epiworldR::get_statuses()}});
+the outputs keep the two apart (e.g., the \code{status} and \code{stage} columns of
+\code{\link[epiworldR:get_hist_total]{epiworldR::get_hist_total()}}). \code{\link[epiworldR:set_initial]{epiworldR::set_initial()}} places agents in
+stages without the virus at the start of each run, e.g.,
+\code{set_initial(model, assign_shares(c(Recovered = 0.1)))} starts 10\% of the
+agents recovered.
 }
 \section{Contact Rate Reduction During Rash Period}{
 
@@ -189,15 +195,15 @@ with gamma (Erlang) distributions instead, for the same reason (Conlan et
 al., 2010). With the means and standard deviations used here, a lognormal
 and a gamma differ little.
 
-Moving to quarantine or isolation does not change the stage: an agent
-moved from Latent to Quarantined Latent keeps the day its latent period
-ends, and so does an agent moved from Rash to Isolated.
+Quarantine and isolation are statuses, not stages, so they do not change
+the stage: a latent agent moved to quarantine keeps the day its latent
+period ends, and so does an agent with rash moved to isolation.
 }
 
 \section{Hospitalization Probability}{
 
 Instead of hospitalization probability, the model uses hospitalization rate:
-each day with rash (in the Rash or Isolated states), an agent is
+each day in the Rash stage (free or isolated), an agent is
 hospitalized with probability \eqn{h} (\code{hospitalization_rate}); otherwise,
 it recovers when its rash period \eqn{D} ends. The probability of
 hospitalization is
@@ -257,7 +263,7 @@ add_layer(
   measles_model,
   layer_mixing(
     "mixing",
-    groups         = grouping_random(c(3e3, 3e3, 3e3)),
+    groups         = assign_counts(c(3e3, 3e3, 3e3)),
     contact_matrix = cmatrix
   )
 )

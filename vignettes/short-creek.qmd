@@ -153,21 +153,15 @@ add_layer(
 )
 ```
 
-We can also specify the vaccination rates. There are multiple ways in which we can do that. The default behavior of the model is, at each run, randomly sample `prop_vaccinated` percent of the population and assign the vaccine. Thus, the number of vaccinated individuals will be constant across simulations. Nonetheless, since the schools and age groups have different vaccination rates, it is better to use the `distribute_tool_to_groups()` function, which vaccinates a share of each group of the mixing layer:
+We can also specify the vaccination rates. There are multiple ways in which we can do that. The default behavior of the model is, at each run, randomly sample `prop_vaccinated` percent of the population and assign the vaccine. Thus, the number of vaccinated individuals will be constant across simulations. Nonetheless, since the schools and age groups have different vaccination rates, it is better to place the vaccine (the model's first tool) with `assign_group_shares()`, which vaccinates a share of each group of the mixing layer at the start of each run:
 
 ```{r}
 #| label: distribute-tool
-# Creating the distribution function
-dist_fun <- distribute_tool_to_groups(
-  layer = "mixing",
-  prevalence = short_creek$vacc_rate,
-  as_proportion = TRUE
+assign_tool(
+  measles_model,
+  tool_pos = 0,
+  assign   = assign_group_shares("mixing", short_creek$vacc_rate)
 )
-
-# Setting the distribution function
-measles_model |>
-  get_tool(0) |>
-  set_distribution_tool(dist_fun)
 ```
 
 Now, we can specify what to record from the simulation.

@@ -35,8 +35,7 @@ expect_error(measles_parameters("NotAModel"), "No parameters found")
 # Drift test: the table matches the arguments and defaults of the models
 # ------------------------------------------------------------------------------
 not_parameters <- c(
-  "...", "name", "target_states", "states_if_pep_effective",
-  "states_if_pep_ineffective", "agent_groups"
+  "...", "name", "target_stages", "target_statuses", "agent_groups"
 )
 
 for (model in c(

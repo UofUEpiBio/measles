@@ -3,6 +3,40 @@
 Tracks epiworldR 1.0.0 (its `v1-layers` branch), where contacts come from
 contact layers.
 
+* **Breaking: natural histories** (epiworld NH-1 to NH-4, ported in
+  epiworldR 1.0.0). Each agent has a **stage** of the disease (Susceptible,
+  Latent, Prodromal, Rash, Severe, Recovered; `get_stages(model)`) and a
+  **status**, where it is (Free, Quarantined, Isolated, Hospitalized;
+  `get_statuses(model)`), instead of one combined state
+  ("Quarantined Latent", "Detected Hospitalized", ...). The outputs keep the
+  two apart: `get_hist_total()`, `get_hist_tool()` and the
+  `run_multiple_get_results()` tables have `status` and `stage` columns, the
+  transitions have `status_from`, `stage_from`, `status_to` and `stage_to`
+  (`from_status`, `from_stage`, ... in `make_saver("transition")`), and `get_hist_transitions()` counts the declared transitions
+  ("Quarantined", "Isolated", "Admitted", "PEP cleared", ...) by day. A
+  hospitalized case is one that went from Rash to Severe (and from any status
+  to Hospitalized). `initial_states()` is defunct in epiworldR; agents start
+  in a stage without the virus with `set_initial(model, assign_shares(c(
+  Recovered = 0.1)))`.
+
+* **Breaking:** `InterventionMeaslesPEP()` takes the stages and statuses of
+  the agents offered PEP, by their labels (`target_stages = c("Susceptible",
+  "Latent", "Prodromal")`, `target_statuses = "Quarantined"`), instead of
+  `target_states`, `states_if_pep_effective` and `states_if_pep_ineffective`
+  (now an error saying so). Where a dosed agent goes is the model's: the
+  virus is cleared through the transition "PEP cleared" (to Recovered) if the
+  PEP works, and the agent is released from quarantine through "PEP release".
+
+* The models are built by epiworld's model registry
+  (`measles::register_models()`), which checks the values of the arguments;
+  the constructors keep their arguments.
+
+* Placements replace the distribution functions: vaccination by group is
+  `assign_tool(model, 0, assign_group_shares("mixing", rates))` (see the Short
+  Creek vignette) instead of `distribute_tool_to_entities()`, and
+  `grouping_random(sizes)` is `assign_counts(sizes)` (both defunct in
+  epiworldR).
+
 * `{measles}` requires `{epiworldR}` (>= 1.0.0), and its headers come from
   epiworld's `v1-layers` (`inst/include/VERSIONS` records the commit).
 
@@ -17,13 +51,13 @@ contact layers.
     model,
     layer_mixing(
       "mixing",
-      groups         = grouping_random(c(3000, 3000, 3000)),
+      groups         = assign_counts(c(3000, 3000, 3000)),
       contact_matrix = cmatrix
     )
   )
   ```
 
-  `grouping_random()` draws what `entity(name, size, as_proportion = FALSE)`
+  `assign_counts()` draws what `entity(name, size, as_proportion = FALSE)`
   did; fixed groups (e.g., `rep(0:2, sizes)`, what
   `add_entities_from_dataframe()` did) go in `groups` as well. Running a mixing
   model without its layer, or with other layers, is an error. The contacts are
@@ -31,10 +65,6 @@ contact layers.
   holds the contact matrix, epiworldR's `get_contact_matrix()` and
   `set_contact_matrix()` on `get_layer(model, "mixing")` read and change it,
   and `set_contact_rate()` on the layer scales it by a model parameter.
-
-* Vaccination by group uses epiworldR's `distribute_tool_to_groups("mixing",
-  rates)` instead of `distribute_tool_to_entities()` (see the Short Creek
-  vignette).
 
 * `ModelMeaslesSchool()` does not change; it now logs its contacts in its own
   layer, `"school"`.
