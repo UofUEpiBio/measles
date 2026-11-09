@@ -14,10 +14,10 @@ InterventionMeaslesPEP(
   ig_willingness,
   mmr_window,
   ig_window,
-  target_states,
-  states_if_pep_effective,
-  states_if_pep_ineffective,
-  agent_groups = integer(0)
+  target_stages,
+  target_statuses,
+  agent_groups = integer(0),
+  ...
 )
 }
 \arguments{
@@ -43,13 +43,24 @@ immunoglobulin (IG).}
 
 \item{ig_window}{Time window for immunoglobulin (IG) administration.}
 
-\item{target_states, states_if_pep_effective, states_if_pep_ineffective}{Integer vectors of target and destination states (see details).}
+\item{target_stages}{Character vector. The stages of the agents offered PEP
+(e.g., \code{c("Susceptible", "Latent", "Prodromal")}), among those of the
+measles models: \code{"Susceptible"}, \code{"Latent"}, \code{"Prodromal"}, \code{"Rash"},
+\code{"Severe"} and \code{"Recovered"}.}
+
+\item{target_statuses}{Character vector. The statuses of the agents offered
+PEP (e.g., \code{"Quarantined"}), among \code{"Free"}, \code{"Quarantined"}, \code{"Isolated"}
+and \code{"Hospitalized"}; \code{character(0)} offers it in any status.}
 
 \item{agent_groups}{Optional integer vector of group (e.g. classroom)
 membership, with one entry per agent, in agent order. When supplied, PEP is
 offered only within the group(s) of the identified case(s). Defaults to
 \code{integer(0)}, meaning the whole population is treated as a single exposed
 group (see details).}
+
+\item{...}{Not used. The arguments \code{target_states},
+\code{states_if_pep_effective} and \code{states_if_pep_ineffective} of measles 0.4
+are an error that says what replaced them.}
 }
 \value{
 An object of class \code{epiworld_globalevent} representing the measles PEP
@@ -70,20 +81,21 @@ immunoglobulin (IG). The system decides which agent gets MMR or IG
 based on the time since exposure and the willingness to accept PEP.
 The flow is the following:
 \enumerate{
-\item Agents in \code{target_states} are eligible for PEP if they are
-willing to accept it (based on \code{pep_willingness}).
-\item If the agent is already infected (for example, in a latent state)
-for at most \code{mmr_window} days, they are offered MMR vaccine.
-Otherwise, they are offered IG.
-\item Susceptible agents are offered the MMR vaccine, and if they accept,
-they are automatically moved out of the quarantine process.
-\item Agents who were already infected and got either MMR or IG may move
-out of the quarantine process if the PEP is effective (based on
-\code{mmr_efficacy} or \code{ig_efficacy}). The destination state depends
-on whether the PEP was effective or not, and is determined by
-\code{states_if_pep_effective} and \code{states_if_pep_ineffective},
-respectively.
+\item Agents in one of the \code{target_stages} and one of the \code{target_statuses}
+are eligible for PEP if they are willing to accept it (based on
+\code{mmr_willingness} and \code{ig_willingness}).
+\item If the exposure started at most \code{mmr_window} days ago, they are offered
+the MMR vaccine; otherwise, within \code{ig_window} days, IG.
+\item An agent that carries the virus (e.g., Latent) clears it if the PEP
+works (based on \code{mmr_efficacy} or \code{ig_efficacy}), through the model's
+transition "PEP cleared" (to Recovered).
+\item A dosed agent in quarantine is then released (back to Free) through the
+model's transition "PEP release", whether or not the PEP worked.
 }
+
+The stages and the statuses of the measles models, and the transitions
+between them, are listed by \code{\link[epiworldR:get_stages]{epiworldR::get_stages()}},
+\code{\link[epiworldR:get_statuses]{epiworldR::get_statuses()}} and \code{\link[epiworldR:get_hist_transitions]{epiworldR::get_hist_transitions()}}.
 
 Since IG winds down over time, the IG "tool" may be removed from
 the agent as a function of the half-life of IG (based on

@@ -17,7 +17,7 @@
 <!-- badges: end -->
 
 ``` r
-citation(package="measles")
+citation(package = "measles")
 #> To cite measles in publications use:
 #>
 #>   Vega Yon G, Toth D, Wagoner J, Banks O (2026). _measles: Measles
@@ -151,16 +151,15 @@ summary(model_school)
 #> ________________________________________________________________________________
 #> SIMULATION STUDY
 #>
-#> Name of the model   : (none)
+#> Name of the model   : Measles in a School with Quarantine
 #> Population size     : 500
 #> Agents' data        : (none)
-#> Number of entities  : 0
 #> Days (duration)     : 200 (of 200)
 #> Number of viruses   : 1
-#> Last run elapsed t  : 1.00ms
-#> Total elapsed t     : 117.00ms (400 runs)
-#> Last run speed      : 78.93 million agents x day / second
-#> Average run speed   : 339.19 million agents x day / second
+#> Last run elapsed t  : 3.00ms
+#> Total elapsed t     : 429.00ms (400 runs)
+#> Last run speed      : 25.47 million agents x day / second
+#> Average run speed   : 93.22 million agents x day / second
 #> Contact layers      : 1
 #>   - school
 #> Last seed used      : 1264933217
@@ -179,44 +178,71 @@ summary(model_school)
 #>  - Contact rate                    : 2.7778
 #>  - Days undetected                 : 2.0000
 #>  - Hospitalization period          : 7.0000
-#>  - Hospitalization rate            : 0.2000
+#>  - Hospitalization rate            : 0.0350
 #>  - Incubation period               : 12.0000
+#>  - Incubation period sd            : 2.5000
 #>  - Isolation period                : 4.0000
 #>  - Prodromal period                : 4.0000
+#>  - Prodromal period sd             : 1.7000
 #>  - Quarantine period               : -1.0000
 #>  - Quarantine willingness          : 1.0000
 #>  - Rash period                     : 3.0000
+#>  - Rash period sd                  : 1.0000
 #>  - Transmission rate               : 0.9000
 #>  - Vaccination rate                : 0.7000
 #>  - Vax efficacy                    : 0.9700
 #>
 #> Distribution of the population at time 200:
-#>   - ( 0) Susceptible             : 499 -> 343
-#>   - ( 1) Latent                  :   1 -> 0
-#>   - ( 2) Prodromal               :   0 -> 0
-#>   - ( 3) Rash                    :   0 -> 0
-#>   - ( 4) Isolated                :   0 -> 0
-#>   - ( 5) Isolated Recovered      :   0 -> 0
-#>   - ( 6) Quarantined Latent      :   0 -> 0
-#>   - ( 7) Quarantined Susceptible :   0 -> 0
-#>   - ( 8) Quarantined Prodromal   :   0 -> 0
-#>   - ( 9) Quarantined Recovered   :   0 -> 0
-#>   - (10) Hospitalized            :   0 -> 0
-#>   - (11) Recovered               :   0 -> 157
+#>   - ( 0) Free / Susceptible         : 499 -> 347
+#>   - ( 1) Quarantined / Susceptible  :   0 -> 0
+#>   - ( 2) Isolated / Susceptible     :   0 -> 0
+#>   - ( 3) Hospitalized / Susceptible :   0 -> 0
+#>   - ( 4) Free / Latent              :   1 -> 0
+#>   - ( 5) Quarantined / Latent       :   0 -> 0
+#>   - ( 6) Isolated / Latent          :   0 -> 0
+#>   - ( 7) Hospitalized / Latent      :   0 -> 0
+#>   - ( 8) Free / Prodromal           :   0 -> 0
+#>   - ( 9) Quarantined / Prodromal    :   0 -> 0
+#>   - (10) Isolated / Prodromal       :   0 -> 0
+#>   - (11) Hospitalized / Prodromal   :   0 -> 0
+#>   - (12) Free / Rash                :   0 -> 0
+#>   - (13) Quarantined / Rash         :   0 -> 0
+#>   - (14) Isolated / Rash            :   0 -> 0
+#>   - (15) Hospitalized / Rash        :   0 -> 0
+#>   - (16) Free / Severe              :   0 -> 0
+#>   - (17) Quarantined / Severe       :   0 -> 0
+#>   - (18) Isolated / Severe          :   0 -> 0
+#>   - (19) Hospitalized / Severe      :   0 -> 0
+#>   - (20) Free / Recovered           :   0 -> 153
+#>   - (21) Quarantined / Recovered    :   0 -> 0
+#>   - (22) Isolated / Recovered       :   0 -> 0
+#>   - (23) Hospitalized / Recovered   :   0 -> 0
 #>
 #> Transition Probabilities:
-#>  - Susceptible              1.00  0.00     -     -     -     -     -     -     -     -     -     -
-#>  - Latent                      -  0.92  0.08     -     -     -     -     -     -     -     -     -
-#>  - Prodromal                   -     -  0.74  0.14  0.13     -     -     -     -     -     -     -
-#>  - Rash                        -     -     -  0.24  0.23     -     -     -     -     -  0.20  0.34
-#>  - Isolated                    -     -     -  0.02  0.44  0.26     -     -     -     -  0.26  0.02
-#>  - Isolated Recovered          -     -     -     -     -  0.52     -     -     -     -     -  0.48
-#>  - Quarantined Latent          -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Quarantined Susceptible     -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Quarantined Prodromal       -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Quarantined Recovered       -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Hospitalized                -     -     -     -     -     -     -     -     -     -  0.88  0.12
-#>  - Recovered                   -     -     -     -     -     -     -     -     -     -     -  1.00
+#>  - Free / Susceptible          1.00     -     -     -  0.00     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined / Susceptible      -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Susceptible         -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized / Susceptible     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Free / Latent                  -     -     -     -  0.92     -     -     -  0.08     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined / Latent           -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Latent              -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized / Latent          -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Free / Prodromal               -     -     -     -     -     -     -     -  0.76     -     -     -  0.11     -  0.13     -     -     -     -     -     -     -     -     -
+#>  - Quarantined / Prodromal        -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Prodromal           -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized / Prodromal       -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Free / Rash                    -     -     -     -     -     -     -     -     -     -     -     -  0.35     -  0.35     -     -     -     -  0.08  0.22     -     -     -
+#>  - Quarantined / Rash             -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Rash                -     -     -     -     -     -     -     -     -     -     -     -  0.02     -  0.59     -     -     -     -  0.03  0.06     -  0.30     -
+#>  - Hospitalized / Rash            -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Free / Severe                  -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined / Severe           -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Severe              -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized / Severe          -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -  0.86  0.14     -     -     -
+#>  - Free / Recovered               -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -  1.00     -     -     -
+#>  - Quarantined / Recovered        -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Recovered           -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -  0.75     -  0.25     -
+#>  - Hospitalized / Recovered       -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
 ```
 
 And we can extract the results (outbreak size in this case), using the
@@ -236,40 +262,36 @@ table(ans) |>
 
 | Outbreak Size | Proportion of Simulations |
 |:--------------|--------------------------:|
-| 1             |                     0.195 |
-| 2             |                     0.032 |
-| 3             |                     0.013 |
-| 4             |                     0.010 |
-| 6             |                     0.002 |
-| 7             |                     0.002 |
-| 137           |                     0.002 |
+| 1             |                     0.075 |
+| 2             |                     0.018 |
 | 139           |                     0.002 |
-| 140           |                     0.002 |
-| 142           |                     0.007 |
-| 143           |                     0.005 |
-| 144           |                     0.013 |
-| 145           |                     0.007 |
+| 141           |                     0.007 |
+| 142           |                     0.002 |
+| 143           |                     0.007 |
+| 144           |                     0.007 |
+| 145           |                     0.013 |
 | 146           |                     0.015 |
-| 147           |                     0.022 |
-| 148           |                     0.013 |
-| 149           |                     0.028 |
+| 147           |                     0.028 |
+| 148           |                     0.035 |
+| 149           |                     0.040 |
 | 150           |                     0.045 |
-| 151           |                     0.048 |
-| 152           |                     0.058 |
-| 153           |                     0.055 |
-| 154           |                     0.050 |
-| 155           |                     0.052 |
-| 156           |                     0.075 |
-| 157           |                     0.048 |
-| 158           |                     0.062 |
-| 159           |                     0.045 |
-| 160           |                     0.035 |
-| 161           |                     0.013 |
-| 162           |                     0.007 |
-| 163           |                     0.018 |
-| 164           |                     0.005 |
-| 165           |                     0.007 |
-| 166           |                     0.005 |
+| 151           |                     0.062 |
+| 152           |                     0.075 |
+| 153           |                     0.062 |
+| 154           |                     0.075 |
+| 155           |                     0.060 |
+| 156           |                     0.078 |
+| 157           |                     0.092 |
+| 158           |                     0.070 |
+| 159           |                     0.038 |
+| 160           |                     0.028 |
+| 161           |                     0.022 |
+| 162           |                     0.015 |
+| 163           |                     0.010 |
+| 164           |                     0.007 |
+| 165           |                     0.005 |
+| 166           |                     0.002 |
+| 168           |                     0.002 |
 
 Distribution of outbreak sizes across 400 simulations
 
@@ -303,7 +325,7 @@ add_layer(
   measles_model,
   layer_mixing(
     "mixing",
-    groups         = grouping_random(c(3000, 3000, 3000)),
+    groups         = assign_counts(c(3000, 3000, 3000)),
     contact_matrix = contact_matrix
   )
 )
@@ -327,13 +349,12 @@ summary(measles_model)
 #> Name of the model   : Measles with Mixing and Quarantine
 #> Population size     : 9000
 #> Agents' data        : (none)
-#> Number of entities  : 0
 #> Days (duration)     : 100 (of 100)
 #> Number of viruses   : 1
 #> Last run elapsed t  : 0.00s
-#> Total elapsed t     : 3.00s (400 runs)
-#> Last run speed      : 36.09 million agents x day / second
-#> Average run speed   : 108.51 million agents x day / second
+#> Total elapsed t     : 4.00s (400 runs)
+#> Last run speed      : 25.64 million agents x day / second
+#> Average run speed   : 89.62 million agents x day / second
 #> Contact layers      : 1
 #>   - mixing
 #> Last seed used      : 1428497254
@@ -353,46 +374,73 @@ summary(measles_model)
 #>  - Contact tracing success rate    : 1.0000
 #>  - Days undetected                 : 2.0000
 #>  - Hospitalization period          : 7.0000
-#>  - Hospitalization rate            : 0.2000
+#>  - Hospitalization rate            : 0.0350
 #>  - Incubation period               : 12.0000
+#>  - Incubation period sd            : 2.5000
 #>  - Isolation period                : 10.0000
 #>  - Isolation willingness           : 1.0000
 #>  - Prodromal period                : 4.0000
+#>  - Prodromal period sd             : 1.7000
 #>  - Quarantine period               : 14.0000
 #>  - Quarantine willingness          : 1.0000
 #>  - Rash period                     : 3.0000
+#>  - Rash period sd                  : 1.0000
 #>  - Rash reduction contact rate     : 1.0000
 #>  - Transmission rate               : 0.9000
 #>  - Vaccination rate                : 0.9500
 #>  - Vax efficacy                    : 0.9700
 #>
 #> Distribution of the population at time 100:
-#>   - ( 0) Susceptible             : 8999 -> 8998
-#>   - ( 1) Latent                  :    1 -> 0
-#>   - ( 2) Prodromal               :    0 -> 0
-#>   - ( 3) Rash                    :    0 -> 0
-#>   - ( 4) Isolated                :    0 -> 0
-#>   - ( 5) Isolated Recovered      :    0 -> 0
-#>   - ( 6) Quarantined Latent      :    0 -> 0
-#>   - ( 7) Quarantined Susceptible :    0 -> 0
-#>   - ( 8) Quarantined Prodromal   :    0 -> 0
-#>   - ( 9) Quarantined Recovered   :    0 -> 0
-#>   - (10) Hospitalized            :    0 -> 0
-#>   - (11) Recovered               :    0 -> 2
+#>   - ( 0) Free / Susceptible         : 8999 -> 8999
+#>   - ( 1) Quarantined / Susceptible  :    0 -> 0
+#>   - ( 2) Isolated / Susceptible     :    0 -> 0
+#>   - ( 3) Hospitalized / Susceptible :    0 -> 0
+#>   - ( 4) Free / Latent              :    1 -> 0
+#>   - ( 5) Quarantined / Latent       :    0 -> 0
+#>   - ( 6) Isolated / Latent          :    0 -> 0
+#>   - ( 7) Hospitalized / Latent      :    0 -> 0
+#>   - ( 8) Free / Prodromal           :    0 -> 0
+#>   - ( 9) Quarantined / Prodromal    :    0 -> 0
+#>   - (10) Isolated / Prodromal       :    0 -> 0
+#>   - (11) Hospitalized / Prodromal   :    0 -> 0
+#>   - (12) Free / Rash                :    0 -> 0
+#>   - (13) Quarantined / Rash         :    0 -> 0
+#>   - (14) Isolated / Rash            :    0 -> 0
+#>   - (15) Hospitalized / Rash        :    0 -> 0
+#>   - (16) Free / Severe              :    0 -> 0
+#>   - (17) Quarantined / Severe       :    0 -> 0
+#>   - (18) Isolated / Severe          :    0 -> 0
+#>   - (19) Hospitalized / Severe      :    0 -> 0
+#>   - (20) Free / Recovered           :    0 -> 1
+#>   - (21) Quarantined / Recovered    :    0 -> 0
+#>   - (22) Isolated / Recovered       :    0 -> 0
+#>   - (23) Hospitalized / Recovered   :    0 -> 0
 #>
 #> Transition Probabilities:
-#>  - Susceptible              1.00  0.00     -     -     -     -     -     -     -     -     -     -
-#>  - Latent                      -  0.83  0.17     -     -     -     -     -     -     -     -     -
-#>  - Prodromal                   -     -  0.33  0.67     -     -     -     -     -     -     -     -
-#>  - Rash                        -     -     -  0.33  0.67     -     -     -     -     -     -     -
-#>  - Isolated                    -     -     -     -  0.50  0.25     -     -     -     -  0.25     -
-#>  - Isolated Recovered          -     -     -     -     -  0.86     -     -     -     -     -  0.14
-#>  - Quarantined Latent          -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Quarantined Susceptible     -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Quarantined Prodromal       -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Quarantined Recovered       -     -     -     -     -     -     -     -     -     -     -     -
-#>  - Hospitalized                -     -     -     -     -     -     -     -     -     -     -  1.00
-#>  - Recovered                   -     -     -     -     -     -     -     -     -     -     -  1.00
+#>  - Free / Susceptible          1.00     -     -     -  0.00     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined / Susceptible      -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Susceptible         -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized / Susceptible     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Free / Latent                  -     -     -     -  0.93     -     -     -  0.07     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined / Latent           -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Latent              -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized / Latent          -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Free / Prodromal               -     -     -     -     -     -     -     -  0.50     -     -     -  0.50     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined / Prodromal        -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Prodromal           -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized / Prodromal       -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Free / Rash                    -     -     -     -     -     -     -     -     -     -     -     -     -     -  1.00     -     -     -     -     -     -     -     -     -
+#>  - Quarantined / Rash             -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Rash                -     -     -     -     -     -     -     -     -     -     -     -     -     -  0.50     -     -     -     -     -     -     -  0.50     -
+#>  - Hospitalized / Rash            -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Free / Severe                  -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Quarantined / Severe           -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Severe              -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Hospitalized / Severe          -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Free / Recovered               -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -  1.00     -     -     -
+#>  - Quarantined / Recovered        -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
+#>  - Isolated / Recovered           -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -  0.14     -  0.86     -
+#>  - Hospitalized / Recovered       -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -     -
 ```
 
 ``` r

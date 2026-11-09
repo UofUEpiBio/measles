@@ -15,8 +15,16 @@
 #' immunoglobulin (IG).
 #' @param mmr_window Time window for MMR vaccine administration.
 #' @param ig_window Time window for immunoglobulin (IG) administration.
-#' @param target_states,states_if_pep_effective,states_if_pep_ineffective
-#' Integer vectors of target and destination states (see details).
+#' @param target_stages Character vector. The stages of the agents offered PEP
+#' (e.g., `c("Susceptible", "Latent", "Prodromal")`), among those of the
+#' measles models: `"Susceptible"`, `"Latent"`, `"Prodromal"`, `"Rash"`,
+#' `"Severe"` and `"Recovered"`.
+#' @param target_statuses Character vector. The statuses of the agents offered
+#' PEP (e.g., `"Quarantined"`), among `"Free"`, `"Quarantined"`, `"Isolated"`
+#' and `"Hospitalized"`; `character(0)` offers it in any status.
+#' @param ... Not used. The arguments `target_states`,
+#' `states_if_pep_effective` and `states_if_pep_ineffective` of measles 0.4
+#' are an error that says what replaced them.
 #' @param agent_groups Optional integer vector of group (e.g. classroom)
 #' membership, with one entry per agent, in agent order. When supplied, PEP is
 #' offered only within the group(s) of the identified case(s). Defaults to
@@ -35,22 +43,23 @@
 #' based on the time since exposure and the willingness to accept PEP.
 #' The flow is the following:
 #'
-#' 1. Agents in `target_states` are eligible for PEP if they are
-#' willing to accept it (based on `pep_willingness`).
+#' 1. Agents in one of the `target_stages` and one of the `target_statuses`
+#' are eligible for PEP if they are willing to accept it (based on
+#' `mmr_willingness` and `ig_willingness`).
 #'
-#' 2. If the agent is already infected (for example, in a latent state)
-#' for at most `mmr_window` days, they are offered MMR vaccine.
-#' Otherwise, they are offered IG.
+#' 2. If the exposure started at most `mmr_window` days ago, they are offered
+#' the MMR vaccine; otherwise, within `ig_window` days, IG.
 #'
-#' 3. Susceptible agents are offered the MMR vaccine, and if they accept,
-#' they are automatically moved out of the quarantine process.
+#' 3. An agent that carries the virus (e.g., Latent) clears it if the PEP
+#' works (based on `mmr_efficacy` or `ig_efficacy`), through the model's
+#' transition "PEP cleared" (to Recovered).
 #'
-#' 4. Agents who were already infected and got either MMR or IG may move
-#' out of the quarantine process if the PEP is effective (based on
-#' `mmr_efficacy` or `ig_efficacy`). The destination state depends
-#' on whether the PEP was effective or not, and is determined by
-#' `states_if_pep_effective` and `states_if_pep_ineffective`,
-#'  respectively.
+#' 4. A dosed agent in quarantine is then released (back to Free) through the
+#' model's transition "PEP release", whether or not the PEP worked.
+#'
+#' The stages and the statuses of the measles models, and the transitions
+#' between them, are listed by [epiworldR::get_stages()],
+#' [epiworldR::get_statuses()] and [epiworldR::get_hist_transitions()].
 #'
 #' Since IG winds down over time, the IG "tool" may be removed from
 #' the agent as a function of the half-life of IG (based on
@@ -100,11 +109,13 @@ InterventionMeaslesPEP <- function(
   ig_willingness,
   mmr_window,
   ig_window,
-  target_states,
-  states_if_pep_effective,
-  states_if_pep_ineffective,
-  agent_groups = integer(0)
+  target_stages,
+  target_statuses,
+  agent_groups = integer(0),
+  ...
 ) {
+
+  pep_defunct_args(...)
 
   stopifnot_character(name)
   stopifnot_double(mmr_efficacy, lb = 0, ub = 1)
@@ -114,9 +125,12 @@ InterventionMeaslesPEP <- function(
   stopifnot_double(mmr_willingness, lb = 0, ub = 1)
   stopifnot_double(ig_willingness, lb = 0, ub = 1)
   stopifnot_double(mmr_window, lb = 0)
-  stopifnot_int(target_states, lb = 0)
-  stopifnot_int(states_if_pep_effective, lb = 0)
-  stopifnot_int(states_if_pep_ineffective, lb = 0)
+  target_stages <- measles_label_ids(target_stages, measles_stages, "stage")
+  target_statuses <- measles_label_ids(
+    target_statuses,
+    measles_statuses,
+    "status"
+  )
 
   # Labels are arbitrary, so no bounds. The length is only checked against
   # the model when the intervention first runs, since the number of agents
@@ -134,11 +148,68 @@ InterventionMeaslesPEP <- function(
     ig_willingness,
     mmr_window,
     ig_window,
-    target_states,
-    states_if_pep_effective,
-    states_if_pep_ineffective,
+    target_stages,
+    target_statuses,
     as.integer(agent_groups)
   ) |>
     structure(class = c("epiworld_globalevent"))
+
+}
+
+# The stages and statuses of the measles models (ModelMeasles in epiworld)
+measles_stages <- c(
+  "Susceptible", "Latent", "Prodromal", "Rash", "Severe", "Recovered"
+)
+measles_statuses <- c("Free", "Quarantined", "Isolated", "Hospitalized")
+
+# The ids (0-based) of stages or statuses named by their labels
+measles_label_ids <- function(x, labels, what) {
+
+  if (!is.character(x) || anyNA(x))
+    stop(
+      sprintf("The %s are named by their labels (", paste0(what, "es")),
+      paste0("\"", labels, "\"", collapse = ", "), ").",
+      call. = FALSE
+    )
+
+  ids <- match(x, labels)
+  if (anyNA(ids))
+    stop(
+      sprintf("The measles models have no %s ", what),
+      paste0("\"", x[is.na(ids)], "\"", collapse = ", "), "; they have ",
+      paste0("\"", labels, "\"", collapse = ", "), ".",
+      call. = FALSE
+    )
+
+  as.integer(ids - 1L)
+
+}
+
+# The arguments that measles 0.4 took, which the model's transitions replaced
+pep_defunct_args <- function(...) {
+
+  old <- intersect(
+    names(list(...)),
+    c("target_states", "states_if_pep_effective", "states_if_pep_ineffective")
+  )
+
+  if (length(old))
+    stop(
+      "InterventionMeaslesPEP() no longer takes ",
+      paste0("-", old, "-", collapse = ", "), " (defunct as of measles ",
+      "0.5.0). The states are now a stage and a status: give the agents ",
+      "offered PEP by their stages (-target_stages-, e.g., c(\"Susceptible\", ",
+      "\"Latent\", \"Prodromal\")) and statuses (-target_statuses-, e.g., ",
+      "\"Quarantined\"). Where they go is the model's: \"PEP cleared\" (to ",
+      "Recovered) and \"PEP release\" (from Quarantined to Free).",
+      call. = FALSE
+    )
+
+  if (...length())
+    stop("Unused arguments: ", paste(names(list(...)), collapse = ", "), ".",
+      call. = FALSE
+    )
+
+  invisible()
 
 }

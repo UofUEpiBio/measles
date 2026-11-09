@@ -52,7 +52,8 @@
 #' @details
 #' The contacts come from the model's mixing layer, which the user adds with
 #' [epiworldR::add_layer()] and [epiworldR::layer_mixing()]: the groups of the
-#' agents (fixed, or drawn at every run with [epiworldR::grouping_random()])
+#' agents (fixed, or drawn at every run with a placement such as
+#' [epiworldR::assign_counts()])
 #' and a contact matrix, a square matrix whose entry `[i, j]` gives the
 #' expected number of contacts that an agent in group `i` has with agents in
 #' group `j` during a time step (one row and one column per group). The model
@@ -64,9 +65,14 @@
 #' prodromal, and rash periods. Vaccination provides protection against
 #' infection.
 #'
-#' The [initial_states] function allows the user to set the initial state of the
-#' model. In particular, the user can specify how many of the non-infected
-#' agents have been removed at the beginning of the simulation.
+#' Each agent has a stage of the disease (Susceptible, Latent, Prodromal, Rash,
+#' Severe, Recovered; [epiworldR::get_stages()]) and a status, where it is
+#' (Free, Quarantined, Isolated, Hospitalized; [epiworldR::get_statuses()]);
+#' the outputs keep the two apart (e.g., the `status` and `stage` columns of
+#' [epiworldR::get_hist_total()]). [epiworldR::set_initial()] places agents in
+#' stages without the virus at the start of each run, e.g.,
+#' `set_initial(model, assign_shares(c(Recovered = 0.1)))` starts 10% of the
+#' agents recovered.
 #'
 #' @section Contact Rate Reduction During Rash Period:
 #' The default behavior of the model is that agents in the rash period
@@ -129,13 +135,13 @@
 #' al., 2010). With the means and standard deviations used here, a lognormal
 #' and a gamma differ little.
 #'
-#' Moving to quarantine or isolation does not change the stage: an agent
-#' moved from Latent to Quarantined Latent keeps the day its latent period
-#' ends, and so does an agent moved from Rash to Isolated.
+#' Quarantine and isolation are statuses, not stages, so they do not change
+#' the stage: a latent agent moved to quarantine keeps the day its latent
+#' period ends, and so does an agent with rash moved to isolation.
 #'
 #' @section Hospitalization Probability:
 #' Instead of hospitalization probability, the model uses hospitalization rate:
-#' each day with rash (in the Rash or Isolated states), an agent is
+#' each day in the Rash stage (free or isolated), an agent is
 #' hospitalized with probability \eqn{h} (`hospitalization_rate`); otherwise,
 #' it recovers when its rash period \eqn{D} ends. The probability of
 #' hospitalization is
@@ -195,7 +201,7 @@
 #'   measles_model,
 #'   layer_mixing(
 #'     "mixing",
-#'     groups         = grouping_random(c(3e3, 3e3, 3e3)),
+#'     groups         = assign_counts(c(3e3, 3e3, 3e3)),
 #'     contact_matrix = cmatrix
 #'   )
 #' )
@@ -253,8 +259,9 @@ ModelMeaslesMixing <- function(
   stopifnot_double(prodromal_period_sd, lb = 0)
   stopifnot_double(rash_period_sd, lb = 0)
 
-  structure(
-    ModelMeaslesMixing_cpp(
+  new_measles_model(
+    "MeaslesMixing",
+    list(
       n = n,
       prevalence = prevalence,
       transmission_rate = transmission_rate,
@@ -277,8 +284,7 @@ ModelMeaslesMixing <- function(
       incubation_period_sd = incubation_period_sd,
       prodromal_period_sd = prodromal_period_sd,
       rash_period_sd = rash_period_sd
-    ),
-    class = c("epiworld_measlesmixing", "epiworld_model")
+    )
   )
 
 }

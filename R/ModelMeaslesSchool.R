@@ -27,9 +27,11 @@
 #' @inheritParams ModelMeaslesMixing
 #' @details
 #' This model can be described as a SLIHR model with isolation and quarantine.
-#' The infectious state is divided into prodromal and rash phases. Furthermore,
-#' the quarantine state includes latent, susceptible, prodromal, and recovered
-#' states.
+#' The infectious period is divided into the Prodromal and Rash stages. Each
+#' agent also has a status (Free, Quarantined, Isolated, Hospitalized), so a
+#' quarantined agent may be susceptible, latent, prodromal or recovered; the
+#' outputs keep the two apart (the `status` and `stage` columns of
+#' [epiworldR::get_hist_total()]).
 #'
 #' The model is a perfect mixing model, meaning that all agents are in contact
 #' with each other. The model is designed to simulate the spread of Measles
@@ -161,29 +163,29 @@ ModelMeaslesSchool <- function(
       immediate. = TRUE
     )
 
-  structure(
-    ModelMeaslesSchool_cpp(
-      n,
-      prevalence,
-      contact_rate,
-      transmission_rate,
-      vax_efficacy,
-      0.0, # vax_improved_recovery,
-      incubation_period,
-      prodromal_period,
-      rash_period,
-      days_undetected,
-      hospitalization_rate,
-      hospitalization_period,
-      prop_vaccinated,
-      quarantine_period,
-      quarantine_willingness,
-      isolation_period,
-      incubation_period_sd,
-      prodromal_period_sd,
-      rash_period_sd
-    ),
-    class = c("epiworld_measlesschool", "epiworld_model")
+  new_measles_model(
+    "MeaslesSchool",
+    list(
+      n                           = n,
+      prevalence                  = prevalence,
+      contact_rate                = contact_rate,
+      transmission_rate           = transmission_rate,
+      vax_efficacy                = vax_efficacy,
+      vax_reduction_recovery_rate = 0,
+      incubation_period           = incubation_period,
+      prodromal_period            = prodromal_period,
+      rash_period                 = rash_period,
+      days_undetected             = days_undetected,
+      hospitalization_rate        = hospitalization_rate,
+      hospitalization_period      = hospitalization_period,
+      prop_vaccinated             = prop_vaccinated,
+      quarantine_period           = quarantine_period,
+      quarantine_willingness      = quarantine_willingness,
+      isolation_period            = isolation_period,
+      incubation_period_sd        = incubation_period_sd,
+      prodromal_period_sd         = prodromal_period_sd,
+      rash_period_sd              = rash_period_sd
+    )
   )
 
 }

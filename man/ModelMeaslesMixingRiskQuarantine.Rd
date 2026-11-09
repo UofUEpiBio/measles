@@ -100,7 +100,7 @@ period in days (default: 1.7).}
 \value{
 \itemize{
 \item The \code{ModelMeaslesMixingRiskQuarantine} function returns a model of classes
-\link[epiworldR:epiworld-methods]{epiworldR::epiworld_model} and \link{epiworld_measlesmixingriskquarantine}.
+\link[epiworldR:epiworld_model]{epiworld_model} and \link{epiworld_measlesmixingriskquarantine}.
 }
 }
 \description{
@@ -111,7 +111,7 @@ and contact tracing mechanisms.
 }
 \details{
 The contacts come from the model's mixing layer, which the user adds, as for
-\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}: a \code{\link[epiworldR:mixing-layers]{epiworldR::layer_mixing()}} with the groups of the
+\code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}: a \code{\link[epiworldR:layer_mixing]{epiworldR::layer_mixing()}} with the groups of the
 agents and a contact matrix (entry \verb{[i, j]} is the expected number of
 contacts that an agent in group \code{i} has with agents in group \code{j} during a
 time step).
@@ -129,9 +129,14 @@ are not in its group
 \item \strong{Low Risk}: Other unvaccinated agents
 }
 
-The \link[epiworldR:epiworld-methods]{epiworldR::initial_states} function allows the user to set the initial state of the
-model. In particular, the user can specify how many of the non-infected
-agents have been removed at the beginning of the simulation.
+Each agent has a stage of the disease (Susceptible, Latent, Prodromal, Rash,
+Severe, Recovered; \code{\link[epiworldR:get_stages]{epiworldR::get_stages()}}) and a status, where it is
+(Free, Quarantined, Isolated, Hospitalized; \code{\link[epiworldR:get_statuses]{epiworldR::get_statuses()}});
+the outputs keep the two apart (e.g., the \code{status} and \code{stage} columns of
+\code{\link[epiworldR:get_hist_total]{epiworldR::get_hist_total()}}). \code{\link[epiworldR:set_initial]{epiworldR::set_initial()}} places agents in
+stages without the virus at the start of each run, e.g.,
+\code{set_initial(model, assign_shares(c(Recovered = 0.1)))} starts 10\% of the
+agents recovered.
 
 The model uses hospitalization rates instead of probabilities. To learn
 more about this, see the documentation in \code{\link[=ModelMeaslesMixing]{ModelMeaslesMixing()}}.
@@ -185,7 +190,7 @@ add_layer(
   measles_model,
   layer_mixing(
     "mixing",
-    groups         = grouping_random(c(3e3, 3e3, 3e3)),
+    groups         = assign_counts(c(3e3, 3e3, 3e3)),
     contact_matrix = cmatrix
   )
 )
