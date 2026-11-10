@@ -8,6 +8,14 @@ make_model_cpp <- function(id, values) {
   .Call(`_measles_make_model_cpp`, id, values)
 }
 
+set_quarantine_exempt_tools_cpp <- function(model, tools) {
+  .Call(`_measles_set_quarantine_exempt_tools_cpp`, model, tools)
+}
+
+get_quarantine_exempt_tools_cpp <- function(model) {
+  .Call(`_measles_get_quarantine_exempt_tools_cpp`, model)
+}
+
 InterventionMeaslesPEP_cpp <- function(name, mmr_efficacy, ig_efficacy, ig_half_life_mean, ig_half_life_sd, mmr_willingness, ig_willingness, mmr_window, ig_window, target_stages, target_statuses, agent_groups) {
   .Call(`_measles_InterventionMeaslesPEP_cpp`, name, mmr_efficacy, ig_efficacy, ig_half_life_mean, ig_half_life_sd, mmr_willingness, ig_willingness, mmr_window, ig_window, target_stages, target_statuses, agent_groups)
 }

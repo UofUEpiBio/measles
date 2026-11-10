@@ -3,6 +3,15 @@
 Tracks epiworldR 1.0.0 (its `v1-layers` branch), where contacts come from
 contact layers.
 
+* **Who is exempt from quarantine is set by tool name** (epiworld#370).
+  `set_quarantine_exempt_tools(model, tools)` and
+  `get_quarantine_exempt_tools(model)`; the default is `c("MMR", "PEP MMR")`.
+  Before, an agent holding any tool was exempt, so the immunoglobulin
+  recipients of `InterventionMeaslesPEP()` skipped quarantine; they are now
+  quarantined (documented MMR is presumptive evidence of immunity,
+  immunoglobulin is not). **Results change** for runs with PEP
+  immunoglobulin or with tools added by the user.
+
 * **Breaking: natural histories** (epiworld NH-1 to NH-4, ported in
   epiworldR 1.0.0). Each agent has a **stage** of the disease (Susceptible,
   Latent, Prodromal, Rash, Severe, Recovered; `get_stages(model)`) and a

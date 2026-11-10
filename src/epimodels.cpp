@@ -41,3 +41,39 @@ SEXP make_model_cpp(std::string id, cpp11::doubles values) {
   );
 
 }
+
+// The measles models share ModelMeasles, which holds who is exempt from
+// quarantine
+static measles::ModelMeasles & as_measles_model(SEXP model) {
+
+  cpp11::external_pointer<epiworld::Model> ptr(model);
+  auto * m = dynamic_cast< measles::ModelMeasles * >(ptr.get());
+  if (m == nullptr)
+    cpp11::stop("The model is not a measles model.");
+
+  return *m;
+
+}
+
+[[cpp11::register]]
+SEXP set_quarantine_exempt_tools_cpp(SEXP model, cpp11::strings tools) {
+
+  std::vector< std::string > names;
+  for (R_xlen_t i = 0; i < tools.size(); ++i)
+    names.push_back(std::string(tools[i]));
+
+  as_measles_model(model).set_quarantine_exempt_tools(names);
+  return model;
+
+}
+
+[[cpp11::register]]
+cpp11::strings get_quarantine_exempt_tools_cpp(SEXP model) {
+
+  cpp11::writable::strings out;
+  for (const auto & name : as_measles_model(model).get_quarantine_exempt_tools())
+    out.push_back(name);
+
+  return out;
+
+}
