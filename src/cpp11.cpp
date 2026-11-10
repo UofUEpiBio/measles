@@ -19,6 +19,20 @@ extern "C" SEXP _measles_make_model_cpp(SEXP id, SEXP values) {
     return cpp11::as_sexp(make_model_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(id), cpp11::as_cpp<cpp11::decay_t<cpp11::doubles>>(values)));
   END_CPP11
 }
+// epimodels.cpp
+SEXP set_quarantine_exempt_tools_cpp(SEXP model, cpp11::strings tools);
+extern "C" SEXP _measles_set_quarantine_exempt_tools_cpp(SEXP model, SEXP tools) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(set_quarantine_exempt_tools_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model), cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(tools)));
+  END_CPP11
+}
+// epimodels.cpp
+cpp11::strings get_quarantine_exempt_tools_cpp(SEXP model);
+extern "C" SEXP _measles_get_quarantine_exempt_tools_cpp(SEXP model) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(get_quarantine_exempt_tools_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model)));
+  END_CPP11
+}
 // interventions.cpp
 SEXP InterventionMeaslesPEP_cpp(std::string name, double mmr_efficacy, double ig_efficacy, double ig_half_life_mean, double ig_half_life_sd, double mmr_willingness, double ig_willingness, double mmr_window, double ig_window, std::vector< int > target_stages, std::vector< int > target_statuses, std::vector< int > agent_groups);
 extern "C" SEXP _measles_InterventionMeaslesPEP_cpp(SEXP name, SEXP mmr_efficacy, SEXP ig_efficacy, SEXP ig_half_life_mean, SEXP ig_half_life_sd, SEXP mmr_willingness, SEXP ig_willingness, SEXP mmr_window, SEXP ig_window, SEXP target_stages, SEXP target_statuses, SEXP agent_groups) {
@@ -29,9 +43,11 @@ extern "C" SEXP _measles_InterventionMeaslesPEP_cpp(SEXP name, SEXP mmr_efficacy
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_measles_InterventionMeaslesPEP_cpp", (DL_FUNC) &_measles_InterventionMeaslesPEP_cpp, 12},
-    {"_measles_make_model_cpp",             (DL_FUNC) &_measles_make_model_cpp,              2},
-    {"_measles_measles_cpp_version_cpp",    (DL_FUNC) &_measles_measles_cpp_version_cpp,     0},
+    {"_measles_InterventionMeaslesPEP_cpp",      (DL_FUNC) &_measles_InterventionMeaslesPEP_cpp,      12},
+    {"_measles_get_quarantine_exempt_tools_cpp", (DL_FUNC) &_measles_get_quarantine_exempt_tools_cpp,  1},
+    {"_measles_make_model_cpp",                  (DL_FUNC) &_measles_make_model_cpp,                   2},
+    {"_measles_measles_cpp_version_cpp",         (DL_FUNC) &_measles_measles_cpp_version_cpp,          0},
+    {"_measles_set_quarantine_exempt_tools_cpp", (DL_FUNC) &_measles_set_quarantine_exempt_tools_cpp,  2},
     {NULL, NULL, 0}
 };
 }
