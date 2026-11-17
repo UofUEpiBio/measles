@@ -3,6 +3,16 @@
 Tracks epiworldR 1.0.0 (its `v1-layers` branch), where contacts come from
 contact layers.
 
+* **The outputs have a `disease` column** (epiworld NH-5, ported in epiworldR
+  1.0.0). Every table from `get_hist_total()`, `get_hist_transitions()`,
+  `get_hist_transition_matrix()`, `get_hist_tool()`, `get_hist_virus()`,
+  `get_reproductive_number()`, `get_transmissions()`, `get_generation_time()`,
+  `run_multiple_get_results()` and the other output functions starts with a
+  `disease` column. The measles models have one disease, so it is constant.
+  Code that selects columns by position shifts by one; by name is unaffected.
+  The measles headers are re-vendored (epiworld `d2df4d93`); nothing else
+  changes, and results are identical.
+
 * **Who is exempt from quarantine is set by tool name** (epiworld#370).
   `set_quarantine_exempt_tools(model, tools)` and
   `get_quarantine_exempt_tools(model)`; the default is `c("MMR", "PEP MMR")`.
