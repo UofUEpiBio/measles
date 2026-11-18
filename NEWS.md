@@ -3,6 +3,14 @@
 Tracks epiworldR 1.0.0 (its `v1-layers` branch), where contacts come from
 contact layers.
 
+* **Epiworld's Phase 4a and 4b** (epiworld#380, #381; ported in epiworldR
+  1.0.0): a layer can exclude statuses and be closed, and a tool can target
+  layers. The measles mixing models sample their own contacts, so until they
+  use epiworld's sampler (its Phase 7) they refuse a status excluded from
+  their layer and a tool that targets layers, with an error; closing their
+  layer stops its contacts. The measles headers are re-vendored (epiworld
+  `a4cb34dc`); results are identical.
+
 * **The outputs have a `disease` column** (epiworld NH-5, ported in epiworldR
   1.0.0). Every table from `get_hist_total()`, `get_hist_transitions()`,
   `get_hist_transition_matrix()`, `get_hist_tool()`, `get_hist_virus()`,
