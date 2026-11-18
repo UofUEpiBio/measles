@@ -54,6 +54,9 @@ expect_equal(
 
 # Every agent is somewhere every day, and quarantine happened
 totals <- get_hist_total(measles_model)
+# The disease column comes first (one disease)
+expect_equal(names(totals)[1], "disease")
+expect_equal(length(unique(totals$disease)), 1L)
 expect_true(all(tapply(totals$counts, totals$date, sum) == N))
 expect_true(
   any(totals$status == "Quarantined" & totals$counts > 0)
