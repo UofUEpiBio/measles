@@ -3,6 +3,12 @@
 Tracks epiworldR 1.0.0 (its `v1-layers` branch), where contacts come from
 contact layers.
 
+* **Epiworld's Phases 4d and 5** (epiworld#384, #386; ported in epiworldR
+  1.0.0): models with a mixing layer can be pushed, and a run that throws
+  can be followed by another run. The measles models sample their own
+  contacts, so they keep pulling; the measles headers are unchanged and
+  results are identical.
+
 * **Epiworld's Phase 4c** (epiworld#383; ported in epiworldR 1.0.0): a
   layer can follow a schedule (`set_schedule()`), and the measles mixing
   models honor it: no contacts through their layer on the days off it. A
