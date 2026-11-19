@@ -164,6 +164,29 @@ no_layer <- ModelMeaslesMixing(
 )
 expect_error(run(no_layer, ndays = 1, seed = 1), "mixing layer")
 
+# Until the measles models use the generic sampler (epiworld's Phase 7), they
+# refuse statuses excluded from their layer, and tools that target layers
+with_layer <- function() {
+  m <- ModelMeaslesMixing(
+    n               = good_n,
+    prevalence      = good_prevalence,
+    prop_vaccinated = good_prop_vaccinated
+  )
+  add_layer(
+    m,
+    layer_mixing("mixing", groups = rep(0, good_n), contact_matrix = 15)
+  )
+  m
+}
+
+excluding <- with_layer()
+exclude_status(get_layer(excluding, "mixing"), "Isolated")
+expect_error(run(excluding, ndays = 1, seed = 1), "excluded from their mixing layer")
+
+targeting <- with_layer()
+add_layer_target_tool(get_tool(targeting, 0), "mixing")
+expect_error(run(targeting, ndays = 1, seed = 1), "tools that target layers")
+
 expect_error(test_model <- ModelMeaslesMixing(
   n                          = good_n,
   prevalence                 = good_prevalence,
