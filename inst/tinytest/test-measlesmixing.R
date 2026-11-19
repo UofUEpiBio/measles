@@ -187,6 +187,15 @@ targeting <- with_layer()
 add_layer_target_tool(get_tool(targeting, 0), "mixing")
 expect_error(run(targeting, ndays = 1, seed = 1), "tools that target layers")
 
+# A schedule on their layer (epiworld's Phase 4c): no contacts, so no
+# transmissions, on the days off it
+scheduled <- with_layer()
+set_schedule(get_layer(scheduled, "mixing"), c(rep(TRUE, 5), FALSE, FALSE))
+run(scheduled, ndays = 60, seed = 1)
+tx <- subset(get_transmissions(scheduled), source >= 0)
+expect_true(nrow(tx) > 10L)
+expect_equal(sum((tx$date - 1) %% 7 >= 5), 0L)
+
 expect_error(test_model <- ModelMeaslesMixing(
   n                          = good_n,
   prevalence                 = good_prevalence,

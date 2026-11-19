@@ -3,6 +3,20 @@
 Tracks epiworldR 1.0.0 (its `v1-layers` branch), where contacts come from
 contact layers.
 
+* **Epiworld's Phases 4d and 5** (epiworld#384, #386; ported in epiworldR
+  1.0.0): models with a mixing layer can be pushed, and a run that throws
+  can be followed by another run. The measles models sample their own
+  contacts, so they keep pulling; the measles headers are unchanged and
+  results are identical.
+
+* **Epiworld's Phase 4c** (epiworld#383; ported in epiworldR 1.0.0): a
+  layer can follow a schedule (`set_schedule()`), and the measles mixing
+  models honor it: no contacts through their layer on the days off it. A
+  model parameter can follow a cycle (`set_param_cycle()`). Persistence needs
+  contact probabilities, so it does not apply to the measles mixing layer
+  (a contact matrix). The measles headers are unchanged; results are
+  identical.
+
 * **Epiworld's Phase 4a and 4b** (epiworld#380, #381; ported in epiworldR
   1.0.0): a layer can exclude statuses and be closed, and a tool can target
   layers. The measles mixing models sample their own contacts, so until they
