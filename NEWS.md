@@ -3,6 +3,21 @@
 Tracks epiworldR 1.0.0 (its `v1-layers` branch), where contacts come from
 contact layers.
 
+* **Epiworld's Phase 6a** (epiworld#388; ported in epiworldR 1.0.0):
+  exposures are independent. A susceptible agent escapes infection with
+  probability `prod(1 - p)` over its infectious contacts, and the infector is
+  drawn in proportion to its hazard `-log(1 - p)`. Until now the draw was
+  conditioned on at most one transmission, which lowered the probability of
+  infection when an agent met several infectious contacts in a day. The
+  measles models draw their infector through epiworld's
+  `Model::sample_virus()`, so **their results change**: an agent with several
+  infectious contacts is more likely to be infected. The measles headers are
+  unchanged. measles compiles epiworld from epiworldR's headers, so it gets
+  this rule from an epiworldR built from `v1-layers` after epiworldR#239. `calibrate_mixing_model()` is unaffected: it computes the
+  reproduction number from the contact matrix, the case where one infectious
+  agent meets susceptibles and the two rules agree. Parameters fitted to
+  outbreak data with earlier versions should be fitted again.
+
 * **Epiworld's Phases 4d and 5** (epiworld#384, #386; ported in epiworldR
   1.0.0): models with a mixing layer can be pushed, and a run that throws
   can be followed by another run. The measles models sample their own
