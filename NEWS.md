@@ -12,7 +12,8 @@ contact layers.
   measles models draw their infector through epiworld's
   `Model::sample_virus()`, so **their results change**: an agent with several
   infectious contacts is more likely to be infected. The measles headers are
-  unchanged. `calibrate_mixing_model()` is unaffected: it computes the
+  unchanged. measles now requires epiworldR 1.0.0-1, the first build with this
+  rule (measles compiles epiworld from epiworldR's headers). `calibrate_mixing_model()` is unaffected: it computes the
   reproduction number from the contact matrix, the case where one infectious
   agent meets susceptibles and the two rules agree. Parameters fitted to
   outbreak data with earlier versions should be fitted again.
